@@ -31,7 +31,7 @@ public class AppMain {
         EXIT_COMMAND.add("안녕");
         EXIT_COMMAND.add("헤어져");
 
-        Komoran komoran = new Komoran("C:\\Users\\a\\IdeaProjects\\GBot\\models");
+        Komoran komoran = new Komoran("C:\\Users\\HP\\IdeaProjects\\richGBot\\models");
         //komoran.setUserDic("C:\\Users\\a\\IdeaProjects\\GBot\\user_data\\NIADic.user");
 
         Scanner scanner = new Scanner(System.in);
