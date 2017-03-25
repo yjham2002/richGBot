@@ -30,6 +30,19 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         return doYouKnow(nounVerbPair.get(0).getFirst(), nounVerbPair.get(1).getFirst());
     }
 
+    public double getWeightOf(String noun, String verb){
+        double total = 0.0;
+        if(!this.containsKey(noun)) return 0.0;
+        if(!this.get(noun).containsKey(verb)) return 0.0;
+
+        double current = (double)this.get(noun).get(verb);
+        for(String key : this.get(noun).keySet()){
+            total += (double)this.get(noun).get(key);
+        }
+
+        return current / total;
+    }
+
     public int learn(String noun, String verb){
         if(this.containsKey(noun)){
             if(this.get(noun).containsKey(verb)){

@@ -19,6 +19,9 @@ public class Linker {
     private static final Set<String> SUBJECTS = new HashSet<>();
     private static final Set<String> VERBS = new HashSet<>();
     private static final Set<String> REQUESTS = new HashSet<>();
+    private static final Set<String> OBJECTS= new HashSet<>();
+    private static final Set<String> ADJECTIVES= new HashSet<>();
+    private static final Set<String> ADVERBS = new HashSet<>();
 
     private static final String PATTERN_VERB = "NNGXSV";
 
@@ -59,6 +62,50 @@ public class Linker {
         for(String s : new String[]{"VV"}) REQUESTS.add(s);
     }
 
+    private List<Intentions> getIntentions(List<Pair<String, String>> cores){
+
+        List<Integer> vIdx = new ArrayList<>();
+        List<Integer> nIdx = new ArrayList<>();
+
+        List<Intentions> retVal = new ArrayList<>();
+
+        int sD = cores.size();
+
+        for(int i = 0; i < cores.size(); i++) {
+            Pair<String, String> pair = cores.get(i);
+            if(VERBS.contains(pair.getSecond())) {
+                vIdx.add(i);
+            }else if(SUBJECTS.contains(pair.getSecond())){
+                nIdx.add(i);
+            }
+        }
+
+        for(int i = 0; i < vIdx.size(); i++){
+            double weight = 0;
+            int candidate = -1;
+
+            Pair<String, String> verb = cores.get(vIdx.get(i));
+            for(int j = 0; j < nIdx.size(); j++){
+                double currentW = base.getWeightOf(cores.get(nIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(nIdx.get(j) - vIdx.get(i))) / (double)sD);
+
+                // System.out.println(cores.get(nIdx.get(j)).getFirst() + "/" + verb.getFirst() + " :: " + currentW + " [" + base.getWeightOf(cores.get(nIdx.get(j)).getFirst(), verb.getFirst()) + " / " + (((double)sD - (double)Math.abs(nIdx.get(j) - vIdx.get(i))) / (double)sD) + "]");
+                if(weight < currentW){
+                    weight = currentW;
+                    candidate = nIdx.get(j);
+                }
+            }
+            if(candidate != -1){
+                Intentions intent = new Intentions();
+                intent.getSubjects().add(cores.get(candidate));
+                intent.getVerbs().add(verb);
+                retVal.add(intent);
+                // TODO multi-match
+            }
+        }
+
+        return retVal;
+    }
+
     private void link(){
         if(this.morphemes == null){
             System.out.println("There is no morpheme data.");
@@ -80,51 +127,64 @@ public class Linker {
         }
 
         Stack<Pair<String, String>> stack = new Stack<>();
-//        for (List<Pair<String, String>> eojeolResult : this.morphemes) {
-//            for (Pair<String, String> wordMorph : eojeolResult) {
-//                if (SUBJECTS.contains(wordMorph.getSecond()) || VERBS.contains(wordMorph.getSecond())) {
-//                    stack.push(wordMorph);
-//                }
-//            }
-//        }
 
-        int currentCursor = 0;
-        do {
-            for (List<Pair<String, String>> eojeolResult : this.morphemes) {
-                for (Pair<String, String> wordMorph : eojeolResult) {
-                    currentCursor++;
-                    Pair<String, String> pending = null;
-                    if (SUBJECTS.contains(wordMorph.getSecond())) {
-                        if(currentCursor < eojeolResult.size()){
-                            stack.push(wordMorph);
-                        }else{
-                            if(wordMorph.getFirst().equals("내") && wordMorph.getSecond().equals("NP")) wordMorph.setFirst("나");
-                            stack.push(wordMorph);
-                        }
+        List<Pair<String, String>> cores = new ArrayList<>();
 
-                    }else if(VERBS.contains(wordMorph.getSecond())){
-                        if(!stack.empty()) {
-                            addProcData(stack.pop(), wordMorph);
-                        }
-                    }
+        for (List<Pair<String, String>> eojeolResult : this.morphemes) {
+            for (Pair<String, String> wordMorph : eojeolResult) {
+                if (SUBJECTS.contains(wordMorph.getSecond()) || VERBS.contains(wordMorph.getSecond())) {
+                    cores.add(wordMorph);
                 }
             }
-        }while(currentCursor < linear.size());
-        while(!stack.empty()) {
-            System.out.println("[DEBUG] :: " + KoreanUtil.getComleteWordByJongsung(stack.pop().getFirst(), "이", "가") + " 검출되었으나 동사와 매칭되지 않음");
         }
+
+        List<Intentions> intentions = getIntentions(cores);
+
+        for(Intentions intent : intentions){
+            addProcData(intent);
+        }
+
+//        int currentCursor = 0;
+//        do {
+//            for (List<Pair<String, String>> eojeolResult : this.morphemes) {
+//                for (Pair<String, String> wordMorph : eojeolResult) {
+//                    currentCursor++;
+//                    Pair<String, String> pending = null;
+//                    if (SUBJECTS.contains(wordMorph.getSecond())) {
+//                        if(currentCursor < eojeolResult.size()){
+//                            stack.push(wordMorph);
+//                        }else{
+//                            if(wordMorph.getFirst().equals("내") && wordMorph.getSecond().equals("NP")) wordMorph.setFirst("나");
+//                            stack.push(wordMorph);
+//                        }
+//
+//                    }else if(VERBS.contains(wordMorph.getSecond())){
+//                        if(!stack.empty()) {
+//                            addProcData(stack.pop(), wordMorph);
+//                        }
+//                    }
+//                }
+//            }
+//        }while(currentCursor < linear.size());
+//        while(!stack.empty()) {
+//            System.out.println("[DEBUG] :: " + KoreanUtil.getComleteWordByJongsung(stack.pop().getFirst(), "이", "가") + " 검출되었으나 동사와 매칭되지 않음");
+//        }
+    }
+
+    public void addProcData(Intentions intent){ // TODO 주어가 하나라는 가정하의 메소드임
+        for(int i = 0; i < intent.getVerbs().size(); i++) addProcData(intent.getSubjects().get(0), intent.getVerbs().get(i));
     }
 
     public void addProcData(Pair<String, String> pop, Pair<String, String> word){
         List<Pair<String, String>> temp = new ArrayList<>();
         temp.add(pop);
         temp.add(word);
-        //learnLinkPair(temp);
-        if(REQUESTS.contains(word.getSecond()) && word.getFirst().equals("하")){
-            System.out.println(pop.getFirst() + " 서비스를 호출합니다.");
-        }else{
-            learnLinkPair(temp);
-        }
+        learnLinkPair(temp);
+//        if(REQUESTS.contains(word.getSecond()) && word.getFirst().equals("하")){
+//            System.out.println(pop.getFirst() + " 서비스를 호출합니다.");
+//        }else{
+//            learnLinkPair(temp);
+//        }
     }
 
     public void learnLinkPair(List<Pair<String, String>> know){
