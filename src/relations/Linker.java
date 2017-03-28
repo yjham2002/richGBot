@@ -37,11 +37,6 @@ public class Linker {
         init();
     }
 
-    public boolean isConcatHead(Pair<String, String> pair){
-        if(pair.getFirst().equals("게") && pair.getSecond().equals("EC")) return true;
-        return false;
-    }
-
     public Linker(){
         init();
     }
@@ -65,7 +60,8 @@ public class Linker {
     private Arc getLinkedArc(List<TypedPair> cores){
 
         List<Integer> vIdx = new ArrayList<>();
-        List<Integer> nIdx = new ArrayList<>();
+        List<Integer> oIdx = new ArrayList<>();
+        List<Integer> sIdx = new ArrayList<>();
         List<Integer> aIdx = new ArrayList<>();
 
         Arc retVal = new Arc(cores);
@@ -75,14 +71,21 @@ public class Linker {
         for(int i = 0; i < cores.size(); i++) {
             Pair<String, String> pair = cores.get(i);
             if(VERBS.contains(pair.getSecond())) {
-                if(cores.size() > i + 1 && isConcatHead(cores.get(i + 1))) {
+                if(cores.size() > i + 1 && KoreanUtil.isConcatHead(cores.get(i + 1))) {
                     cores.get(i).setType(TypedPair.TYPE_ADV);
                     aIdx.add(i);
                 }else{
+                    cores.get(i).setType(TypedPair.TYPE_VERB);
                     vIdx.add(i);
                 }
             }else if(SUBJECTS.contains(pair.getSecond())){
-                nIdx.add(i);
+                if(cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))){
+                    cores.get(i).setType(TypedPair.TYPE_SUBJECT);
+                    sIdx.add(i);
+                }else{
+                    cores.get(i).setType(TypedPair.TYPE_OBJECT);
+                    oIdx.add(i);
+                }
             }
         }
 
@@ -91,21 +94,26 @@ public class Linker {
             int candidate = -1;
 
             Pair<String, String> verb = cores.get(vIdx.get(i));
-            for(int j = 0; j < nIdx.size(); j++){
-                double currentWofNV = base.getWeightOf(cores.get(nIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(nIdx.get(j) - vIdx.get(i))) / (double)sD);
+
+            // 목적어와 동사 연결
+            for(int j = 0; j < oIdx.size(); j++){
+                double currentWofNV = base.getWeightOf(cores.get(oIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(oIdx.get(j) - vIdx.get(i))) / (double)sD);
                 if(weight < currentWofNV){
                     weight = currentWofNV;
-                    candidate = nIdx.get(j);
+                    candidate = oIdx.get(j);
                 }
             }
 
+            // 아크 생성
             if(candidate != -1){
                 retVal.connect(candidate, vIdx.get(i));
-                // TODO multi-match
             }
 
+            // 사용된 변수 초기화
+            weight = 0;
             candidate = -1;
 
+            // 부사와 동사 연결
             for(int j = 0; j < aIdx.size(); j++){
                 double currentWofAV = base.getWeightOf(cores.get(aIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(aIdx.get(j) - vIdx.get(i))) / (double)sD);
                 if(weight < currentWofAV){
@@ -114,9 +122,28 @@ public class Linker {
                 }
             }
 
+            // 아크 생성
+            if(candidate != -1){
+                retVal.connect(candidate, vIdx.get(i));
+            }
+
+            // 사용된 변수 초기화
+            weight = 0;
+            candidate = -1;
+
+            // 주어와 동사 연결
+            for(int j = 0; j < sIdx.size(); j++){
+                System.out.println(cores.get(sIdx.get(j)));
+                double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(sIdx.get(j) - vIdx.get(i))) / (double)sD);
+                if(weight < currentWofAV){
+                    weight = currentWofAV;
+                    candidate = sIdx.get(j);
+                }
+            }
+
+            // 아크 생성
             if(candidate != -1){
                 retVal.connect(vIdx.get(i), candidate);
-                // TODO multi-match
             }
         }
 
@@ -155,7 +182,7 @@ public class Linker {
 
     }
 
-    public void addProcData(Arc arc){ // TODO 주어가 하나라는 가정하의 메소드임
+    public void addProcData(Arc arc){ // TODO 주어가 하나라는 가정 하의 메소드임
         for(Integer key : arc.keySet()) {
             addProcData(arc.getWord(key), arc.getWord(arc.get(key)));
         }
@@ -180,8 +207,11 @@ public class Linker {
         if(base.doYouKnow(know) > 0){
             String concat = "는";
             if(know.get(1).getSecond().equals("VA")) concat = "은";
-            if(know.get(1).getType() == TypedPair.TYPE_ADV){
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
+
+            if(know.get(0).getType() == TypedPair.TYPE_ADV){
+                System.out.println(MY_NAME + " : \'" + know.get(1).getFirst() + "다\'는 " + know.get(0).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
+            }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
             }else{
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는")+ " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
             }
@@ -189,8 +219,11 @@ public class Linker {
         }else{
             String concat = "는";
             if(know.get(1).getSecond().equals("VA")) concat = "은";
-            if(know.get(1).getType() == TypedPair.TYPE_ADV){
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!");
+
+            if(know.get(0).getType() == TypedPair.TYPE_ADV){
+                System.out.println(MY_NAME + " : \'" + know.get(1).getFirst() + "다\'는 " + know.get(0).getFirst() + "게!!! 새롭게 알게됐어요!");
+            }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
             }else {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
             }

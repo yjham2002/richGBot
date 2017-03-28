@@ -8,9 +8,11 @@ import kr.co.shineware.util.common.model.Pair;
 public class TypedPair extends Pair<String, String> {
 
     public static final int TYPE_DEFAULT = -1;
-    public static final int TYPE_VERB = 0;
-    public static final int TYPE_NOUN = 1;
-    public static final int TYPE_ADV = 2;
+
+    public static final int TYPE_VERB        = 0;
+    public static final int TYPE_SUBJECT     = 1;
+    public static final int TYPE_OBJECT      = 2;
+    public static final int TYPE_ADV         = 3;
 
     private int type = TYPE_DEFAULT;
 

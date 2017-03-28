@@ -18,16 +18,16 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
 
     public KnowledgeBase(){}
 
-    public int doYouKnow(String noun, String verb){
-        if(this.containsKey(noun)){
-            if(this.get(noun).containsKey(verb)){
-                return this.get(noun).get(verb);
+    public int doYouKnow(String key, String subKey){
+        if(this.containsKey(key)){
+            if(this.get(key).containsKey(subKey)){
+                return this.get(key).get(subKey);
             }else return 0;
         }else return 0;
     }
 
-    public int doYouKnow(List<TypedPair> nounVerbPair){
-        return doYouKnow(nounVerbPair.get(0).getFirst(), nounVerbPair.get(1).getFirst());
+    public int doYouKnow(List<TypedPair> linkPair){
+        return doYouKnow(linkPair.get(0).getFirst(), linkPair.get(1).getFirst());
     }
 
     public double getWeightOf(String noun, String verb){
@@ -64,8 +64,8 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         }
     }
 
-    public int learn(List<TypedPair> nounVerbPair){
-        return learn(nounVerbPair.get(0).getFirst(), nounVerbPair.get(1).getFirst());
+    public int learn(List<TypedPair> linkPair){
+        return learn(linkPair.get(0).getFirst(), linkPair.get(1).getFirst());
     }
 
 }
