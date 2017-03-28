@@ -31,7 +31,7 @@ public class AppMain {
         EXIT_COMMAND.add("안녕");
         EXIT_COMMAND.add("헤어져");
 
-        Komoran komoran = new Komoran("C:\\Users\\HP\\IdeaProjects\\richGBot\\models");
+        Komoran komoran = new Komoran("C:\\Users\\a\\IdeaProjects\\richGBot\\models");
         //komoran.setUserDic("C:\\Users\\a\\IdeaProjects\\GBot\\user_data\\NIADic.user");
 
         Scanner scanner = new Scanner(System.in);
@@ -45,12 +45,12 @@ public class AppMain {
             List<List<Pair<String, String>>> result = komoran.analyze(command);
             linker.setMorphemes(result, command);
             linker.printResult();
-//            for (List<Pair<String, String>> eojeolResult : result) {
-//                for (Pair<String, String> wordMorph : eojeolResult) {
-//                    System.out.print(wordMorph + "   ");
-//                }
-//                System.out.println();
-//            }
+            for (List<Pair<String, String>> eojeolResult : result) {
+                for (Pair<String, String> wordMorph : eojeolResult) {
+                    System.out.print(wordMorph + "   ");
+                }
+                System.out.println();
+            }
         }
 
     }

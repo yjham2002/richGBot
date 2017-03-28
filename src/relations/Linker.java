@@ -22,6 +22,7 @@ public class Linker {
     private static final Set<String> OBJECTS= new HashSet<>();
     private static final Set<String> ADJECTIVES= new HashSet<>();
     private static final Set<String> ADVERBS = new HashSet<>();
+    private static final Set<String> DETERMINERS = new HashSet<>();
 
     private static final String PATTERN_VERB = "NNGXSV";
 
@@ -60,6 +61,7 @@ public class Linker {
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
         for(String s : new String[]{"VA", "VV"}) VERBS.add(s);
         for(String s : new String[]{"VV"}) REQUESTS.add(s);
+        for(String s : new String[]{"MM"}) DETERMINERS.add(s);
     }
 
     private List<Intentions> getIntentions(List<Pair<String, String>> cores){
