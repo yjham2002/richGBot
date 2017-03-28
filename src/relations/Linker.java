@@ -23,6 +23,7 @@ public class Linker {
     private static final Set<String> ADJECTIVES= new HashSet<>();
     private static final Set<String> ADVERBS = new HashSet<>();
     private static final Set<String> DETERMINERS = new HashSet<>();
+    private static final Set<String> BASES = new HashSet<>();
 
     private static final String PATTERN_VERB = "NNGXSV";
 
@@ -55,6 +56,7 @@ public class Linker {
         for(String s : new String[]{"VA", "VV"}) VERBS.add(s);
         for(String s : new String[]{"VV"}) REQUESTS.add(s);
         for(String s : new String[]{"MM"}) DETERMINERS.add(s);
+        for(String s : new String[]{"XR"}) BASES.add(s);
     }
 
     private Arc getLinkedArc(List<TypedPair> cores){
@@ -69,8 +71,10 @@ public class Linker {
         int sD = cores.size();
 
         for(int i = 0; i < cores.size(); i++) {
+
             Pair<String, String> pair = cores.get(i);
-            if(VERBS.contains(pair.getSecond())) {
+
+            if(VERBS.contains(pair.getSecond())) { // 동사 혹은 형용사로 현재 페어가 입력될 수 있는 경우
                 if(cores.size() > i + 1 && KoreanUtil.isConcatHead(cores.get(i + 1))) {
                     cores.get(i).setType(TypedPair.TYPE_ADV);
                     aIdx.add(i);
@@ -78,13 +82,33 @@ public class Linker {
                     cores.get(i).setType(TypedPair.TYPE_VERB);
                     vIdx.add(i);
                 }
-            }else if(SUBJECTS.contains(pair.getSecond())){
-                if(cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))){
+            }else if(SUBJECTS.contains(pair.getSecond())){ // 주어 혹은 목적어로 현재 페어가 입력될 수 있는 경우
+                if(cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))){ // 다음 페어가 주격조사인 경우
                     cores.get(i).setType(TypedPair.TYPE_SUBJECT);
                     sIdx.add(i);
                 }else{
-                    cores.get(i).setType(TypedPair.TYPE_OBJECT);
+                    cores.get(i).setType(TypedPair.TYPE_OBJECT); // 다음 페어에 주격조사가 아닌 경우 목적어로 간주
                     oIdx.add(i);
+                }
+            }else{ // 예외 상황 처리
+                if(KoreanUtil.isDerivable(cores.get(i))) {
+                    if (cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1))) { // 파생접미사 처리
+                        TypedPair typedPair = new TypedPair();
+                        typedPair.setFirst(cores.get(i).getFirst() + cores.get(i + 1).getFirst());
+                        if (KoreanUtil.isVerbalDeriver(cores.get(i + 1))) {
+                            typedPair.setSecond("VV");
+                            cores.remove(i);
+                            cores.remove(i);
+                            cores.add(i, typedPair);
+                            i--;
+                        } else if (KoreanUtil.isAdjectiveDeriver(cores.get(i + 1))) {
+                            typedPair.setSecond("VA");
+                            cores.remove(i);
+                            cores.remove(i);
+                            cores.add(i, typedPair);
+                            i--;
+                        }
+                    }
                 }
             }
         }
@@ -177,7 +201,9 @@ public class Linker {
             }
         }
 
-        addProcData(getLinkedArc(cores));
+        Arc procArc = getLinkedArc(cores);
+
+        addProcData(procArc);
 
     }
 
@@ -231,11 +257,6 @@ public class Linker {
 
         base.learn(know);
 
-    }
-
-    public String traceArc(Arc arc){
-        String sentence = "";
-        return sentence;
     }
 
     public void printResult(){

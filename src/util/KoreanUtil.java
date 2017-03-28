@@ -17,8 +17,28 @@ public class KoreanUtil {
         return false;
     }
 
+    public static boolean isDerivable(Pair<String, String> pair){
+        if(pair.getSecond().equals("XR") || pair.getSecond().equals("NNG")) return true;
+        return false;
+    }
+
     public static boolean isSubjectivePost(Pair<String, String> pair){
         if(pair.getSecond().equals("JKS")) return true;
+        return false;
+    }
+
+    public static boolean isAdjectiveDeriver(Pair<String, String> pair){
+        if(pair.getSecond().equals("XSA")) return true;
+        return false;
+    }
+
+    public static boolean isVerbalDeriver(Pair<String, String> pair){
+        if(pair.getSecond().equals("XSV")) return true;
+        return false;
+    }
+
+    public static boolean isDeriver(Pair<String, String> pair){
+        if(pair.getSecond().equals("XSA") || pair.getSecond().equals("XSV") || pair.getSecond().equals("XSN") || pair.getSecond().equals("XSB")) return true;
         return false;
     }
 
