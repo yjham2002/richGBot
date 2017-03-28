@@ -53,7 +53,8 @@ public class Linker {
         this.base = new KnowledgeBase();
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
-        for(String s : new String[]{"VA", "VV"}) VERBS.add(s);
+        for(String s : new String[]{"VV"}) VERBS.add(s);
+        for(String s : new String[]{"VA"}) ADJECTIVES.add(s);
         for(String s : new String[]{"VV"}) REQUESTS.add(s);
         for(String s : new String[]{"MM"}) DETERMINERS.add(s);
         for(String s : new String[]{"XR"}) BASES.add(s);
@@ -62,9 +63,11 @@ public class Linker {
     private Arc getLinkedArc(List<TypedPair> cores){
 
         List<Integer> vIdx = new ArrayList<>();
+        List<Integer> adjIdx = new ArrayList<>();
         List<Integer> oIdx = new ArrayList<>();
         List<Integer> sIdx = new ArrayList<>();
         List<Integer> aIdx = new ArrayList<>();
+        List<Integer> soIdx = new ArrayList<>();
 
         Arc retVal = new Arc(cores);
 
@@ -74,21 +77,31 @@ public class Linker {
 
             Pair<String, String> pair = cores.get(i);
 
-            if(VERBS.contains(pair.getSecond())) { // 동사 혹은 형용사로 현재 페어가 입력될 수 있는 경우
-                if(cores.size() > i + 1 && KoreanUtil.isConcatHead(cores.get(i + 1))) {
-                    cores.get(i).setType(TypedPair.TYPE_ADV);
-                    aIdx.add(i);
-                }else{
-                    cores.get(i).setType(TypedPair.TYPE_VERB);
-                    vIdx.add(i);
+            if(VERBS.contains(pair.getSecond()) || ADJECTIVES.contains(pair.getSecond())) { // 동사 혹은 형용사로 현재 페어가 입력될 수 있는 경우
+                if(cores.size() > i + 1 && KoreanUtil.isDeterminingHead(cores.get(i + 1)) && ADJECTIVES.contains(pair.getSecond())){
+                    cores.get(i).setType(TypedPair.TYPE_ADJ);
+                    adjIdx.add(i);
+                }else {
+                    if (cores.size() > i + 1 && KoreanUtil.isConcatHead(cores.get(i + 1))) {
+                        cores.get(i).setType(TypedPair.TYPE_ADV);
+                        aIdx.add(i);
+                    } else {
+                        cores.get(i).setType(TypedPair.TYPE_VERB);
+                        vIdx.add(i);
+                    }
                 }
-            }else if(SUBJECTS.contains(pair.getSecond())){ // 주어 혹은 목적어로 현재 페어가 입력될 수 있는 경우
-                if(cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))){ // 다음 페어가 주격조사인 경우
-                    cores.get(i).setType(TypedPair.TYPE_SUBJECT);
+            }else if(SUBJECTS.contains(pair.getSecond()) && !(cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1)))){ // 주어 혹은 목적어로 현재 페어가 입력될 수 있는 경우
+                if(KoreanUtil.isQuestion(cores.get(i))){
+                    cores.get(i).setType(TypedPair.TYPE_QUESTION);
                     sIdx.add(i);
-                }else{
-                    cores.get(i).setType(TypedPair.TYPE_OBJECT); // 다음 페어에 주격조사가 아닌 경우 목적어로 간주
-                    oIdx.add(i);
+                }else {
+                    if (cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))) { // 다음 페어가 주격조사인 경우
+                        cores.get(i).setType(TypedPair.TYPE_SUBJECT);
+                        sIdx.add(i);
+                    } else {
+                        cores.get(i).setType(TypedPair.TYPE_OBJECT); // 다음 페어에 주격조사가 아닌 경우 목적어로 간주
+                        oIdx.add(i);
+                    }
                 }
             }else{ // 예외 상황 처리
                 if(KoreanUtil.isDerivable(cores.get(i))) {
@@ -113,60 +126,93 @@ public class Linker {
             }
         }
 
-        for(int i = 0; i < vIdx.size(); i++){
+        // 형용사 기준 링킹
+
+        for(int k = 0; k < adjIdx.size(); k++){
             double weight = 0;
             int candidate = -1;
 
-            Pair<String, String> verb = cores.get(vIdx.get(i));
+            Pair<String, String> adj = cores.get(adjIdx.get(k));
 
-            // 목적어와 동사 연결
-            for(int j = 0; j < oIdx.size(); j++){
-                double currentWofNV = base.getWeightOf(cores.get(oIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(oIdx.get(j) - vIdx.get(i))) / (double)sD);
-                if(weight < currentWofNV){
-                    weight = currentWofNV;
-                    candidate = oIdx.get(j);
+            // 형용사와 명사 연결
+            soIdx.addAll(sIdx);
+            soIdx.addAll(oIdx);
+
+            for (int j = 0; j < soIdx.size(); j++) {
+                double currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - adjIdx.get(k))) / (double) sD);
+                if (weight <= currentWofOJ) { // IMPORTANT : 등호가 포함됨(우측 수식 우선)
+                    weight = currentWofOJ;
+                    candidate = soIdx.get(j);
                 }
             }
 
             // 아크 생성
-            if(candidate != -1){
-                retVal.connect(candidate, vIdx.get(i));
+            if (candidate != -1) {
+                retVal.connect(candidate, adjIdx.get(k));
             }
 
-            // 사용된 변수 초기화
-            weight = 0;
-            candidate = -1;
+        }
 
-            // 부사와 동사 연결
-            for(int j = 0; j < aIdx.size(); j++){
-                double currentWofAV = base.getWeightOf(cores.get(aIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(aIdx.get(j) - vIdx.get(i))) / (double)sD);
-                if(weight < currentWofAV){
-                    weight = currentWofAV;
-                    candidate = aIdx.get(j);
+        // 동사 기준 링킹
+
+        if(vIdx.size() == 0){ // 동사 혹은 형용사가 없는 경우 - 의문문 / 홑단어
+
+        }else {
+            for (int i = 0; i < vIdx.size(); i++) {
+                double weight = 0;
+                int candidate = -1;
+
+                Pair<String, String> verb = cores.get(vIdx.get(i));
+
+                // 목적어와 동사 연결
+                for (int j = 0; j < oIdx.size(); j++) {
+                    double currentWofNV = base.getWeightOf(cores.get(oIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(oIdx.get(j) - vIdx.get(i))) / (double) sD);
+                    if (weight < currentWofNV) {
+                        weight = currentWofNV;
+                        candidate = oIdx.get(j);
+                    }
                 }
-            }
 
-            // 아크 생성
-            if(candidate != -1){
-                retVal.connect(vIdx.get(i), candidate);
-            }
-
-            // 사용된 변수 초기화
-            weight = 0;
-            candidate = -1;
-
-            // 주어와 동사 연결
-            for(int j = 0; j < sIdx.size(); j++){
-                double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(sIdx.get(j) - vIdx.get(i))) / (double)sD);
-                if(weight < currentWofAV){
-                    weight = currentWofAV;
-                    candidate = sIdx.get(j);
+                // 아크 생성
+                if (candidate != -1) {
+                    retVal.connect(candidate, vIdx.get(i));
                 }
-            }
 
-            // 아크 생성
-            if(candidate != -1){
-                retVal.connect(vIdx.get(i), candidate);
+                // 사용된 변수 초기화
+                weight = 0;
+                candidate = -1;
+
+                // 부사와 동사 연결
+                for (int j = 0; j < aIdx.size(); j++) {
+                    double currentWofAV = base.getWeightOf(cores.get(aIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(aIdx.get(j) - vIdx.get(i))) / (double) sD);
+                    if (weight < currentWofAV) {
+                        weight = currentWofAV;
+                        candidate = aIdx.get(j);
+                    }
+                }
+
+                // 아크 생성
+                if (candidate != -1) {
+                    retVal.connect(vIdx.get(i), candidate);
+                }
+
+                // 사용된 변수 초기화
+                weight = 0;
+                candidate = -1;
+
+                // 주어와 동사 연결
+                for (int j = 0; j < sIdx.size(); j++) {
+                    double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD);
+                    if (weight < currentWofAV) {
+                        weight = currentWofAV;
+                        candidate = sIdx.get(j);
+                    }
+                }
+
+                // 아크 생성
+                if (candidate != -1) {
+                    retVal.connect(vIdx.get(i), candidate);
+                }
             }
         }
 
@@ -237,6 +283,10 @@ public class Linker {
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
             }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
+            }else if(know.get(1).getType() == TypedPair.TYPE_QUESTION){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금한거죠? " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
+            }else if(know.get(1).getType() == TypedPair.TYPE_ADJ){
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") +  " " + know.get(1).getFirst() + "다는거죠! " + base.doYouKnow(know) + "번 봤던 수식구조예요.");
             }else{
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는")+ " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
             }
@@ -249,6 +299,10 @@ public class Linker {
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!");
             }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
+            }else if(know.get(1).getType() == TypedPair.TYPE_QUESTION){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금하신가요?!");
+            }else if(know.get(1).getType() == TypedPair.TYPE_ADJ){
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
             }else {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
             }

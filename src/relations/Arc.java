@@ -44,9 +44,21 @@ public class Arc extends HashMap<Integer, Integer>{
      * @return
      */
     private boolean isCrossed(int dominant, int dependant){
+        int leftSide = dependant;
+        int rightSide = dominant;
+        if(dominant < dependant){
+            leftSide = dominant;
+            rightSide = dependant;
+        }
         for(Integer i : this.keySet()){
-            if(i >= dependant) break;
-            if(this.get(i) > dominant) return true;
+            int mLeft = i;
+            int mRight = this.get(i);
+            if(mLeft > mRight){
+                mLeft = this.get(i);
+                mRight = i;
+            }
+            if(leftSide > mLeft && rightSide > mRight && mRight > leftSide) return true;
+            if(leftSide < mLeft && rightSide < mRight && mRight < leftSide) return true;
         }
         return false;
     }

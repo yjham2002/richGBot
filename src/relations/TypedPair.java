@@ -13,6 +13,8 @@ public class TypedPair extends Pair<String, String> {
     public static final int TYPE_SUBJECT     = 1;
     public static final int TYPE_OBJECT      = 2;
     public static final int TYPE_ADV         = 3;
+    public static final int TYPE_QUESTION    = 4;
+    public static final int TYPE_ADJ    = 5;
 
     private int type = TYPE_DEFAULT;
 

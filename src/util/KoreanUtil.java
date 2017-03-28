@@ -17,6 +17,11 @@ public class KoreanUtil {
         return false;
     }
 
+    public static boolean isDeterminingHead(Pair<String, String> pair){
+        if(pair.getSecond().equals("ETM")) return true;
+        return false;
+    }
+
     public static boolean isDerivable(Pair<String, String> pair){
         if(pair.getSecond().equals("XR") || pair.getSecond().equals("NNG")) return true;
         return false;
@@ -44,6 +49,15 @@ public class KoreanUtil {
 
     public static boolean isObjectivePost(Pair<String, String> pair){
         if(pair.getSecond().equals("JKO")) return true;
+        return false;
+    }
+
+    public static boolean isQuestion(Pair<String, String> pair){
+        if(pair.getSecond().equals("NP")){
+            switch (pair.getFirst()){
+                case "누구": case "어디": case "무엇": case "뭐": return true;
+            }
+        }
         return false;
     }
 
