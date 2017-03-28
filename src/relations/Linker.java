@@ -27,8 +27,7 @@ public class Linker {
     private static final String PATTERN_VERB = "NNGXSV";
 
     private List<List<Pair<String, String>>> morphemes;
-    private List<Pair<String, String>> linear;
-    private List<List<Pair<String, String>>> proc;
+    private List<List<TypedPair>> proc;
     private KnowledgeBase base;
 
     private String temporaryMemory = "";
@@ -36,6 +35,11 @@ public class Linker {
     public Linker(List<List<Pair<String, String>>> morphemes){
         this.morphemes = morphemes;
         init();
+    }
+
+    public boolean isConcatHead(Pair<String, String> pair){
+        if(pair.getFirst().equals("게") && pair.getSecond().equals("EC")) return true;
+        return false;
     }
 
     public Linker(){
@@ -49,14 +53,8 @@ public class Linker {
 
     public void init(){
         memory = new ArrayList<>();
-        this.linear = new ArrayList<>();
         this.proc = new ArrayList<>();
         this.base = new KnowledgeBase();
-
-        if(this.morphemes != null) {
-            for (List<Pair<String, String>> eojeolResult : morphemes)
-                for (Pair<String, String> wordMorph : eojeolResult) linear.add(wordMorph);
-        }
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
         for(String s : new String[]{"VA", "VV"}) VERBS.add(s);
@@ -64,19 +62,25 @@ public class Linker {
         for(String s : new String[]{"MM"}) DETERMINERS.add(s);
     }
 
-    private List<Intentions> getIntentions(List<Pair<String, String>> cores){
+    private Arc getLinkedArc(List<TypedPair> cores){
 
         List<Integer> vIdx = new ArrayList<>();
         List<Integer> nIdx = new ArrayList<>();
+        List<Integer> aIdx = new ArrayList<>();
 
-        List<Intentions> retVal = new ArrayList<>();
+        Arc retVal = new Arc(cores);
 
         int sD = cores.size();
 
         for(int i = 0; i < cores.size(); i++) {
             Pair<String, String> pair = cores.get(i);
             if(VERBS.contains(pair.getSecond())) {
-                vIdx.add(i);
+                if(cores.size() > i + 1 && isConcatHead(cores.get(i + 1))) {
+                    cores.get(i).setType(TypedPair.TYPE_ADV);
+                    aIdx.add(i);
+                }else{
+                    vIdx.add(i);
+                }
             }else if(SUBJECTS.contains(pair.getSecond())){
                 nIdx.add(i);
             }
@@ -88,19 +92,30 @@ public class Linker {
 
             Pair<String, String> verb = cores.get(vIdx.get(i));
             for(int j = 0; j < nIdx.size(); j++){
-                double currentW = base.getWeightOf(cores.get(nIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(nIdx.get(j) - vIdx.get(i))) / (double)sD);
-
-                // System.out.println(cores.get(nIdx.get(j)).getFirst() + "/" + verb.getFirst() + " :: " + currentW + " [" + base.getWeightOf(cores.get(nIdx.get(j)).getFirst(), verb.getFirst()) + " / " + (((double)sD - (double)Math.abs(nIdx.get(j) - vIdx.get(i))) / (double)sD) + "]");
-                if(weight < currentW){
-                    weight = currentW;
+                double currentWofNV = base.getWeightOf(cores.get(nIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(nIdx.get(j) - vIdx.get(i))) / (double)sD);
+                if(weight < currentWofNV){
+                    weight = currentWofNV;
                     candidate = nIdx.get(j);
                 }
             }
+
             if(candidate != -1){
-                Intentions intent = new Intentions();
-                intent.getSubjects().add(cores.get(candidate));
-                intent.getVerbs().add(verb);
-                retVal.add(intent);
+                retVal.connect(candidate, vIdx.get(i));
+                // TODO multi-match
+            }
+
+            candidate = -1;
+
+            for(int j = 0; j < aIdx.size(); j++){
+                double currentWofAV = base.getWeightOf(cores.get(aIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(aIdx.get(j) - vIdx.get(i))) / (double)sD);
+                if(weight < currentWofAV){
+                    weight = currentWofAV;
+                    candidate = aIdx.get(j);
+                }
+            }
+
+            if(candidate != -1){
+                retVal.connect(vIdx.get(i), candidate);
                 // TODO multi-match
             }
         }
@@ -128,59 +143,30 @@ public class Linker {
             memory.add(prev);
         }
 
-        Stack<Pair<String, String>> stack = new Stack<>();
-
-        List<Pair<String, String>> cores = new ArrayList<>();
+        List<TypedPair> cores = new ArrayList<>();
 
         for (List<Pair<String, String>> eojeolResult : this.morphemes) {
             for (Pair<String, String> wordMorph : eojeolResult) {
-                if (SUBJECTS.contains(wordMorph.getSecond()) || VERBS.contains(wordMorph.getSecond())) {
-                    cores.add(wordMorph);
-                }
+                cores.add(new TypedPair(wordMorph));
             }
         }
 
-        List<Intentions> intentions = getIntentions(cores);
+        addProcData(getLinkedArc(cores));
 
-        for(Intentions intent : intentions){
-            addProcData(intent);
+    }
+
+    public void addProcData(Arc arc){ // TODO 주어가 하나라는 가정하의 메소드임
+        for(Integer key : arc.keySet()) {
+            addProcData(arc.getWord(key), arc.getWord(arc.get(key)));
         }
-
-//        int currentCursor = 0;
-//        do {
-//            for (List<Pair<String, String>> eojeolResult : this.morphemes) {
-//                for (Pair<String, String> wordMorph : eojeolResult) {
-//                    currentCursor++;
-//                    Pair<String, String> pending = null;
-//                    if (SUBJECTS.contains(wordMorph.getSecond())) {
-//                        if(currentCursor < eojeolResult.size()){
-//                            stack.push(wordMorph);
-//                        }else{
-//                            if(wordMorph.getFirst().equals("내") && wordMorph.getSecond().equals("NP")) wordMorph.setFirst("나");
-//                            stack.push(wordMorph);
-//                        }
-//
-//                    }else if(VERBS.contains(wordMorph.getSecond())){
-//                        if(!stack.empty()) {
-//                            addProcData(stack.pop(), wordMorph);
-//                        }
-//                    }
-//                }
-//            }
-//        }while(currentCursor < linear.size());
-//        while(!stack.empty()) {
-//            System.out.println("[DEBUG] :: " + KoreanUtil.getComleteWordByJongsung(stack.pop().getFirst(), "이", "가") + " 검출되었으나 동사와 매칭되지 않음");
-//        }
     }
 
-    public void addProcData(Intentions intent){ // TODO 주어가 하나라는 가정하의 메소드임
-        for(int i = 0; i < intent.getVerbs().size(); i++) addProcData(intent.getSubjects().get(0), intent.getVerbs().get(i));
-    }
-
-    public void addProcData(Pair<String, String> pop, Pair<String, String> word){
-        List<Pair<String, String>> temp = new ArrayList<>();
-        temp.add(pop);
+    public void addProcData(TypedPair pop, TypedPair word){
+        if(pop == null) System.out.println("pop null");
+        if(word == null) System.out.println("word null");
+        List<TypedPair> temp = new ArrayList<>();
         temp.add(word);
+        temp.add(pop);
         learnLinkPair(temp);
 //        if(REQUESTS.contains(word.getSecond()) && word.getFirst().equals("하")){
 //            System.out.println(pop.getFirst() + " 서비스를 호출합니다.");
@@ -189,16 +175,25 @@ public class Linker {
 //        }
     }
 
-    public void learnLinkPair(List<Pair<String, String>> know){
+    public void learnLinkPair(List<TypedPair> know){
 
         if(base.doYouKnow(know) > 0){
             String concat = "는";
             if(know.get(1).getSecond().equals("VA")) concat = "은";
-            System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는")+ " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
+            if(know.get(1).getType() == TypedPair.TYPE_ADV){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
+            }else{
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는")+ " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
+            }
+
         }else{
             String concat = "는";
             if(know.get(1).getSecond().equals("VA")) concat = "은";
-            System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는")+ " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
+            if(know.get(1).getType() == TypedPair.TYPE_ADV){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!");
+            }else {
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
+            }
             proc.add(know);
         }
 

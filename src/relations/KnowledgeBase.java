@@ -26,7 +26,7 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         }else return 0;
     }
 
-    public int doYouKnow(List<Pair<String, String>> nounVerbPair){
+    public int doYouKnow(List<TypedPair> nounVerbPair){
         return doYouKnow(nounVerbPair.get(0).getFirst(), nounVerbPair.get(1).getFirst());
     }
 
@@ -64,7 +64,7 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         }
     }
 
-    public int learn(List<Pair<String, String>> nounVerbPair){
+    public int learn(List<TypedPair> nounVerbPair){
         return learn(nounVerbPair.get(0).getFirst(), nounVerbPair.get(1).getFirst());
     }
 
