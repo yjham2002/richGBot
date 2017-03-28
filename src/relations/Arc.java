@@ -85,7 +85,7 @@ public class Arc extends HashMap<Integer, Integer>{
         }
 
         this.put(dependant, dominant);
-        if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos);
+        if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
         return VALID;
     }
 

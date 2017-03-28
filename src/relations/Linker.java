@@ -124,7 +124,7 @@ public class Linker {
 
             // 아크 생성
             if(candidate != -1){
-                retVal.connect(candidate, vIdx.get(i));
+                retVal.connect(vIdx.get(i), candidate);
             }
 
             // 사용된 변수 초기화
@@ -133,7 +133,6 @@ public class Linker {
 
             // 주어와 동사 연결
             for(int j = 0; j < sIdx.size(); j++){
-                System.out.println(cores.get(sIdx.get(j)));
                 double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + (((double)sD - (double)Math.abs(sIdx.get(j) - vIdx.get(i))) / (double)sD);
                 if(weight < currentWofAV){
                     weight = currentWofAV;
@@ -208,8 +207,8 @@ public class Linker {
             String concat = "는";
             if(know.get(1).getSecond().equals("VA")) concat = "은";
 
-            if(know.get(0).getType() == TypedPair.TYPE_ADV){
-                System.out.println(MY_NAME + " : \'" + know.get(1).getFirst() + "다\'는 " + know.get(0).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
+            if(know.get(1).getType() == TypedPair.TYPE_ADV){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
             }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
             }else{
@@ -220,8 +219,8 @@ public class Linker {
             String concat = "는";
             if(know.get(1).getSecond().equals("VA")) concat = "은";
 
-            if(know.get(0).getType() == TypedPair.TYPE_ADV){
-                System.out.println(MY_NAME + " : \'" + know.get(1).getFirst() + "다\'는 " + know.get(0).getFirst() + "게!!! 새롭게 알게됐어요!");
+            if(know.get(1).getType() == TypedPair.TYPE_ADV){
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!");
             }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
             }else {
@@ -232,6 +231,11 @@ public class Linker {
 
         base.learn(know);
 
+    }
+
+    public String traceArc(Arc arc){
+        String sentence = "";
+        return sentence;
     }
 
     public void printResult(){
