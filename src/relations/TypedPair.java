@@ -9,12 +9,13 @@ public class TypedPair extends Pair<String, String> {
 
     public static final int TYPE_DEFAULT = -1;
 
-    public static final int TYPE_VERB        = 0;
-    public static final int TYPE_SUBJECT     = 1;
-    public static final int TYPE_OBJECT      = 2;
-    public static final int TYPE_ADV         = 3;
-    public static final int TYPE_QUESTION    = 4;
-    public static final int TYPE_ADJ    = 5;
+    public static final int TYPE_VERB        = 0; // 동사
+    public static final int TYPE_SUBJECT     = 1; // 주어
+    public static final int TYPE_OBJECT      = 2; // 목적어
+    public static final int TYPE_ADV         = 3; // 수식언
+    public static final int TYPE_QUESTION    = 4; // 의문사
+    public static final int TYPE_ADJ    = 5; // 형용사 - 관형형전성어미에 의한 형용언의 형용사화
+    public static final int TYPE_VADJ    = 6; // 형용사 - 관형형전성어미에 의한 동사의 형용사화
 
     private int type = TYPE_DEFAULT;
 

@@ -17,6 +17,7 @@ public class Linker {
     private static final int MEMORY_SIZE = 100;
 
     private static final Set<String> SUBJECTS = new HashSet<>();
+    private static final Set<String> DEPNOUN = new HashSet<>();
     private static final Set<String> VERBS = new HashSet<>();
     private static final Set<String> REQUESTS = new HashSet<>();
     private static final Set<String> OBJECTS= new HashSet<>();
@@ -53,6 +54,7 @@ public class Linker {
         this.base = new KnowledgeBase();
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
+        for(String s : new String[]{"NNB"}) DEPNOUN.add(s);
         for(String s : new String[]{"VV"}) VERBS.add(s);
         for(String s : new String[]{"VA"}) ADJECTIVES.add(s);
         for(String s : new String[]{"VV"}) REQUESTS.add(s);
@@ -78,8 +80,11 @@ public class Linker {
             Pair<String, String> pair = cores.get(i);
 
             if(VERBS.contains(pair.getSecond()) || ADJECTIVES.contains(pair.getSecond())) { // 동사 혹은 형용사로 현재 페어가 입력될 수 있는 경우
-                if(cores.size() > i + 1 && KoreanUtil.isDeterminingHead(cores.get(i + 1)) && ADJECTIVES.contains(pair.getSecond())){
+                if(cores.size() > i + 1 && KoreanUtil.isDeterminingHead(cores.get(i + 1)) && ADJECTIVES.contains(pair.getSecond())) {
                     cores.get(i).setType(TypedPair.TYPE_ADJ);
+                    adjIdx.add(i);
+                }else if(cores.size() > i + 1 && KoreanUtil.isDeterminingHead(cores.get(i + 1)) && VERBS.contains(pair.getSecond())){
+                    cores.get(i).setType(TypedPair.TYPE_VADJ);
                     adjIdx.add(i);
                 }else {
                     if (cores.size() > i + 1 && KoreanUtil.isConcatHead(cores.get(i + 1))) {
@@ -132,6 +137,7 @@ public class Linker {
 
             double weight = 0;
             int candidate = -1;
+            int dependantNoun = -1;
 
             Pair<String, String> adj = cores.get(adjIdx.get(k));
 
@@ -142,18 +148,31 @@ public class Linker {
             for (int j = 0; j < soIdx.size(); j++) { // 본 루프에서는 형용사의 접미사로서 관형형전성어미가 접속되어 'ㄴ' 까지를 인덱스로 간주, 해당 형용사에 대해 우측을 검사할 때는 관형형전성어미의 인덱스를 기준으로 가중치를 계산
                 double currentWofOJ = 0;
 
-                if(soIdx.get(j) >= adjIdx.get(k)) currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - adjIdx.get(k))) / (double) sD);
-                else currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - (adjIdx.get(k) + 1))) / (double) sD);
+                if(cores.get(adjIdx.get(k)).getType() == TypedPair.TYPE_ADJ || cores.get(adjIdx.get(k)).getType() == TypedPair.TYPE_VADJ) {
+                    if(soIdx.get(j) == adjIdx.get(k) + 1 && KoreanUtil.isDependantNoun(cores.get(soIdx.get(j)))){
+                        dependantNoun = soIdx.get(j);
+                    }
+                    else if (soIdx.get(j) >= adjIdx.get(k))
+                        currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - adjIdx.get(k))) / (double) sD);
+                    else
+                        currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - (adjIdx.get(k) + 1))) / (double) sD);
 
-                if (weight <= currentWofOJ) { // IMPORTANT : 등호가 포함됨(우측 수식거리 우선)
-                    weight = currentWofOJ;
-                    candidate = soIdx.get(j);
+                    if (weight <= currentWofOJ) { // IMPORTANT : 등호가 포함됨(우측 수식거리 우선)
+                        weight = currentWofOJ;
+                        candidate = soIdx.get(j);
+                    }
+                }else{
+                    // DO NOTHING
                 }
             }
 
             // 아크 생성
             if (candidate != -1) {
                 retVal.connect(candidate, adjIdx.get(k));
+            }
+
+            if(dependantNoun != -1){
+                // 의존 명사가 지시하는 것이 무엇인지 찾아낸 상태
             }
 
         }
@@ -290,8 +309,10 @@ public class Linker {
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
             }else if(know.get(1).getType() == TypedPair.TYPE_QUESTION){
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금한거죠? " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
-            }else if(know.get(1).getType() == TypedPair.TYPE_ADJ){
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") +  " " + know.get(1).getFirst() + "다는거죠! " + base.doYouKnow(know) + "번 봤던 수식구조예요.");
+            }else if(know.get(1).getType() == TypedPair.TYPE_ADJ) {
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠! " + base.doYouKnow(know) + "번 봤던 수식구조예요.");
+            }else if(know.get(1).getType() == TypedPair.TYPE_VADJ){
+                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") +  " " + know.get(1).getFirst() + "다! " + base.doYouKnow(know) + "번 봤던 봤어요.");
             }else{
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는")+ " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
             }
@@ -308,6 +329,8 @@ public class Linker {
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금하신가요?!");
             }else if(know.get(1).getType() == TypedPair.TYPE_ADJ){
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
+            }else if(know.get(1).getType() == TypedPair.TYPE_VADJ){
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
             }else {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
             }

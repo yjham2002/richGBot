@@ -22,6 +22,11 @@ public class KoreanUtil {
         return false;
     }
 
+    public static boolean isDependantNoun(Pair<String, String> pair){
+        if(pair.getSecond().equals("NNB")) return true;
+        return false;
+    }
+
     public static boolean isDerivable(Pair<String, String> pair){
         if(pair.getSecond().equals("XR") || pair.getSecond().equals("NNG")) return true;
         return false;
