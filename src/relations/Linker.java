@@ -129,6 +129,7 @@ public class Linker {
         // 형용사 기준 링킹
 
         for(int k = 0; k < adjIdx.size(); k++){
+
             double weight = 0;
             int candidate = -1;
 
@@ -138,9 +139,13 @@ public class Linker {
             soIdx.addAll(sIdx);
             soIdx.addAll(oIdx);
 
-            for (int j = 0; j < soIdx.size(); j++) {
-                double currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - adjIdx.get(k))) / (double) sD);
-                if (weight <= currentWofOJ) { // IMPORTANT : 등호가 포함됨(우측 수식 우선)
+            for (int j = 0; j < soIdx.size(); j++) { // 본 루프에서는 형용사의 접미사로서 관형형전성어미가 접속되어 'ㄴ' 까지를 인덱스로 간주, 해당 형용사에 대해 우측을 검사할 때는 관형형전성어미의 인덱스를 기준으로 가중치를 계산
+                double currentWofOJ = 0;
+
+                if(soIdx.get(j) >= adjIdx.get(k)) currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - adjIdx.get(k))) / (double) sD);
+                else currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - (adjIdx.get(k) + 1))) / (double) sD);
+
+                if (weight <= currentWofOJ) { // IMPORTANT : 등호가 포함됨(우측 수식거리 우선)
                     weight = currentWofOJ;
                     candidate = soIdx.get(j);
                 }
