@@ -21,6 +21,7 @@ public class Linker {
     private static final int SENTENCE_QUESTION = 30;
 
     private static final Set<String> SUBJECTS = new HashSet<>();
+    private static final Set<String> GENERAL_NOUN = new HashSet<>();
     private static final Set<String> DEPNOUN = new HashSet<>();
     private static final Set<String> VERBS = new HashSet<>();
     private static final Set<String> REQUESTS = new HashSet<>();
@@ -62,6 +63,14 @@ public class Linker {
         for(String s : new String[]{"VV"}) REQUESTS.add(s);
         for(String s : new String[]{"MM"}) DETERMINERS.add(s);
         for(String s : new String[]{"XR"}) BASES.add(s);
+        for(String s : new String[]{"SL", "SH", "SW", "NF", "SN", "NA"}) GENERAL_NOUN.add(s);
+        GENERAL_NOUN.addAll(SUBJECTS);
+    }
+
+    private List<TypedPair> groupingPhrase(List<TypedPair> cores){
+        List<TypedPair> retVal = new ArrayList<>();
+
+        return retVal;
     }
 
     private List<TypedPair> shortenNounNounPhrase(List<TypedPair> cores){
@@ -74,9 +83,25 @@ public class Linker {
 
         for(int i = 0; i < cores.size(); i++){
             TypedPair pair = cores.get(i);
-            if(SUBJECTS.contains(pair.getSecond())){
+            if(GENERAL_NOUN.contains(pair.getSecond())){
                 if(flag){
-                    newFirst = newFirst + " " + pair.getFirst();
+                    if(KoreanUtil.isDerivable(cores.get(i))) {
+                        if (cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1))) { // 파생접미사 처리
+                            TypedPair typedPair = new TypedPair();
+                            typedPair.setFirst(cores.get(i).getFirst() + cores.get(i + 1).getFirst());
+                            if (KoreanUtil.isVerbalDeriver(cores.get(i + 1)) || KoreanUtil.isAdjectiveDeriver(cores.get(i + 1))) {
+                                entry = new TypedPair();
+                                entry.setFirst(newFirst);
+                                entry.setSecond("NNG");
+                                retVal.add(entry);
+
+                                retVal.add(pair);
+                                flag = false;
+                            }
+                        }
+                    }
+                    if(flag) newFirst = newFirst + " " + pair.getFirst();
+
                 }else{
                     newFirst = pair.getFirst();
                     flag = true;
@@ -92,8 +117,6 @@ public class Linker {
                 retVal.add(pair);
             }
         }
-
-        for(TypedPair t : retVal) System.out.print(t.getFirst() + " ");
 
         return retVal;
     }
