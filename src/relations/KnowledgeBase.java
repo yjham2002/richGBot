@@ -16,6 +16,9 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     public static final int ALREADY_KNOW = 100;
     public static final int LEARNED = 200;
 
+    public static final int TYPE_METAPHOR   = -100;
+    public static final int TYPE_SYNONYM    = -200;
+
     public KnowledgeBase(){}
 
     public int doYouKnow(String key, String subKey){

@@ -33,7 +33,7 @@ public class KoreanUtil {
     }
 
     public static boolean isSubjectivePost(Pair<String, String> pair){
-        if(pair.getSecond().equals("JKS")) return true;
+        if(pair.getSecond().equals("JKS") || pair.getSecond().equals("JX")) return true;
         return false;
     }
 

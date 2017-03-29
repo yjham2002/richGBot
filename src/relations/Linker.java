@@ -354,12 +354,6 @@ public class Linker {
     }
 
     private void addProcData(Arc arc, int what){
-        switch(what){
-            case SENTENCE_ORDER: System.out.println("DEBUG :: 명령문 검출"); break;
-            case SENTENCE_QUESTION: System.out.println("DEBUG :: 의문문 검출"); break;
-            case SENTENCE_PLAIN: default: System.out.println("DEBUG :: 평서문 검출"); break;
-        }
-
         for(Integer key : arc.keySet()) {
             addProcData(arc.getWord(key), arc.getWord(arc.get(key)), what);
         }
