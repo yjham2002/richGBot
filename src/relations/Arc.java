@@ -63,6 +63,14 @@ public class Arc extends HashMap<Integer, Integer>{
         return false;
     }
 
+    public List<TypedPair> getWords() {
+        return words;
+    }
+
+    public void setWords(List<TypedPair> words) {
+        this.words = words;
+    }
+
     /**
      * 아크를 생성하기 위한 연결 메소드 - 연결과 동시에 여러 종류의 의존성 제약을 검출한다.
      * @param dominant
