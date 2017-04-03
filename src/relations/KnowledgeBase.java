@@ -1,5 +1,6 @@
 package relations;
 
+import DB.DBManager;
 import kr.co.shineware.util.common.model.Pair;
 
 import java.util.HashMap;
@@ -13,13 +14,22 @@ import java.util.Set;
  */
 public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
 
+    public static final int DEBUG_MODE = 100;
+    public static final int REAL_MODE = 200;
+    public static final int CURRENT_MODE = REAL_MODE;
+
     public static final int ALREADY_KNOW = 100;
     public static final int LEARNED = 200;
+
+    public DBManager dbManager;
 
     public static final int TYPE_METAPHOR   = -100;
     public static final int TYPE_SYNONYM    = -200;
 
-    public KnowledgeBase(){}
+    public KnowledgeBase(DBManager dbManager){
+        this.dbManager = dbManager;
+        wakeUp();
+    }
 
     public int doYouKnow(String key, String subKey){
         if(this.containsKey(key)){
@@ -46,6 +56,21 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         return current / total;
     }
 
+    private void wakeUp(){
+        List<KnowledgeFraction> knowledgeFractions = dbManager.getKnowledges();
+
+        int counter =  1;
+        for(KnowledgeFraction know : knowledgeFractions) {
+            HashMap<String, Integer> entry = new HashMap<>();
+            entry.put(know.getRefWord(), know.getFrequency());
+            this.put(know.getWord(), entry);
+            if(CURRENT_MODE == REAL_MODE){
+                String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
+                System.out.println("Loading KnowledgeBase on cache :: (" + percentage + ") :: " + know);
+            }
+        }
+    }
+
     public int learn(String noun, String verb){
         if(this.containsKey(noun)){
             if(this.get(noun).containsKey(verb)){
@@ -68,6 +93,7 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     }
 
     public int learn(List<TypedPair> linkPair){
+        if(CURRENT_MODE == REAL_MODE) dbManager.saveKnowledgeLink(linkPair.get(0), linkPair.get(1));
         return learn(linkPair.get(0).getFirst(), linkPair.get(1).getFirst());
     }
 

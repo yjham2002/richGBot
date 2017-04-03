@@ -1,5 +1,6 @@
 package relations;
 
+import DB.DBManager;
 import kr.co.shineware.util.common.model.Pair;
 import util.KoreanUtil;
 
@@ -35,6 +36,7 @@ public class Linker {
 
     private List<List<Pair<String, String>>> morphemes;
     private KnowledgeBase base;
+    private DBManager dbManager;
 
     private String temporaryMemory = "";
 
@@ -53,8 +55,9 @@ public class Linker {
     }
 
     private void init(){
+        dbManager = new DBManager();
         memory = new ArrayList<>();
-        this.base = new KnowledgeBase();
+        this.base = new KnowledgeBase(dbManager);
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
         for(String s : new String[]{"NNB"}) DEPNOUN.add(s);
