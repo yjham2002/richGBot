@@ -20,6 +20,7 @@ public class Linker {
     private static final int SENTENCE_ORDER = 10;
     private static final int SENTENCE_PLAIN = 20;
     private static final int SENTENCE_QUESTION = 30;
+    private static final int SENTENCE_META = 40;
 
     private static final Set<String> SUBJECTS = new HashSet<>();
     private static final Set<String> GENERAL_NOUN = new HashSet<>();
@@ -32,10 +33,11 @@ public class Linker {
     private static final Set<String> DETERMINERS = new HashSet<>();
     private static final Set<String> BASES = new HashSet<>();
 
-    private static final String PATTERN_VERB = "NNGXSV";
-
     private List<List<Pair<String, String>>> morphemes;
-    private KnowledgeBase base;
+
+    private KnowledgeBase base; // 가중치 부여 및 단순 문장 링킹를 위한 지식베이스
+    private KnowledgeBase metaBase; // 은유적 1:N 관계를 기술하기 위한 지식베이스 (단, 1은 큰 범위의 의미이고 N은 작은 범위의 의미)
+
     private DBManager dbManager;
 
     private String temporaryMemory = "";
@@ -57,9 +59,11 @@ public class Linker {
     private void init(){
         dbManager = new DBManager();
         memory = new ArrayList<>();
-        this.base = new KnowledgeBase(dbManager);
+        this.base = new KnowledgeBase(dbManager, KnowledgeBase.SET_SENTENCE_RECOGNIZE);
+        this.metaBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_METAPHOR_RECOGNIZE);
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
+        for(String s : new String[]{"NN", "NNG", "NA", "SL", "SH", "SW", "NF", "SN", "NA"}) OBJECTS.add(s);
         for(String s : new String[]{"NNB"}) DEPNOUN.add(s);
         for(String s : new String[]{"VV"}) VERBS.add(s);
         for(String s : new String[]{"VA"}) ADJECTIVES.add(s);
@@ -124,16 +128,17 @@ public class Linker {
         return retVal;
     }
 
-    private Arc getLinkedArc(List<TypedPair> cores){
+    private MorphemeArc getLinkedArc(List<TypedPair> cores){
 
-        List<Integer> vIdx = new ArrayList<>();
-        List<Integer> adjIdx = new ArrayList<>();
-        List<Integer> oIdx = new ArrayList<>();
-        List<Integer> sIdx = new ArrayList<>();
-        List<Integer> aIdx = new ArrayList<>();
-        List<Integer> soIdx = new ArrayList<>();
+        List<Integer> vIdx = new ArrayList<>(); // VERB INDEX
+        List<Integer> adjIdx = new ArrayList<>(); // ADJECTIVE INDEX
+        List<Integer> oIdx = new ArrayList<>(); // OBJECT INDEX
+        List<Integer> sIdx = new ArrayList<>(); // SUBJECT INDEX
+        List<Integer> aIdx = new ArrayList<>(); // ADVERB INDEX
+        List<Integer> soIdx = new ArrayList<>(); // SUBJECT + OBJECT INDEX
+        List<Integer> mIdx = new ArrayList<>(); // METAPHORICAL INDEX
 
-        Arc retVal = new Arc(cores);
+        MorphemeArc retVal = new MorphemeArc(cores);
 
         int sD = cores.size();
 
@@ -157,17 +162,22 @@ public class Linker {
                         vIdx.add(i);
                     }
                 }
-            }else if(SUBJECTS.contains(pair.getSecond()) && !(cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1)))){ // 주어 혹은 목적어로 현재 페어가 입력될 수 있는 경우
-                if(KoreanUtil.isQuestion(cores.get(i))){
+            }else if(SUBJECTS.contains(pair.getSecond()) && !(cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1)))) { // 주어 혹은 목적어로 현재 페어가 입력될 수 있는 경우
+                if (KoreanUtil.isQuestion(cores.get(i))) {
                     cores.get(i).setType(TypedPair.TYPE_QUESTION);
                     sIdx.add(i);
-                }else {
+                } else {
                     if (cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))) { // 다음 페어가 주격조사인 경우
                         cores.get(i).setType(TypedPair.TYPE_SUBJECT);
                         sIdx.add(i);
                     } else {
-                        cores.get(i).setType(TypedPair.TYPE_OBJECT); // 다음 페어에 주격조사가 아닌 경우 목적어로 간주
-                        oIdx.add(i);
+                        if(OBJECTS.contains(pair.getSecond()) && (KoreanUtil.isEOS(cores.get(i + 1)) || KoreanUtil.isPositiveDesignator(cores.get(i + 1)))) {
+                            cores.get(i).setType(TypedPair.TYPE_METAPHORE);
+                            mIdx.add(i);
+                        }else {
+                            cores.get(i).setType(TypedPair.TYPE_OBJECT); // 다음 페어에 주격조사가 아닌 경우 목적어로 간주
+                            oIdx.add(i);
+                        }
                     }
                 }
             }else{ // 예외 상황 처리
@@ -239,10 +249,31 @@ public class Linker {
 
         }
 
+        // 은유형 표현 링킹
+        for(int i = 0; i < mIdx.size(); i++){
+            double weight = 0;
+            int candidate = -1;
+
+            Pair<String, String> meta = cores.get(mIdx.get(i));
+
+            // 목적어와 동사 연결
+            for (int j = 0; j < sIdx.size(); j++) {
+                double currentWofNM = metaBase.getWeightOf(cores.get(sIdx.get(j)).getFirst(), meta.getFirst()) + (((double) sD - (double) Math.abs(sIdx.get(j) - mIdx.get(i))) / (double) sD);
+                if (weight < currentWofNM) {
+                    weight = currentWofNM;
+                    candidate = sIdx.get(j);
+                }
+            }
+
+            // 아크 생성
+            if (candidate != -1) {
+                retVal.connect(candidate, mIdx.get(i));
+            }
+        }
+
         // 동사 기준 링킹
 
         if(vIdx.size() == 0){ // 동사 혹은 형용사가 없는 경우 - 의문문 / 홑단어
-
         }else {
             for (int i = 0; i < vIdx.size(); i++) {
                 double weight = 0;
@@ -333,7 +364,7 @@ public class Linker {
             }
         }
 
-        Arc procArc = getLinkedArc(shortenNounNounPhrase(cores));
+        MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores));
 
         // 명령문 분기 By isOrder
         addProcData(procArc, isOrder(procArc.getWords()));
@@ -342,6 +373,11 @@ public class Linker {
 
     private int isOrder(List<TypedPair> words){
         int questions = 0;
+        for(int i = 0; i < words.size() ; i++) {
+            TypedPair pair = words.get(i); // TODO 문장 구분
+            if(pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
+        }
+
         for(int i = 0; i < words.size() ; i++) {
             TypedPair pair = words.get(i); // TODO 문장 구분
             if(pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
@@ -356,9 +392,11 @@ public class Linker {
         return SENTENCE_ORDER;
     }
 
-    private void addProcData(Arc arc, int what){
+    private void addProcData(MorphemeArc arc, int what){
         for(Integer key : arc.keySet()) {
-            addProcData(arc.getWord(key), arc.getWord(arc.get(key)), what);
+            for(Integer subKey : arc.get(key)) {
+                addProcData(arc.getWord(key), arc.getWord(subKey), what);
+            }
         }
     }
 
@@ -425,22 +463,33 @@ public class Linker {
             }else {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + know.get(1).getFirst() + "겠습니다. [서비스 호출]");
             }
-        }else if(what == SENTENCE_QUESTION){
-            if(know.get(1).getType() == TypedPair.TYPE_ADV){
+        }else if(what == SENTENCE_QUESTION) {
+            if (know.get(1).getType() == TypedPair.TYPE_ADV) {
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!?");
-            }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
+            } else if (know.get(1).getType() == TypedPair.TYPE_SUBJECT) {
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
-            }else if(know.get(1).getType() == TypedPair.TYPE_QUESTION){
+            } else if (know.get(1).getType() == TypedPair.TYPE_QUESTION) {
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 정보가 " + know.get(1).getFirst() + "인지 탐색합니다. [검색 호출]");
-            }else if(know.get(1).getType() == TypedPair.TYPE_ADJ){
+            } else if (know.get(1).getType() == TypedPair.TYPE_ADJ) {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
-            }else if(know.get(1).getType() == TypedPair.TYPE_VADJ){
+            } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
-            }else {
+            } else {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + know.get(1).getFirst() + "겠습니다. [서비스 호출]");
             }
+        }else if(what == SENTENCE_META){
+            if (metaBase.doYouKnow(know) > 0) {
+                if (know.get(1).getType() == TypedPair.TYPE_METAPHORE) {
+                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "과", "와") + " 같은 의미라고 " + metaBase.doYouKnow(know) + "번 들었어요.");
+                }
+            }else{
+                if (know.get(1).getType() == TypedPair.TYPE_METAPHORE) {
+                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "과", "와") + " 같은 의미라고 알아둘게요.");
+                }
+            }
         }else{}
-        base.learn(know);
+        if(what != SENTENCE_META) base.learn(know);
+        else metaBase.learn(know);
 
     }
 

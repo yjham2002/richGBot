@@ -1,26 +1,16 @@
 package relations;
 
-import kr.co.shineware.util.common.model.Pair;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author 함의진
- * @deprecated
- * 의존 제약 조건에 따른 아크 연결을 위한 클래스로 맵의 키로 의존소를 이용한다.
- * 1. 해시맵의 특성을 통해 지배소 유일의 원칙을 제약한다. (컬리전 시에는 인덱스를 비교한다.)
- * 2. 투영의 원칙은 이하의 isCrossed 메소드를 통해 제약한다.
- * 3. 지배소 후위의 원칙은 지배소와 의존소 각각의 인덱스를 통해 아래 connect 내에서 제약한다. - 자유로운 명령을 위해 제약하지 않음 *
- * 4. 격틀/의미정보 제약은 지식베이스의 기계학습을 통해 제약한다.
- * 5. 필수 성분 제약의 경우, 연결 과정에서 검출할 수 없으므로, 본 클래스에서 제약하지 않는다. *
+ * @author  함의진
+ * @version 1.0
+ * 별도의 제약조건을 설정하지 않은 리스트형 아크 자료구조
+ * Arc에 비해 한 노드로부터 여러 노드로의 연결이 가능하게 설정되었으며, 의미상 국문학적 제약이 설정되지 않음.
  */
-
-@Deprecated
-public class Arc extends HashMap<Integer, Integer>{
+public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
 
     private static boolean semaphore = false;
 
@@ -34,7 +24,7 @@ public class Arc extends HashMap<Integer, Integer>{
 
     private List<TypedPair> words;
 
-    public Arc(List<TypedPair> linearWords){
+    public MorphemeArc(List<TypedPair> linearWords){
         super();
         if(linearWords == null) words = new ArrayList<>();
         else words = linearWords;
@@ -54,14 +44,16 @@ public class Arc extends HashMap<Integer, Integer>{
             rightSide = dependant;
         }
         for(Integer i : this.keySet()){
-            int mLeft = i;
-            int mRight = this.get(i);
-            if(mLeft > mRight){
-                mLeft = this.get(i);
-                mRight = i;
+            for(Integer j : this.get(i)) {
+                int mLeft = i;
+                int mRight = j;
+                if (mLeft > mRight) {
+                    mLeft = j;
+                    mRight = i;
+                }
+                if (leftSide > mLeft && rightSide > mRight && mRight > leftSide) return true;
+                if (leftSide < mLeft && rightSide < mRight && mRight < leftSide) return true;
             }
-            if(leftSide > mLeft && rightSide > mRight && mRight > leftSide) return true;
-            if(leftSide < mLeft && rightSide < mRight && mRight < leftSide) return true;
         }
         return false;
     }
@@ -91,16 +83,16 @@ public class Arc extends HashMap<Integer, Integer>{
 //            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [지배소 후위의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
 //            doNothing = true;
 //        }
-        if(isCrossed(dominant, dependant)){
-            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [투영의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
-            doNothing = true;
-        }
-        if(this.containsKey(dependant)){
-            if(this.get(dependant) != dominant){
-                if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [지배소 유일의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
-                doNothing = true;
-            }
-        }
+//        if(isCrossed(dominant, dependant)){
+//            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [투영의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+//            doNothing = true;
+//        }
+//        if(this.containsKey(dependant)){
+//            if(isNotTheOnlyOne(dependant, dominant)){
+//                if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [지배소 유일의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+//                doNothing = true;
+//            }
+//        }
 
         if(doNothing) {
             semaphore = false;
@@ -112,16 +104,41 @@ public class Arc extends HashMap<Integer, Integer>{
         return VALID;
     }
 
+    private boolean isNotTheOnlyOne(Integer dependant, Integer key){
+        for(Integer i : this.get(dependant)){
+            if(i != key) return true;
+        }
+        return false;
+    }
+
     @Override
-    public Integer put(Integer i, Integer ii){
+    public ArrayList<Integer> put(Integer i, ArrayList<Integer> ii){
         if(semaphore){
-            super.put(i, ii);
+            if(this.containsKey(i)){
+                for(Integer subKey : ii) this.get(i).add(subKey);
+            }else {
+                super.put(i, ii);
+            }
             semaphore = false;
-            return VALID;
+            return ii;
         }else {
             if (CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [의존성 제약을 위반할 수 있는 임의 삽입]");
-            return INVALID;
+            return null;
         }
+    }
+
+    public ArrayList<Integer> put(Integer i, Integer ii){
+        ArrayList<Integer> entry = new ArrayList<>();
+        entry.add(ii);
+
+        return this.put(i, entry);
+    }
+
+    private boolean containsValue(Integer key){
+        for(ArrayList<Integer> list : this.values()){
+            if(list.contains(key)) return true;
+        }
+        return false;
     }
 
     public TypedPair getWord(Integer key){

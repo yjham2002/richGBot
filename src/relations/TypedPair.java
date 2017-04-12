@@ -16,6 +16,7 @@ public class TypedPair extends Pair<String, String> {
     public static final int TYPE_QUESTION    = 4; // 의문사
     public static final int TYPE_ADJ    = 5; // 형용사 - 관형형전성어미에 의한 형용언의 형용사화
     public static final int TYPE_VADJ    = 6; // 형용사 - 관형형전성어미에 의한 동사의 형용사화
+    public static final int TYPE_METAPHORE    = 7; // 형용사 - 관형형전성어미에 의한 동사의 형용사화
 
     private int type = TYPE_DEFAULT;
 
@@ -30,6 +31,11 @@ public class TypedPair extends Pair<String, String> {
         this.setFirst(first);
         this.setSecond(second);
         this.type = type;
+    }
+
+    public boolean equals(TypedPair pair){
+        if(this.getFirst().equals(pair.getFirst()) && this.getSecond().equals(pair.getSecond())) return true;
+        return false;
     }
 
     public int getType() {

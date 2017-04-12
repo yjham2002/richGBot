@@ -14,6 +14,11 @@ import java.util.Set;
  */
 public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
 
+    public static final int SET_SENTENCE_RECOGNIZE = 100;
+    public static final int SET_METAPHOR_RECOGNIZE = 200;
+
+    private int current_set = SET_SENTENCE_RECOGNIZE;
+
     public static final int DEBUG_MODE = 100;
     public static final int REAL_MODE = 200;
     public static final int CURRENT_MODE = REAL_MODE;
@@ -26,8 +31,9 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     public static final int TYPE_METAPHOR   = -100;
     public static final int TYPE_SYNONYM    = -200;
 
-    public KnowledgeBase(DBManager dbManager){
+    public KnowledgeBase(DBManager dbManager, int set){
         this.dbManager = dbManager;
+        this.current_set = set;
         wakeUp();
     }
 
@@ -57,22 +63,47 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     }
 
     private void wakeUp(){
-        List<KnowledgeFraction> knowledgeFractions = dbManager.getKnowledges();
-
+        List<KnowledgeFraction> knowledgeFractions;
         int counter =  1;
-        for(KnowledgeFraction know : knowledgeFractions) {
-            HashMap<String, Integer> entry = new HashMap<>();
-            entry.put(know.getRefWord(), know.getFrequency());
-            if(this.containsKey(know.getWord())) {
-                this.get(know.getWord()).put(know.getRefWord(), know.getFrequency());
-            }else{
-                this.put(know.getWord(), entry);
-            }
-            if(CURRENT_MODE == REAL_MODE){
-                String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
-                System.out.println("Loading KnowledgeBase on cache :: (" + percentage + ") :: " + know);
-            }
+
+        switch (current_set){
+            case SET_SENTENCE_RECOGNIZE :
+                knowledgeFractions = dbManager.getKnowledges();
+
+                for(KnowledgeFraction know : knowledgeFractions) {
+                    HashMap<String, Integer> entry = new HashMap<>();
+                    entry.put(know.getRefWord(), know.getFrequency());
+                    if(this.containsKey(know.getWord())) {
+                        this.get(know.getWord()).put(know.getRefWord(), know.getFrequency());
+                    }else{
+                        this.put(know.getWord(), entry);
+                    }
+                    if(CURRENT_MODE == REAL_MODE){
+                        String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
+                        System.out.println("Loading KnowledgeBase on cache :: (" + percentage + ") :: " + know);
+                    }
+                }
+                break;
+            case SET_METAPHOR_RECOGNIZE :
+                knowledgeFractions = dbManager.getMetaphores();
+
+                for(KnowledgeFraction know : knowledgeFractions) {
+                    HashMap<String, Integer> entry = new HashMap<>();
+                    entry.put(know.getRefWord(), know.getFrequency());
+                    if(this.containsKey(know.getWord())) {
+                        this.get(know.getWord()).put(know.getRefWord(), know.getFrequency());
+                    }else{
+                        this.put(know.getWord(), entry);
+                    }
+                    if(CURRENT_MODE == REAL_MODE){
+                        String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
+                        System.out.println("Loading MetaphoreBase on cache :: (" + percentage + ") :: " + know);
+                    }
+                }
+                break;
+            default: break;
         }
+
     }
 
     public int learn(String noun, String verb){
@@ -99,7 +130,11 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     public int learn(List<TypedPair> linkPair){
         if(CURRENT_MODE == REAL_MODE) {
             boolean reverse = linkPair.get(1).getType() == TypedPair.TYPE_ADV;
-            dbManager.saveKnowledgeLink(linkPair.get(0), linkPair.get(1), reverse);
+            switch (current_set){
+                case SET_SENTENCE_RECOGNIZE : dbManager.saveKnowledgeLink(linkPair.get(0), linkPair.get(1), reverse); break;
+                case SET_METAPHOR_RECOGNIZE : dbManager.saveMetaLink(linkPair.get(0), linkPair.get(1)); break;
+                default: break;
+            }
         }
         return learn(linkPair.get(0).getFirst(), linkPair.get(1).getFirst());
     }
