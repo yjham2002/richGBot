@@ -387,7 +387,7 @@ public class Linker {
                 } else if (know.get(1).getType() == TypedPair.TYPE_ADJ) {
                     System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠! " + base.doYouKnow(know) + "번 봤던 수식구조예요.");
                 } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! " + base.doYouKnow(know) + "번 봤던 봤어요.");
+                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! " + base.doYouKnow(know) + "번 봤던 구조예요.");
                 } else {
                     System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
                 }
@@ -397,7 +397,7 @@ public class Linker {
                 if (know.get(1).getSecond().equals("VA")) concat = "은";
 
                 if (know.get(1).getType() == TypedPair.TYPE_ADV) {
-                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!");
+                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!-");
                 } else if (know.get(1).getType() == TypedPair.TYPE_SUBJECT) {
                     System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
                 } else if (know.get(1).getType() == TypedPair.TYPE_QUESTION) {
@@ -413,7 +413,7 @@ public class Linker {
 
         }else if(what == SENTENCE_ORDER){
             if(know.get(1).getType() == TypedPair.TYPE_ADV){
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!");
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!!");
             }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
             }else if(know.get(1).getType() == TypedPair.TYPE_QUESTION){
@@ -427,7 +427,7 @@ public class Linker {
             }
         }else if(what == SENTENCE_QUESTION){
             if(know.get(1).getType() == TypedPair.TYPE_ADV){
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!");
+                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!?");
             }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
                 System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
             }else if(know.get(1).getType() == TypedPair.TYPE_QUESTION){

@@ -63,7 +63,11 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         for(KnowledgeFraction know : knowledgeFractions) {
             HashMap<String, Integer> entry = new HashMap<>();
             entry.put(know.getRefWord(), know.getFrequency());
-            this.put(know.getWord(), entry);
+            if(this.containsKey(know.getWord())) {
+                this.get(know.getWord()).put(know.getRefWord(), know.getFrequency());
+            }else{
+                this.put(know.getWord(), entry);
+            }
             if(CURRENT_MODE == REAL_MODE){
                 String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
                 System.out.println("Loading KnowledgeBase on cache :: (" + percentage + ") :: " + know);
@@ -93,7 +97,10 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     }
 
     public int learn(List<TypedPair> linkPair){
-        if(CURRENT_MODE == REAL_MODE) dbManager.saveKnowledgeLink(linkPair.get(0), linkPair.get(1));
+        if(CURRENT_MODE == REAL_MODE) {
+            boolean reverse = linkPair.get(1).getType() == TypedPair.TYPE_ADV;
+            dbManager.saveKnowledgeLink(linkPair.get(0), linkPair.get(1), reverse);
+        }
         return learn(linkPair.get(0).getFirst(), linkPair.get(1).getFirst());
     }
 

@@ -42,13 +42,20 @@ public class DBManager extends DBConstManager {
         try{
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
             st = connection.createStatement();
-            String sql = "SELECT word, refWord, SUM(frequency) AS frequency FROM tblKnowledgeLink GROUP BY word, refWord ORDER BY word;";
+            String sql = "SELECT word, refWord, SUM(frequency) AS frequency, `reverse` FROM tblKnowledgeLink GROUP BY word, refWord ORDER BY word;";
             ResultSet rs = st.executeQuery(sql);
 
             while(rs.next()){
                 KnowledgeFraction know = new KnowledgeFraction();
                 know.setWord(rs.getString("word"));
                 know.setRefWord(rs.getString("refWord"));
+//                if(rs.getInt("reverse") == 0){
+//                    know.setWord(rs.getString("word"));
+//                    know.setRefWord(rs.getString("refWord"));
+//                }else{
+//                    know.setRefWord(rs.getString("word"));
+//                    know.setWord(rs.getString("refWord"));
+//                }
                 know.setFrequency(rs.getInt("frequency"));
                 retVal.add(know);
             }
@@ -82,13 +89,21 @@ public class DBManager extends DBConstManager {
         }
     }
 
-    public boolean saveKnowledgeLink(TypedPair word, TypedPair ref){
+    public boolean saveKnowledgeLink(TypedPair word, TypedPair ref, boolean reverse){
         boolean retVal = false;
+
+        TypedPair param1, param2;
+
+        param1 = word;
+        param2 = ref;
+
         try {
             String sql;
 
-            if(getFrequentBetween(word, ref) == 0) sql = "INSERT INTO `GBot`.`tblKnowledgeLink`(`word`,`refWord`,`tag`,`refTag`,`uptDate`,`regDate`) VALUES ('" + word.getFirst() + "','" + ref.getFirst() + "','" + word.getSecond() + "','" + ref.getSecond() + "', NOW(), NOW());";
-            else sql = "UPDATE `GBot`.`tblKnowledgeLink` SET `frequency` = (`frequency` + 1), `uptDate` = NOW() WHERE word='" + word.getFirst() + "' AND refWord='" + ref.getFirst() + "' AND tag='" + word.getSecond() + "' AND refTag='" + ref.getSecond() + "';";
+            if(getFrequentBetween(param1, param2) == 0) sql = "INSERT INTO `GBot`.`tblKnowledgeLink`(`word`,`refWord`,`tag`,`refTag`,`uptDate`,`regDate`, `reverse`) VALUES ('"
+                    + param1.getFirst() + "','" + param2.getFirst() + "','" + param1.getSecond() + "','" + param2.getSecond() + "', NOW(), NOW(), " + (reverse? 1 : 0) + ");";
+            else sql = "UPDATE `GBot`.`tblKnowledgeLink` SET `frequency` = (`frequency` + 1), `uptDate` = NOW() WHERE word='"
+                    + param1.getFirst() + "' AND refWord='" + param2.getFirst() + "' AND tag='" + param1.getSecond() + "' AND refTag='" + param2.getSecond() + "';";
 
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
             st = connection.createStatement();
