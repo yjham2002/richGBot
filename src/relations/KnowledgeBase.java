@@ -68,6 +68,7 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
 
         switch (current_set){
             case SET_SENTENCE_RECOGNIZE :
+                System.out.println("[INFO :: Loading [SETENCE RECOGNIZER] cache has been started.]");
                 knowledgeFractions = dbManager.getKnowledges();
 
                 for(KnowledgeFraction know : knowledgeFractions) {
@@ -78,14 +79,15 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
                     }else{
                         this.put(know.getWord(), entry);
                     }
-                    if(CURRENT_MODE == REAL_MODE){
+                    if(CURRENT_MODE == DEBUG_MODE){
                         String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
                         System.out.println("Loading KnowledgeBase on cache :: (" + percentage + ") :: " + know);
                     }
                 }
                 break;
             case SET_METAPHOR_RECOGNIZE :
-                knowledgeFractions = dbManager.getMetaphores();
+                System.out.println("[INFO :: Loading [METAPHOR RECOGNIZER] cache has been started.]");
+                knowledgeFractions = dbManager.getMetaphors();
 
                 for(KnowledgeFraction know : knowledgeFractions) {
                     HashMap<String, Integer> entry = new HashMap<>();
@@ -95,7 +97,7 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
                     }else{
                         this.put(know.getWord(), entry);
                     }
-                    if(CURRENT_MODE == REAL_MODE){
+                    if(CURRENT_MODE == DEBUG_MODE){
                         String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
                         System.out.println("Loading MetaphoreBase on cache :: (" + percentage + ") :: " + know);
                     }
@@ -103,6 +105,8 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
                 break;
             default: break;
         }
+
+        System.out.println("[INFO :: Loading cache has done successfully.]");
 
     }
 
@@ -125,6 +129,20 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
             this.put(noun, entry);
             return LEARNED;
         }
+    }
+
+    public String getRootMeaning(String current){
+        if(current_set == SET_SENTENCE_RECOGNIZE) {
+            System.out.println("[DEBUG :: 문장인식기 내에서의 루트 탐색 호출 - 예상치 못한 결과가 도출될 수 있음]");
+        }
+
+        for(String key : this.keySet()){
+            if(this.get(key).containsKey(current)){
+                return getRootMeaning(key);
+            }
+        }
+
+        return current;
     }
 
     public int learn(List<TypedPair> linkPair){

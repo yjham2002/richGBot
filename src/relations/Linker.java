@@ -256,7 +256,7 @@ public class Linker {
 
             Pair<String, String> meta = cores.get(mIdx.get(i));
 
-            // 목적어와 동사 연결
+            // 주체적 명사와 종속적 명사 연결
             for (int j = 0; j < sIdx.size(); j++) {
                 double currentWofNM = metaBase.getWeightOf(cores.get(sIdx.get(j)).getFirst(), meta.getFirst()) + (((double) sD - (double) Math.abs(sIdx.get(j) - mIdx.get(i))) / (double) sD);
                 if (weight < currentWofNM) {
@@ -267,7 +267,7 @@ public class Linker {
 
             // 아크 생성
             if (candidate != -1) {
-                retVal.connect(candidate, mIdx.get(i));
+                retVal.connect(mIdx.get(i), candidate);
             }
         }
 
@@ -410,6 +410,8 @@ public class Linker {
     }
 
     private void learnLinkPair(List<TypedPair> know, int what){
+        String action = know.get(1).getFirst();
+        if(action.charAt(action.length() - 1) == '하') action = action.substring(0, action.length() - 1);
 
         if(what == SENTENCE_PLAIN) {
             if (base.doYouKnow(know) > 0) {
@@ -461,7 +463,7 @@ public class Linker {
             }else if(know.get(1).getType() == TypedPair.TYPE_VADJ){
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
             }else {
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + know.get(1).getFirst() + "겠습니다. [서비스 호출]");
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + metaBase.getRootMeaning(action) + "하겠습니다. [서비스 호출]");
             }
         }else if(what == SENTENCE_QUESTION) {
             if (know.get(1).getType() == TypedPair.TYPE_ADV) {
@@ -475,16 +477,16 @@ public class Linker {
             } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
             } else {
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + know.get(1).getFirst() + "겠습니다. [서비스 호출]");
+                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + metaBase.getRootMeaning(action) + "하겠습니다. [서비스 호출]");
             }
         }else if(what == SENTENCE_META){
             if (metaBase.doYouKnow(know) > 0) {
-                if (know.get(1).getType() == TypedPair.TYPE_METAPHORE) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "과", "와") + " 같은 의미라고 " + metaBase.doYouKnow(know) + "번 들었어요.");
+                if (know.get(0).getType() == TypedPair.TYPE_METAPHORE) {
+                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "과", "와") + " 같은 의미라고 " + metaBase.doYouKnow(know) + "번 들었어요.");
                 }
             }else{
-                if (know.get(1).getType() == TypedPair.TYPE_METAPHORE) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "과", "와") + " 같은 의미라고 알아둘게요.");
+                if (know.get(0).getType() == TypedPair.TYPE_METAPHORE) {
+                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "과", "와") + " 같은 의미라고 알아둘게요.");
                 }
             }
         }else{}

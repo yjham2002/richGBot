@@ -37,7 +37,7 @@ public class DBManager extends DBConstManager {
         }
     }
 
-    public List<KnowledgeFraction> getMetaphores(){
+    public List<KnowledgeFraction> getMetaphors(){
         List<KnowledgeFraction> retVal = new ArrayList<>();
         try{
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
@@ -145,15 +145,21 @@ public class DBManager extends DBConstManager {
         boolean retVal = false;
 
         TypedPair param1, param2;
-
         param1 = word;
         param2 = ref;
+
+        if(getFrequentBetweenForMeta(param2, param1) > 0 || param1.equals(param2)){
+            System.out.println("[WARN :: 재귀 탈출 조건에 위배되는 유의어/동의어 삽입 - 무시됨]");
+            return false;
+        }
 
         try {
             String sql;
 
-            if(getFrequentBetweenForMeta(param1, param2) == 0) sql = "INSERT INTO `GBot`.`tblMetaphore`(`includer`,`includee`,`tag_r`,`tag_e`,`uptDate`,`regDate`) VALUES ('"
-                    + param1.getFirst() + "','" + param2.getFirst() + "','" + param1.getSecond() + "','" + param2.getSecond() + "', NOW(), NOW());";
+            if(getFrequentBetweenForMeta(param1, param2) == 0) {
+                sql = "INSERT INTO `GBot`.`tblMetaphore`(`includer`,`includee`,`tag_r`,`tag_e`,`uptDate`,`regDate`) VALUES ('"
+                        + param1.getFirst() + "','" + param2.getFirst() + "','" + param1.getSecond() + "','" + param2.getSecond() + "', NOW(), NOW());";
+            }
             else sql = "UPDATE `GBot`.`tblMetaphore` SET `frequency` = (`frequency` + 1), `uptDate` = NOW() WHERE includer='"
                     + param1.getFirst() + "' AND includee='" + param2.getFirst() + "' AND tag_r='" + param1.getSecond() + "' AND tag_e='" + param2.getSecond() + "';";
 
@@ -165,11 +171,11 @@ public class DBManager extends DBConstManager {
             st.close();
             connection.close();
 
-            return  retVal;
         }catch(SQLException e){
             e.printStackTrace();
-            return false;
         }
+
+        return retVal;
     }
 
     public boolean saveKnowledgeLink(TypedPair word, TypedPair ref, boolean reverse){
