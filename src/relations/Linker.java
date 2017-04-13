@@ -28,6 +28,7 @@ public class Linker {
 
     private static boolean SIMILARITY_MODE = true;
     private static final double SIMILARITY_THRESHOLD = 0.5;
+    private static final double SIMILARITY_HIJACKING_THRESHOLD = 0.80;
 
     private static final int SENTENCE_ORDER = 10;
     private static final int SENTENCE_PLAIN = 20;
@@ -424,28 +425,32 @@ public class Linker {
 
         MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores)); // 아크를 연결하고 분석을 수행
 
+        double prob = 0.0; // 유사도 척도
+        String prediction = ""; // 예측된 사용자 의도
+
+        if(SIMILARITY_MODE){
+
+            prediction = "";
+            prob = 0.0;
+            for(String str : staticBase.keySet()){
+                double newProb = KoreanUtil.getEditDistanceRate(str, serialWords, true);
+                if(prob < newProb) {
+                    prediction = staticBase.get(str).keySet().iterator().next();
+                    prob = newProb;
+                }
+            }
+
+            System.out.println("[INFO :: 유사도 기반 정적 응답을 수행합니다. (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
+
+        }
+
         if(procArc.keySet().size() == 0){
-            if(SIMILARITY_MODE){
-
-                String prediction = "";
-                double prob = 0.0;
-                for(String str : staticBase.keySet()){
-                    double newProb = KoreanUtil.getEditDistanceRate(str, serialWords, true);
-                    if(prob < newProb) {
-                        prediction = staticBase.get(str).keySet().iterator().next();
-                        prob = newProb;
-                    }
-                }
-
-                System.out.println("[INFO :: 유사도 기반 정적 응답을 수행합니다. (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
-
-                if(prob >= SIMILARITY_THRESHOLD){
-                    System.out.println(StaticResponser.talk(prediction));
-                }
-
+            if(prob >= SIMILARITY_THRESHOLD){
+                System.out.println(StaticResponser.talk(prediction));
             }
         }else {
-            addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
+            if(prob >= SIMILARITY_HIJACKING_THRESHOLD) System.out.println(StaticResponser.talk(prediction));
+            else addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
         }
 
     }
@@ -588,7 +593,8 @@ public class Linker {
                 }
             }
         }else{}
-        if(what != SENTENCE_META) {
+
+        if(what != SENTENCE_META && what != SENTENCE_METAPHORICAL_QUESTION) {
             base.learn(know);
         }
         else if(what == SENTENCE_METAPHORICAL_QUESTION){
