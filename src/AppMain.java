@@ -11,12 +11,6 @@ import java.util.*;
  */
 public class AppMain {
 
-//    public static String sentence1 = "나는 세호가 밥을 먹는다고 생각한다";
-//    public static String sentence2 = "독한 감기에 걸리면 정말 아프다 낚싯줄이 감기는 것처럼 좀 쓰린데 이는 내가 많이 어리석어 밥을 아예 먹지 않았기 때문이다.";
-//    public static String sentence3 = "컴퓨터를 이용해서 프로그래밍을 하고싶다 그리고 노트에 소설을 쓰고싶다.";
-//    public static String sentence4 = "모니터가 참 멋지네요 하지만 벌어진 틈새가 신경 쓰입니다.";
-//    public static String sentence5 = "핸드폰을 통해 전화를 받으면 상대방의 목소리가 들립니다 마치 옆에 있는 듯한 느낌을 받아볼 수 있지요.";
-
     public static void main(String[] args) {
 
         Komoran komoran = new Komoran("C:\\Users\\a\\IdeaProjects\\richGBot\\models");

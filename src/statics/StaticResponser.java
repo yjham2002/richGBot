@@ -8,12 +8,17 @@ import java.util.Random;
  */
 public class StaticResponser {
     public static final String INTENT_TIME = "TIME";
+    public static final String INTENT_HELLO = "HELLO";
+    public static final String INTENT_CALL = "CALL";
+    public static final String INTENT_DOING = "DOING";
 
     public static String talk(String intent){
         String response = "";
         switch (intent){
-            case "TIME": response = "현재 시각은 [" + new Date() + "] 입니다."; break;
-            case "HELLO": response = ResponseConstant.HELLO[new Random().nextInt(ResponseConstant.getSizeOfHello())]; break;
+            case INTENT_TIME: response = "현재 시각은 [" + new Date() + "] 입니다."; break;
+            case INTENT_HELLO: response = ResponseConstant.HELLO[new Random().nextInt(ResponseConstant.HELLO.length)]; break;
+            case INTENT_CALL: response = ResponseConstant.CALL[new Random().nextInt(ResponseConstant.CALL.length)]; break;
+            case INTENT_DOING: response = ResponseConstant.DOING[new Random().nextInt(ResponseConstant.DOING.length)]; break;
             default : break;
         }
 
