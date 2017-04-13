@@ -35,5 +35,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="com.ullink.slack:simpleslackapi:0.6.0" level="project" />
+    <orderEntry type="library" name="org.jsoup:jsoup:1.10.2" level="project" />
   </component>
 </module>

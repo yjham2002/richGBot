@@ -2,9 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/org_jsoup_jsoup_1_10_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/util/WeatherParser.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/com_google_code_gson_gson_2_8_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/javax_websocket_javax_websocket_client_api_1_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/org_apache_directory_studio_org_apache_logging_log4j_1_2_17.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/org_glassfish_tyrus_tyrus_core_1_2.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/org_slf4j_slf4j_log4j12_1_6_4.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/org_threeten_threetenbp_1_3_3.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/AppSlackMain.class" afterPath="$PROJECT_DIR$/out/production/GBot/AppSlackMain.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Linker.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/Linker.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GBot.iml" afterPath="$PROJECT_DIR$/GBot.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppSlackMain.java" afterPath="$PROJECT_DIR$/src/AppSlackMain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linker.java" afterPath="$PROJECT_DIR$/src/relations/Linker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/statics/ResponseConstant.java" afterPath="$PROJECT_DIR$/src/statics/ResponseConstant.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/statics/StaticResponser.java" afterPath="$PROJECT_DIR$/src/statics/StaticResponser.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -28,20 +39,20 @@
         <entry file="file://$PROJECT_DIR$/src/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="152">
-              <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="469" column="85" lean-forward="false" selection-start-line="469" selection-start-column="85" selection-end-line="469" selection-end-column="85" />
+            <state relative-caret-position="366">
+              <caret line="470" column="17" lean-forward="false" selection-start-line="470" selection-start-column="17" selection-end-line="470" selection-end-column="17" />
               <folding>
-                <element signature="e#33366#33367#0" expanded="true" />
-                <element signature="e#33393#33394#0" expanded="true" />
+                <element signature="e#33368#33369#0" expanded="true" />
+                <element signature="e#33395#33396#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -50,8 +61,8 @@
       <file leaf-file-name="AppSlackMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppSlackMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+            <state relative-caret-position="186">
+              <caret line="27" column="30" lean-forward="false" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -65,6 +76,42 @@
             <state relative-caret-position="351">
               <caret line="104" column="25" lean-forward="false" selection-start-line="104" selection-start-column="25" selection-end-line="104" selection-end-column="25" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResponseConstant.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/statics/ResponseConstant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="8" column="24" lean-forward="true" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StaticResponser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="199">
+              <caret line="20" column="45" lean-forward="true" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WeatherParser.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/util/WeatherParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="427">
+              <caret line="43" column="9" lean-forward="false" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#589#590#0" expanded="true" />
+                <element signature="e#616#617#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -165,10 +212,11 @@
         <option value="$PROJECT_DIR$/src/com/ullink/slack/simpleslackapi/SlackMessage.java" />
         <option value="$PROJECT_DIR$/src/com/ullink/slack/simpleslackapi/SlackMessageListener.java" />
         <option value="$PROJECT_DIR$/src/com/ullink/slack/simpleslackapi/impl/SlackBotImpl.java" />
-        <option value="$PROJECT_DIR$/src/AppSlackMain.java" />
-        <option value="$PROJECT_DIR$/src/statics/StaticResponser.java" />
         <option value="$PROJECT_DIR$/src/statics/ResponseConstant.java" />
+        <option value="$PROJECT_DIR$/src/AppSlackMain.java" />
         <option value="$PROJECT_DIR$/src/relations/Linker.java" />
+        <option value="$PROJECT_DIR$/src/statics/StaticResponser.java" />
+        <option value="$PROJECT_DIR$/src/util/WeatherParser.java" />
       </list>
     </option>
   </component>
@@ -219,6 +267,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="richGBot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="richGBot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -619,13 +685,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/relations/Arc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="48" column="33" lean-forward="false" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="893">
@@ -639,8 +698,8 @@
         <state relative-caret-position="8284">
           <caret line="442" column="17" lean-forward="false" selection-start-line="442" selection-start-column="17" selection-end-line="442" selection-end-column="17" />
           <folding>
-            <element signature="e#33366#33367#0" expanded="true" />
-            <element signature="e#33393#33394#0" expanded="true" />
+            <element signature="e#33368#33369#0" expanded="true" />
+            <element signature="e#33395#33396#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -658,7 +717,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -683,8 +742,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#33366#33367#0" expanded="true" />
-            <element signature="e#33393#33394#0" expanded="true" />
+            <element signature="e#33368#33369#0" expanded="true" />
+            <element signature="e#33395#33396#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -709,8 +768,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#33366#33367#0" expanded="true" />
-            <element signature="e#33393#33394#0" expanded="true" />
+            <element signature="e#33368#33369#0" expanded="true" />
+            <element signature="e#33395#33396#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -744,8 +803,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#33366#33367#0" expanded="true" />
-            <element signature="e#33393#33394#0" expanded="true" />
+            <element signature="e#33368#33369#0" expanded="true" />
+            <element signature="e#33395#33396#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -822,7 +881,7 @@
         <state relative-caret-position="2299">
           <caret line="125" column="24" lean-forward="false" selection-start-line="125" selection-start-column="24" selection-end-line="125" selection-end-column="24" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -832,7 +891,7 @@
         <state relative-caret-position="3838">
           <caret line="202" column="47" lean-forward="false" selection-start-line="202" selection-start-column="47" selection-end-line="202" selection-end-column="47" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -935,36 +994,8 @@
     <entry file="file://$PROJECT_DIR$/src/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
-          <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppSlackMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/statics/ResponseConstant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="63" column="28" lean-forward="false" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -976,13 +1007,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppSlackMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="27" column="30" lean-forward="false" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="469" column="85" lean-forward="false" selection-start-line="469" selection-start-column="85" selection-end-line="469" selection-end-column="85" />
+        <state relative-caret-position="366">
+          <caret line="470" column="17" lean-forward="false" selection-start-line="470" selection-start-column="17" selection-end-line="470" selection-end-column="17" />
           <folding>
-            <element signature="e#33366#33367#0" expanded="true" />
-            <element signature="e#33393#33394#0" expanded="true" />
+            <element signature="e#33368#33369#0" expanded="true" />
+            <element signature="e#33395#33396#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="20" column="45" lean-forward="true" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/statics/ResponseConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="24" lean-forward="true" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/util/WeatherParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="43" column="9" lean-forward="false" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#589#590#0" expanded="true" />
+            <element signature="e#616#617#0" expanded="true" />
           </folding>
         </state>
       </provider>

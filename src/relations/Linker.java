@@ -455,7 +455,7 @@ public class Linker {
             }
 
             System.out.println("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
-            if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
+            //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
         }
 
         if(procArc.keySet().size() == 0){

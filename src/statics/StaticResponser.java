@@ -1,5 +1,7 @@
 package statics;
 
+import util.WeatherParser;
+
 import java.util.Date;
 import java.util.Random;
 
@@ -13,6 +15,7 @@ public class StaticResponser {
     public static final String INTENT_DOING = "DOING";
     public static final String INTENT_BAD = "BAD";
     public static final String INTENT_GOOD = "GOOD";
+    public static final String INTENT_WEATHER = "WEATHER";
     public static final String INTENT_NOTHING = "NOTHING";
 
     public static String talk(String intent){
@@ -25,6 +28,7 @@ public class StaticResponser {
             case INTENT_BAD: response = ResponseConstant.BAD[new Random().nextInt(ResponseConstant.BAD.length)]; break;
             case INTENT_GOOD: response = ResponseConstant.GOOD[new Random().nextInt(ResponseConstant.GOOD.length)]; break;
             case INTENT_NOTHING: response = ResponseConstant.NOTHING[new Random().nextInt(ResponseConstant.NOTHING.length)]; break;
+            case INTENT_WEATHER: response = WeatherParser.getWeather("서울"); break;
             default : break;
         }
 
