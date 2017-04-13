@@ -21,6 +21,7 @@ public class Linker {
     private static final int SENTENCE_PLAIN = 20;
     private static final int SENTENCE_QUESTION = 30;
     private static final int SENTENCE_META = 40;
+    private static final int SENTENCE_METAPHORICAL_QUESTION = 50;
 
     private static final Set<String> SUBJECTS = new HashSet<>();
     private static final Set<String> GENERAL_NOUN = new HashSet<>();
@@ -63,7 +64,7 @@ public class Linker {
         this.metaBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_METAPHOR_RECOGNIZE);
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
-        for(String s : new String[]{"NN", "NNG", "NA", "SL", "SH", "SW", "NF", "SN", "NA"}) OBJECTS.add(s);
+        for(String s : new String[]{"NP", "NN", "NNG", "NA", "SL", "SH", "SW", "NF", "SN", "NA"}) OBJECTS.add(s);
         for(String s : new String[]{"NNB"}) DEPNOUN.add(s);
         for(String s : new String[]{"VV"}) VERBS.add(s);
         for(String s : new String[]{"VA"}) ADJECTIVES.add(s);
@@ -364,10 +365,11 @@ public class Linker {
             }
         }
 
-        MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores));
 
-        // 명령문 분기 By isOrder
-        addProcData(procArc, isOrder(procArc.getWords()));
+
+        MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores)); // 아크를 연결하고 분석을 수행
+
+        addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
 
     }
 
@@ -401,12 +403,17 @@ public class Linker {
     }
 
     private void addProcData(TypedPair pop, TypedPair word, int what){
+        int type = what;
         if(pop == null) System.out.println("pop null");
         if(word == null) System.out.println("word null");
         List<TypedPair> temp = new ArrayList<>();
+        if(KoreanUtil.isMetaQuestion(word)){
+            type = SENTENCE_METAPHORICAL_QUESTION;
+        }
+
         temp.add(word);
         temp.add(pop);
-        learnLinkPair(temp, what);
+        learnLinkPair(temp, type);
     }
 
     private void learnLinkPair(List<TypedPair> know, int what){
@@ -427,7 +434,7 @@ public class Linker {
                 } else if (know.get(1).getType() == TypedPair.TYPE_ADJ) {
                     System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠! " + base.doYouKnow(know) + "번 봤던 수식구조예요.");
                 } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! " + base.doYouKnow(know) + "번 봤던 구조예요.");
+                    System.out.println(MY_NAME + " : " + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! " + base.doYouKnow(know) + "번 봤던 구조예요.");
                 } else {
                     System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
                 }
@@ -445,7 +452,7 @@ public class Linker {
                 } else if (know.get(1).getType() == TypedPair.TYPE_ADJ) {
                     System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
                 } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
+                    System.out.println(MY_NAME + " : " + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! 알아둘게요.");
                 } else {
                     System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
                 }
@@ -489,9 +496,26 @@ public class Linker {
                     System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "과", "와") + " 같은 의미라고 알아둘게요.");
                 }
             }
+        }else if(what == SENTENCE_METAPHORICAL_QUESTION){
+            if (know.get(0).getType() == TypedPair.TYPE_METAPHORE) {
+                List<String> backTrack = metaBase.getBackTrackingList(know.get(1).getFirst(), new ArrayList<>());
+                System.out.print("\'" + know.get(1).getFirst() + "\'에 대한 지식 백트랙킹 결과 : [");
+                for(int e = 0; e < backTrack.size(); e++){
+                    System.out.print(backTrack.get(e));
+                    if(e < backTrack.size() - 1) System.out.print(", ");
+                    else System.out.print("]\n");
+                }
+            }
         }else{}
-        if(what != SENTENCE_META) base.learn(know);
-        else metaBase.learn(know);
+        if(what != SENTENCE_META) {
+            base.learn(know);
+        }
+        else if(what == SENTENCE_METAPHORICAL_QUESTION){
+            // DO NOTHING
+        }
+        else{
+            metaBase.learn(know);
+        }
 
     }
 

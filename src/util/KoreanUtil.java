@@ -40,6 +40,11 @@ public class KoreanUtil {
         return false;
     }
 
+    public static boolean isHowQuestion(Pair<String, String> pair){
+        if(pair.getFirst().equals("몇") && pair.getSecond().equals("MM")) return true;
+        return false;
+    }
+
     public static boolean isSubjectivePost(Pair<String, String> pair){
         if((pair.getSecond().equals("JKS") || pair.getSecond().equals("JX")) && !isEOS(pair)) return true;
         return false;
@@ -67,6 +72,19 @@ public class KoreanUtil {
 
     public static boolean isObjectivePost(Pair<String, String> pair){
         if(pair.getSecond().equals("JKO")) return true;
+        return false;
+    }
+
+    public static boolean isMetaQuestion(Pair<String, String> pair){
+        if(pair.getSecond().equals("NP")){
+            switch (pair.getFirst()){
+                case "누구": case "어디": case "무엇": case "뭐": return true;
+            }
+        }else if(pair.getSecond().equals("NNG")){
+            switch (pair.getFirst()){
+                case "누구": case "어디": case "무엇": case "뭐": return true;
+            }
+        }
         return false;
     }
 

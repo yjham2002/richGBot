@@ -3,10 +3,7 @@ package relations;
 import DB.DBManager;
 import kr.co.shineware.util.common.model.Pair;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author 함의진
@@ -14,22 +11,35 @@ import java.util.Set;
  */
 public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
 
+    /*
+    지식베이스 용도에 대한 컨스턴트
+     */
     public static final int SET_SENTENCE_RECOGNIZE = 100;
     public static final int SET_METAPHOR_RECOGNIZE = 200;
+    public static final int SET_STATIC_QUESTION = 300;
 
+    /*
+    현재 지식베이스의 용도를 갖는 변수로서 기본값은 문장 인식기
+     */
     private int current_set = SET_SENTENCE_RECOGNIZE;
 
+    /*
+    로그 출력 레벨을 조정하기 위한 컨스턴트
+     */
     public static final int DEBUG_MODE = 100;
     public static final int REAL_MODE = 200;
     public static final int CURRENT_MODE = REAL_MODE;
 
+    /*
+    학습 결과에 대한 피드백을 제공하기 위한 컨스턴트
+     */
     public static final int ALREADY_KNOW = 100;
     public static final int LEARNED = 200;
 
+    /*
+    DB 커넥션을 위임받는 DBManager 인스턴스
+     */
     public DBManager dbManager;
-
-    public static final int TYPE_METAPHOR   = -100;
-    public static final int TYPE_SYNONYM    = -200;
 
     public KnowledgeBase(DBManager dbManager, int set){
         this.dbManager = dbManager;
@@ -143,6 +153,22 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         }
 
         return current;
+    }
+
+    public List<String> getBackTrackingList(String current, List<String> list){
+        if(current_set == SET_SENTENCE_RECOGNIZE) {
+            System.out.println("[DEBUG :: 문장인식기 내에서의 루트 탐색 호출 - 예상치 못한 결과가 도출될 수 있음]");
+        }
+
+        list.add(current);
+
+        for(String key : this.keySet()){
+            if(this.get(key).containsKey(current)){
+                getBackTrackingList(key, list);
+            }
+        }
+
+        return list;
     }
 
     public int learn(List<TypedPair> linkPair){
