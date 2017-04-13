@@ -40,8 +40,8 @@ public class KoreanUtil {
         return false;
     }
 
-    public static boolean isHowQuestion(Pair<String, String> pair){
-        if(pair.getFirst().equals("몇") && pair.getSecond().equals("MM")) return true;
+    public static boolean isSpecialCharacter(Pair<String, String> pair){
+        if(pair.getSecond().equals("SF")) return true;
         return false;
     }
 

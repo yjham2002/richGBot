@@ -69,6 +69,38 @@ public class DBManager extends DBConstManager {
         return retVal;
     }
 
+    public List<KnowledgeFraction> getStaticBases(){
+        List<KnowledgeFraction> retVal = new ArrayList<>();
+        try{
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            String sql = "SELECT serialWord, serialTag, intention, SUM(frequency) AS frequency FROM tblStaticSentence GROUP BY serialWord, serialTag ORDER BY serialWord;";
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()){
+                KnowledgeFraction know = new KnowledgeFraction();
+                know.setWord(rs.getString("serialWord"));
+                know.setRefWord(rs.getString("intention"));
+//                if(rs.getInt("reverse") == 0){
+//                    know.setWord(rs.getString("word"));
+//                    know.setRefWord(rs.getString("refWord"));
+//                }else{
+//                    know.setRefWord(rs.getString("word"));
+//                    know.setWord(rs.getString("refWord"));
+//                }
+                know.setFrequency(rs.getInt("frequency"));
+                retVal.add(know);
+            }
+
+            rs.close();
+            st.close();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
     public List<KnowledgeFraction> getKnowledges(){
         List<KnowledgeFraction> retVal = new ArrayList<>();
         try{
@@ -121,6 +153,26 @@ public class DBManager extends DBConstManager {
         }
     }
 
+    public int getFrequentOfStatic(String sWord, String sTag, String intention){
+        try {
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            String sql = "SELECT IFNULL(frequency, 0) AS frequency FROM `GBot`.`tblStaticSentence` WHERE serialWord='" + sWord + "' AND serialTag='" + sTag + "' AND intention='" + intention + "';";
+            ResultSet rs = st.executeQuery(sql);
+            int rowCount = rs.last() ? rs.getRow() : 0;
+            rs.close();
+            st.close();
+
+            connection.close();
+
+            return rowCount;
+        }catch(SQLException e){
+            e.printStackTrace();
+
+            return 0;
+        }
+    }
+
     public int getFrequentBetweenForMeta(TypedPair word, TypedPair ref){
         try {
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
@@ -138,6 +190,31 @@ public class DBManager extends DBConstManager {
             e.printStackTrace();
 
             return 0;
+        }
+    }
+
+    public boolean saveStaticSentence(String sWord, String sTag, String intention){
+        boolean retVal = false;
+
+        try {
+            String sql;
+
+            if(getFrequentOfStatic(sWord, sTag, intention) == 0) sql = "INSERT INTO `GBot`.`tblStaticSentence`(`serialWord`,`serialTag`,`intention`,`uptDate`,`regDate`) " +
+                    "VALUES (\'" + sWord + "\',\'" + sTag + "\',\'" + intention + "\',NOW(),NOW());";
+            else sql = "UPDATE `GBot`.`tblStaticSentence` SET `frequency` = (`frequency` + 1), `uptDate` = NOW()  WHERE serialWord='" + sWord + "' AND serialTag='" + sTag + "' AND intention='" + intention + "';";
+
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+
+            retVal = st.execute(sql);
+
+            st.close();
+            connection.close();
+
+            return  retVal;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
         }
     }
 

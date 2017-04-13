@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DB/DBManager.java" afterPath="$PROJECT_DIR$/src/DB/DBManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/KnowledgeBase.java" afterPath="$PROJECT_DIR$/src/relations/KnowledgeBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linker.java" afterPath="$PROJECT_DIR$/src/relations/Linker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/KoreanUtil.java" afterPath="$PROJECT_DIR$/src/util/KoreanUtil.java" />
@@ -26,41 +27,31 @@
       <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="33" column="86" lean-forward="true" selection-start-line="33" selection-start-column="86" selection-end-line="33" selection-end-column="86" />
+            <state relative-caret-position="350">
+              <caret line="45" column="44" lean-forward="true" selection-start-line="45" selection-start-column="44" selection-end-line="45" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="367" column="0" lean-forward="false" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
+            <state relative-caret-position="92">
+              <caret line="396" column="18" lean-forward="true" selection-start-line="396" selection-start-column="18" selection-end-line="396" selection-end-column="18" />
               <folding>
-                <element signature="e#24217#24218#0" expanded="true" />
-                <element signature="e#24239#24240#0" expanded="true" />
+                <element signature="e#26459#26460#0" expanded="true" />
+                <element signature="e#26481#26482#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KnowledgeBase.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="KnowledgeBase.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/KnowledgeBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1121">
-              <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="KoreanUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="40" column="5" lean-forward="false" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+            <state relative-caret-position="331">
+              <caret line="122" column="75" lean-forward="false" selection-start-line="122" selection-start-column="75" selection-end-line="122" selection-end-column="75" />
               <folding />
             </state>
           </provider>
@@ -111,9 +102,10 @@
       <find>기억해둘게요</find>
       <find>NP</find>
       <find>connect</find>
-      <find>봤던</find>
       <find>다!</find>
       <find>getBac</find>
+      <find>void lin</find>
+      <find>봤던</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\a\IdeaProjects\GBot\src</dir>
@@ -155,10 +147,10 @@
         <option value="$PROJECT_DIR$/src/relations/TypedPair.java" />
         <option value="$PROJECT_DIR$/src/relations/Arc.java" />
         <option value="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
-        <option value="$PROJECT_DIR$/src/DB/DBManager.java" />
+        <option value="$PROJECT_DIR$/src/relations/KnowledgeBase.java" />
         <option value="$PROJECT_DIR$/src/util/KoreanUtil.java" />
         <option value="$PROJECT_DIR$/src/relations/Linker.java" />
-        <option value="$PROJECT_DIR$/src/relations/KnowledgeBase.java" />
+        <option value="$PROJECT_DIR$/src/DB/DBManager.java" />
       </list>
     </option>
   </component>
@@ -620,8 +612,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -657,8 +649,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -702,8 +694,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -747,8 +739,8 @@
         <state relative-caret-position="8284">
           <caret line="442" column="17" lean-forward="false" selection-start-line="442" selection-start-column="17" selection-end-line="442" selection-end-column="17" />
           <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -792,8 +784,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -819,8 +811,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -854,8 +846,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -942,14 +934,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="33" column="86" lean-forward="true" selection-start-line="33" selection-start-column="86" selection-end-line="33" selection-end-column="86" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/TypedPair.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
@@ -968,40 +952,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DB/DBManager.java">
+    <entry file="file://$PROJECT_DIR$/src/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="151" column="76" lean-forward="true" selection-start-line="151" selection-start-column="76" selection-end-line="151" selection-end-column="76" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="350">
+          <caret line="45" column="44" lean-forward="true" selection-start-line="45" selection-start-column="44" selection-end-line="45" selection-end-column="44" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
-          <caret line="40" column="5" lean-forward="false" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+          <caret line="40" column="5" lean-forward="true" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="367" column="0" lean-forward="false" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
-          <folding>
-            <element signature="e#24217#24218#0" expanded="true" />
-            <element signature="e#24239#24240#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/KnowledgeBase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1121">
-          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+        <state relative-caret-position="331">
+          <caret line="122" column="75" lean-forward="false" selection-start-line="122" selection-start-column="75" selection-end-line="122" selection-end-column="75" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DB/DBManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="202" column="47" lean-forward="false" selection-start-line="202" selection-start-column="47" selection-end-line="202" selection-end-column="47" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="396" column="18" lean-forward="true" selection-start-line="396" selection-start-column="18" selection-end-line="396" selection-end-column="18" />
+          <folding>
+            <element signature="e#26459#26460#0" expanded="true" />
+            <element signature="e#26481#26482#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

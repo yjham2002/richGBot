@@ -11,6 +11,15 @@ import java.util.*;
  */
 public class Linker {
 
+    /*
+    문법 검사를 진행하지 않는 강제 명령이 필요할 경우, 이하의 패턴을 문장의 처음에 붙히고 공백으로 구분하여 문장을 시작한다.
+    필수적으로, #으로 둘러쌓인 띄어쓰기가 없는 영문으로 아래 패턴을 구성해야 한다.
+     */
+    // PATTERN_FORCE START
+    private static final String COMMAND_PATTERN_FORCE = "#FORCE#"; // 정적 문장에 대한 답변을 문법 분석없이 진행하기 위한 커맨드
+    private static final String COMMAND_PATTERN_FORCE_INTENT_TIME = "TIME"; // 현재 시간에 대한 질문 의도
+    // PATTERN_FORCE END
+
     public static List<String> memory;
 
     public static final String MY_NAME = "RES";
@@ -38,6 +47,7 @@ public class Linker {
 
     private KnowledgeBase base; // 가중치 부여 및 단순 문장 링킹를 위한 지식베이스
     private KnowledgeBase metaBase; // 은유적 1:N 관계를 기술하기 위한 지식베이스 (단, 1은 큰 범위의 의미이고 N은 작은 범위의 의미)
+    private KnowledgeBase staticBase; // 정적 문장에 대한 단순 매칭을 수행하는 정적 지식베이스
 
     private DBManager dbManager;
 
@@ -62,6 +72,7 @@ public class Linker {
         memory = new ArrayList<>();
         this.base = new KnowledgeBase(dbManager, KnowledgeBase.SET_SENTENCE_RECOGNIZE);
         this.metaBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_METAPHOR_RECOGNIZE);
+        this.staticBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_STATIC_QUESTION);
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
         for(String s : new String[]{"NP", "NN", "NNG", "NA", "SL", "SH", "SW", "NF", "SN", "NA"}) OBJECTS.add(s);
@@ -338,6 +349,7 @@ public class Linker {
     }
 
     private void link(){
+
         if(this.morphemes == null){
             System.out.println("There is no morpheme data.");
         }
@@ -365,7 +377,52 @@ public class Linker {
             }
         }
 
+        String intention = "";
+        String serialWords = "";
+        String serialTags = "";
 
+        for (int q = 0; q < cores.size(); q++) {
+            Pair<String, String> pair = cores.get(q);
+            if(!KoreanUtil.isSpecialCharacter(pair)) {
+                serialWords += pair.getFirst();
+                serialTags += pair.getSecond();
+            }
+        }
+
+        // PATTERN DETECTING START
+        if(temporaryMemory.indexOf(COMMAND_PATTERN_FORCE) == 0){
+            if(cores.size() < 4){
+                System.out.println("[WARN :: INVALID PARAMETER HAS BEEN DETECTED]");
+                return;
+            }else{
+                intention = cores.get(3).getFirst();
+                serialWords = "";
+                serialTags = "";
+                for (int q = 4; q < cores.size(); q++) {
+                    Pair<String, String> pair = cores.get(q);
+                    if(!KoreanUtil.isSpecialCharacter(pair)) {
+                        serialWords += pair.getFirst();
+                        serialTags += pair.getSecond();
+                    }
+                }
+                staticBase.memorize(serialWords.trim(), serialTags.trim(), intention);
+                System.out.println("[INFO :: 강제 학습 명령이 정상적으로 수행됨]");
+            }
+            return;
+        }
+        // PATTERN DETECTING END
+
+        System.out.println(serialWords);
+
+        if(staticBase.containsKey(serialWords)){
+            String intent = staticBase.get(serialWords).keySet().iterator().next();
+            switch (intent){
+                case "TIME": System.out.println("현재 시각은 " + new Date()); break;
+                default : break;
+            }
+
+            return;
+        }
 
         MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores)); // 아크를 연결하고 분석을 수행
 

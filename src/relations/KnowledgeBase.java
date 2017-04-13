@@ -113,6 +113,21 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
                     }
                 }
                 break;
+            case SET_STATIC_QUESTION :
+                System.out.println("[INFO :: Loading [STATIC SENTENCT RECOGNIZER] cache has been started.]");
+                knowledgeFractions = dbManager.getStaticBases();
+
+                for(KnowledgeFraction know : knowledgeFractions) {
+                    System.out.println(know);
+                    HashMap<String, Integer> entry = new HashMap<>();
+                    entry.put(know.getRefWord().trim(), know.getFrequency());
+                    this.put(know.getWord().trim(), entry);
+                    if(CURRENT_MODE == DEBUG_MODE){
+                        String percentage = String.format("%02.1f", 100.0f * (double)counter++/(double)knowledgeFractions.size()) + "%";
+                        System.out.println("Loading StaticBase on cache :: (" + percentage + ") :: " + know);
+                    }
+                }
+                break;
             default: break;
         }
 
@@ -139,6 +154,10 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
             this.put(noun, entry);
             return LEARNED;
         }
+    }
+
+    public boolean memorize(String sWord, String sTag, String intention){
+        return dbManager.saveStaticSentence(sWord, sTag, intention);
     }
 
     public String getRootMeaning(String current){
