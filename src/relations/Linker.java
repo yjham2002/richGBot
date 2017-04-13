@@ -26,6 +26,9 @@ public class Linker {
 
     private static final int MEMORY_SIZE = 100;
 
+    private static boolean SIMILARITY_MODE = true;
+    private static final double SIMILARITY_THRESHOLD = 0.5;
+
     private static final int SENTENCE_ORDER = 10;
     private static final int SENTENCE_PLAIN = 20;
     private static final int SENTENCE_QUESTION = 30;
@@ -402,8 +405,9 @@ public class Linker {
         }
         // PATTERN DETECTING END
 
-        if(staticBase.containsKey(serialWords)){
-            String intent = staticBase.get(serialWords).keySet().iterator().next();
+        String cleanedSerial = KoreanUtil.eliminateMeaningLess(serialWords);
+        if(staticBase.containsKey(cleanedSerial)){
+            String intent = staticBase.get(cleanedSerial).keySet().iterator().next();
             System.out.println(StaticResponser.talk(intent));
             return;
         }else{
@@ -420,8 +424,34 @@ public class Linker {
 
         MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores)); // 아크를 연결하고 분석을 수행
 
-        addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
+        if(procArc.keySet().size() == 0){
+            if(SIMILARITY_MODE){
 
+                String prediction = "";
+                double prob = 0.0;
+                for(String str : staticBase.keySet()){
+                    double newProb = KoreanUtil.getEditDistanceRate(str, serialWords, true);
+                    if(prob < newProb) {
+                        prediction = staticBase.get(str).keySet().iterator().next();
+                        prob = newProb;
+                    }
+                }
+
+                System.out.println("[INFO :: 유사도 기반 정적 응답을 수행합니다. (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
+
+                if(prob >= SIMILARITY_THRESHOLD){
+                    System.out.println(StaticResponser.talk(prediction));
+                }
+
+            }
+        }else {
+            addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
+        }
+
+    }
+
+    public void setSimilarityMode(boolean mode){ // 유사도 검증 모드 설정 시 실행속도가 크게 저하될 수 있음
+        this.SIMILARITY_MODE = mode;
     }
 
     private int isOrder(List<TypedPair> words){

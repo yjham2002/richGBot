@@ -2,6 +2,7 @@
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 import kr.co.shineware.util.common.model.Pair;
 import relations.Linker;
+import util.KoreanUtil;
 
 import java.util.*;
 
@@ -18,19 +19,6 @@ public class AppMain {
 
     public static void main(String[] args) {
 
-        Set<String> EXIT_COMMAND = new HashSet<>();
-        EXIT_COMMAND.add("꺼져");
-        EXIT_COMMAND.add("종료");
-        EXIT_COMMAND.add("사라져");
-        EXIT_COMMAND.add("닥쳐");
-        EXIT_COMMAND.add("EXIT");
-        EXIT_COMMAND.add("저리가");
-        EXIT_COMMAND.add("이제그만");
-        EXIT_COMMAND.add("디버그하자");
-        EXIT_COMMAND.add("디버그");
-        EXIT_COMMAND.add("안녕");
-        EXIT_COMMAND.add("헤어져");
-
         Komoran komoran = new Komoran("C:\\Users\\a\\IdeaProjects\\richGBot\\models");
         //komoran.setUserDic("C:\\Users\\a\\IdeaProjects\\GBot\\user_data\\NIADic.user");
 
@@ -41,7 +29,6 @@ public class AppMain {
         while(true) {
             System.out.print("USER : ");
             String command = scanner.nextLine();
-            if(EXIT_COMMAND.contains(command)) System.exit(0);
             List<List<Pair<String, String>>> result = komoran.analyze(command);
             linker.setMorphemes(result, command);
             linker.printResult();

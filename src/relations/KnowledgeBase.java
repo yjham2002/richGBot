@@ -156,6 +156,15 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     }
 
     public boolean memorize(String sWord, String sTag, String intention){
+        HashMap<String, Integer> entry = new HashMap<>();
+        if(this.containsKey(sWord)){
+            int freq = this.get(sWord).get(intention);
+            this.get(sWord).put(intention, freq + 1);
+        }else {
+            entry.put(intention, 1);
+            this.put(sWord, entry);
+        }
+
         return dbManager.saveStaticSentence(sWord, sTag, intention);
     }
 

@@ -97,4 +97,56 @@ public class KoreanUtil {
         return false;
     }
 
+    public static double getEditDistanceRate(String str1, String str2, boolean eliminateMeaningless){
+        String str1_m = str1.toString().trim();
+        String str2_m = str2.toString().trim();
+        if(eliminateMeaningless){
+            str1_m = str1.replaceAll("ㅋ", "").trim();
+            str2_m = str2.replaceAll("ㅋ", "").trim();
+        }
+        int length = str1_m.length();
+        if(length < str2_m.length()) length = str2_m.length();
+        return 1.0 - (double)getEditDistance(str1_m, str2_m)/(double)length;
+    }
+
+    public static int getEditDistance(String str1, String str2){
+        int len1 = str1.length()+1;
+        int len2 = str2.length()+1;
+        char[] cstr1=str1.toCharArray();
+        char[] cstr2=str2.toCharArray();
+
+        int[][] matrix = new int[len1][len2];
+        int isreplace = 0;
+
+        for(int i=0;i<len1;i++) matrix[i][0] = i;
+        for(int j=0;j<len2;j++) matrix[0][j] = j;
+
+        for(int i = 1; i < len1; i++){
+            for(int j = 1; j < len2; j++){
+                if( str1.charAt(i - 1) == str2.charAt(j - 1)){
+                    isreplace = 0;
+                }else{
+                    isreplace = 1;
+                }
+                matrix[i][j] = getMin(matrix[i-1][j] + 1, matrix[i][j-1] + 1, matrix[i-1][j-1] + isreplace);
+            }
+        }
+
+        return matrix[len1-1][len2-1];
+    }
+
+    public static String eliminateMeaningLess(String str){
+        String retVal = str.replaceAll("ㅋ", "").trim();
+        return retVal;
+    }
+
+    private static int getMin(int a,int b, int c){
+        int min = 99999; // 오차의 한계
+        if(a < min) min = a;
+        if(b < min) min = b;
+        if(c < min) min = c;
+
+        return min;
+    }
+
 }
