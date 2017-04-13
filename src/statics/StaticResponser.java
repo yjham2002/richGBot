@@ -13,6 +13,7 @@ public class StaticResponser {
     public static final String INTENT_DOING = "DOING";
     public static final String INTENT_BAD = "BAD";
     public static final String INTENT_GOOD = "GOOD";
+    public static final String INTENT_NOTHING = "NOTHING";
 
     public static String talk(String intent){
         String response = "";
@@ -23,6 +24,7 @@ public class StaticResponser {
             case INTENT_DOING: response = ResponseConstant.DOING[new Random().nextInt(ResponseConstant.DOING.length)]; break;
             case INTENT_BAD: response = ResponseConstant.BAD[new Random().nextInt(ResponseConstant.BAD.length)]; break;
             case INTENT_GOOD: response = ResponseConstant.GOOD[new Random().nextInt(ResponseConstant.GOOD.length)]; break;
+            case INTENT_NOTHING: response = ResponseConstant.NOTHING[new Random().nextInt(ResponseConstant.NOTHING.length)]; break;
             default : break;
         }
 

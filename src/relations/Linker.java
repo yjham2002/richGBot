@@ -2,6 +2,7 @@ package relations;
 
 import DB.DBManager;
 import kr.co.shineware.util.common.model.Pair;
+import statics.ResponseConstant;
 import statics.StaticResponser;
 import util.KoreanUtil;
 
@@ -462,6 +463,11 @@ public class Linker {
                 System.out.println(StaticResponser.talk(prediction));
                 if(stream) {
                     responses.add(StaticResponser.talk(prediction));
+                }
+            }else{
+                System.out.println(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
+                if(stream) {
+                    responses.add(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
                 }
             }
         }else {

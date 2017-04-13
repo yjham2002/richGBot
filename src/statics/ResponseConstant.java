@@ -53,4 +53,15 @@ public class ResponseConstant {
             "Thanks! :)"
     };
 
+    public static final String[] NOTHING = new String[]{
+            "무슨 뜻인지 모르겠어요...ㅠㅠ",
+            "못알아듣겠어용...",
+            "I didn't quite get that! ㅠㅠ",
+            "무슨 뜻이지...ㅠ",
+            "모르는 명령이예요 ㅠㅠ",
+            "모르겠어요...",
+            "저의 부족함으로 인해 못알아듣겠네요....",
+            "....? 무슨 뜻인지..."
+    };
+
 }

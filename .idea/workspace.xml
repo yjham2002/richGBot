@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppSlackMain.java" afterPath="$PROJECT_DIR$/src/AppSlackMain.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linker.java" afterPath="$PROJECT_DIR$/src/relations/Linker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/statics/ResponseConstant.java" afterPath="$PROJECT_DIR$/src/statics/ResponseConstant.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/statics/StaticResponser.java" afterPath="$PROJECT_DIR$/src/statics/StaticResponser.java" />
     </list>
@@ -33,14 +34,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="415" column="32" lean-forward="true" selection-start-line="415" selection-start-column="32" selection-end-line="415" selection-end-column="32" />
+            <state relative-caret-position="347">
+              <caret line="469" column="85" lean-forward="false" selection-start-line="469" selection-start-column="85" selection-end-line="469" selection-end-column="85" />
               <folding>
-                <element signature="e#33088#33089#0" expanded="true" />
-                <element signature="e#33115#33116#0" expanded="true" />
+                <element signature="e#33366#33367#0" expanded="true" />
+                <element signature="e#33393#33394#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -49,8 +50,8 @@
       <file leaf-file-name="AppSlackMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppSlackMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="35" column="73" lean-forward="true" selection-start-line="35" selection-start-column="73" selection-end-line="35" selection-end-column="73" />
+            <state relative-caret-position="357">
+              <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -61,21 +62,9 @@
       <file leaf-file-name="KoreanUtil.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="522">
+            <state relative-caret-position="351">
               <caret line="104" column="25" lean-forward="false" selection-start-line="104" selection-start-column="25" selection-end-line="104" selection-end-column="25" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StaticResponser.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="25" column="28" lean-forward="true" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -176,10 +165,10 @@
         <option value="$PROJECT_DIR$/src/com/ullink/slack/simpleslackapi/SlackMessage.java" />
         <option value="$PROJECT_DIR$/src/com/ullink/slack/simpleslackapi/SlackMessageListener.java" />
         <option value="$PROJECT_DIR$/src/com/ullink/slack/simpleslackapi/impl/SlackBotImpl.java" />
-        <option value="$PROJECT_DIR$/src/relations/Linker.java" />
         <option value="$PROJECT_DIR$/src/AppSlackMain.java" />
         <option value="$PROJECT_DIR$/src/statics/StaticResponser.java" />
         <option value="$PROJECT_DIR$/src/statics/ResponseConstant.java" />
+        <option value="$PROJECT_DIR$/src/relations/Linker.java" />
       </list>
     </option>
   </component>
@@ -650,8 +639,8 @@
         <state relative-caret-position="8284">
           <caret line="442" column="17" lean-forward="false" selection-start-line="442" selection-start-column="17" selection-end-line="442" selection-end-column="17" />
           <folding>
-            <element signature="e#33088#33089#0" expanded="true" />
-            <element signature="e#33115#33116#0" expanded="true" />
+            <element signature="e#33366#33367#0" expanded="true" />
+            <element signature="e#33393#33394#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -694,8 +683,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#33088#33089#0" expanded="true" />
-            <element signature="e#33115#33116#0" expanded="true" />
+            <element signature="e#33366#33367#0" expanded="true" />
+            <element signature="e#33393#33394#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -720,8 +709,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#33088#33089#0" expanded="true" />
-            <element signature="e#33115#33116#0" expanded="true" />
+            <element signature="e#33366#33367#0" expanded="true" />
+            <element signature="e#33393#33394#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -755,8 +744,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#33088#33089#0" expanded="true" />
-            <element signature="e#33115#33116#0" expanded="true" />
+            <element signature="e#33366#33367#0" expanded="true" />
+            <element signature="e#33393#33394#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -951,29 +940,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="415" column="32" lean-forward="true" selection-start-line="415" selection-start-column="32" selection-end-line="415" selection-end-column="32" />
-          <folding>
-            <element signature="e#33088#33089#0" expanded="true" />
-            <element signature="e#33115#33116#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="104" column="25" lean-forward="false" selection-start-line="104" selection-start-column="25" selection-end-line="104" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppSlackMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="35" column="73" lean-forward="true" selection-start-line="35" selection-start-column="73" selection-end-line="35" selection-end-column="73" />
+        <state relative-caret-position="357">
+          <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -982,18 +952,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/statics/ResponseConstant.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-38">
-          <caret line="19" column="22" lean-forward="true" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+        <state relative-caret-position="484">
+          <caret line="63" column="28" lean-forward="false" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="25" column="28" lean-forward="true" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+        <state relative-caret-position="408">
+          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="104" column="25" lean-forward="false" selection-start-line="104" selection-start-column="25" selection-end-line="104" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="469" column="85" lean-forward="false" selection-start-line="469" selection-start-column="85" selection-end-line="469" selection-end-column="85" />
+          <folding>
+            <element signature="e#33366#33367#0" expanded="true" />
+            <element signature="e#33393#33394#0" expanded="true" />
           </folding>
         </state>
       </provider>
