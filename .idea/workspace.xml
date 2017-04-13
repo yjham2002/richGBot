@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DB/DBManager.java" afterPath="$PROJECT_DIR$/src/DB/DBManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/statics/StaticResponser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/KnowledgeBase.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/KnowledgeBase.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Linker.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/Linker.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" afterPath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/KnowledgeBase.java" afterPath="$PROJECT_DIR$/src/relations/KnowledgeBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linker.java" afterPath="$PROJECT_DIR$/src/relations/Linker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/KoreanUtil.java" afterPath="$PROJECT_DIR$/src/util/KoreanUtil.java" />
@@ -37,21 +41,31 @@
       <file leaf-file-name="Linker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="396" column="18" lean-forward="true" selection-start-line="396" selection-start-column="18" selection-end-line="396" selection-end-column="18" />
+            <state relative-caret-position="148">
+              <caret line="406" column="59" lean-forward="false" selection-start-line="406" selection-start-column="59" selection-end-line="406" selection-end-column="59" />
               <folding>
-                <element signature="e#26459#26460#0" expanded="true" />
-                <element signature="e#26481#26482#0" expanded="true" />
+                <element signature="e#26305#26306#0" expanded="true" />
+                <element signature="e#26327#26328#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KnowledgeBase.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/relations/KnowledgeBase.java">
+      <file leaf-file-name="StaticResponser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="122" column="75" lean-forward="false" selection-start-line="122" selection-start-column="75" selection-end-line="122" selection-end-column="75" />
+            <state relative-caret-position="323">
+              <caret line="17" column="24" lean-forward="false" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KoreanUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="43" column="203" lean-forward="false" selection-start-line="43" selection-start-column="203" selection-end-line="43" selection-end-column="203" />
               <folding />
             </state>
           </provider>
@@ -104,8 +118,8 @@
       <find>connect</find>
       <find>다!</find>
       <find>getBac</find>
-      <find>void lin</find>
       <find>봤던</find>
+      <find>void lin</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\a\IdeaProjects\GBot\src</dir>
@@ -147,10 +161,11 @@
         <option value="$PROJECT_DIR$/src/relations/TypedPair.java" />
         <option value="$PROJECT_DIR$/src/relations/Arc.java" />
         <option value="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
+        <option value="$PROJECT_DIR$/src/DB/DBManager.java" />
         <option value="$PROJECT_DIR$/src/relations/KnowledgeBase.java" />
         <option value="$PROJECT_DIR$/src/util/KoreanUtil.java" />
+        <option value="$PROJECT_DIR$/src/statics/StaticResponser.java" />
         <option value="$PROJECT_DIR$/src/relations/Linker.java" />
-        <option value="$PROJECT_DIR$/src/DB/DBManager.java" />
       </list>
     </option>
   </component>
@@ -222,6 +237,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="richGBot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="richGBot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="statics" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -612,8 +645,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -649,8 +682,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -694,8 +727,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -739,8 +772,8 @@
         <state relative-caret-position="8284">
           <caret line="442" column="17" lean-forward="false" selection-start-line="442" selection-start-column="17" selection-end-line="442" selection-end-column="17" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -784,8 +817,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -811,8 +844,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -846,8 +879,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -960,22 +993,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="40" column="5" lean-forward="true" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/KnowledgeBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="122" column="75" lean-forward="false" selection-start-line="122" selection-start-column="75" selection-end-line="122" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DB/DBManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
@@ -986,13 +1003,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/relations/KnowledgeBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="120" column="45" lean-forward="false" selection-start-line="120" selection-start-column="45" selection-end-line="120" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="43" column="203" lean-forward="false" selection-start-line="43" selection-start-column="203" selection-end-line="43" selection-end-column="203" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="17" column="24" lean-forward="false" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="396" column="18" lean-forward="true" selection-start-line="396" selection-start-column="18" selection-end-line="396" selection-end-column="18" />
+        <state relative-caret-position="148">
+          <caret line="406" column="59" lean-forward="false" selection-start-line="406" selection-start-column="59" selection-end-line="406" selection-end-column="59" />
           <folding>
-            <element signature="e#26459#26460#0" expanded="true" />
-            <element signature="e#26481#26482#0" expanded="true" />
+            <element signature="e#26305#26306#0" expanded="true" />
+            <element signature="e#26327#26328#0" expanded="true" />
           </folding>
         </state>
       </provider>

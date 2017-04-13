@@ -118,7 +118,6 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
                 knowledgeFractions = dbManager.getStaticBases();
 
                 for(KnowledgeFraction know : knowledgeFractions) {
-                    System.out.println(know);
                     HashMap<String, Integer> entry = new HashMap<>();
                     entry.put(know.getRefWord().trim(), know.getFrequency());
                     this.put(know.getWord().trim(), entry);

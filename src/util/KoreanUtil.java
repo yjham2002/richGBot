@@ -41,7 +41,7 @@ public class KoreanUtil {
     }
 
     public static boolean isSpecialCharacter(Pair<String, String> pair){
-        if(pair.getSecond().equals("SF")) return true;
+        if(pair.getSecond().equals("SF") || pair.getSecond().equals("SW") || pair.getSecond().equals("SP") || pair.getSecond().equals("SE") || pair.getSecond().equals("SS") || pair.getSecond().equals("SO")) return true;
         return false;
     }
 

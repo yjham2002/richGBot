@@ -2,6 +2,7 @@ package relations;
 
 import DB.DBManager;
 import kr.co.shineware.util.common.model.Pair;
+import statics.StaticResponser;
 import util.KoreanUtil;
 
 import java.util.*;
@@ -17,7 +18,6 @@ public class Linker {
      */
     // PATTERN_FORCE START
     private static final String COMMAND_PATTERN_FORCE = "#FORCE#"; // 정적 문장에 대한 답변을 문법 분석없이 진행하기 위한 커맨드
-    private static final String COMMAND_PATTERN_FORCE_INTENT_TIME = "TIME"; // 현재 시간에 대한 질문 의도
     // PATTERN_FORCE END
 
     public static List<String> memory;
@@ -359,16 +359,6 @@ public class Linker {
 
         memory.add(temporaryMemory);
 
-        if(prev.equals(temporaryMemory) && memory.size() >= 1){
-            System.out.println(MY_NAME + " : 같은 말을 두 번하지 않아도 다 알아듣고 있어요!!!");
-            return;
-        }
-
-        if(memory.size() > MEMORY_SIZE) {
-            memory.clear();
-            memory.add(prev);
-        }
-
         List<TypedPair> cores = new ArrayList<>();
 
         for (List<Pair<String, String>> eojeolResult : this.morphemes) {
@@ -412,16 +402,20 @@ public class Linker {
         }
         // PATTERN DETECTING END
 
-        System.out.println(serialWords);
-
         if(staticBase.containsKey(serialWords)){
             String intent = staticBase.get(serialWords).keySet().iterator().next();
-            switch (intent){
-                case "TIME": System.out.println("현재 시각은 " + new Date()); break;
-                default : break;
+            System.out.println(StaticResponser.talk(intent));
+            return;
+        }else{
+            if(prev.equals(temporaryMemory) && memory.size() >= 1){
+                System.out.println(MY_NAME + " : 같은 말을 두 번하지 않아도 다 알아듣고 있어요!!!");
+                return;
             }
 
-            return;
+            if(memory.size() > MEMORY_SIZE) {
+                memory.clear();
+                memory.add(prev);
+            }
         }
 
         MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores)); // 아크를 연결하고 분석을 수행
