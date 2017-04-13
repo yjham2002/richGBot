@@ -24,10 +24,10 @@ public class AppSlackMain {
         Linker linker = new Linker();
 
         try {
-            SlackSession session = SlackSessionFactory.createWebSocketSlackSession("xoxb-168613915715-tSw6O0oDdZuBTb2JZz67jdeA");
+            SlackSession session = SlackSessionFactory.createWebSocketSlackSession("xoxb-168613915715-ff6GLAlSuAT2Y73KRSbL8mMT");
             session.connect();
 
-            //SlackChannel channel = session.findChannelByName("general"); //make sure bot is a member of the channel.
+            SlackChannel channel_general = session.findChannelByName("general"); //make sure bot is a member of the channel.
             SlackMessagePostedListener listener = new SlackMessagePostedListener() {
                 @Override
                 public void onEvent(SlackMessagePosted slackMessagePosted, SlackSession slackSession) {
@@ -40,7 +40,8 @@ public class AppSlackMain {
                     linker.setMorphemes(result, message);
                     List<String> rMsgs = linker.interaction();
                     for(String rMsg : rMsgs) {
-                        session.sendMessageToUser(slackUser, rMsg, null);
+                        session.sendMessage(slackMessagePosted.getChannel(), rMsg);
+                        //session.sendMessageToUser(slackUser, rMsg, null);
                         //session.sendMessage(channel, "GBot has been invited to Richware");
                     }
                 }
