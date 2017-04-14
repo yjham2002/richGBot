@@ -24,6 +24,7 @@ public class StaticResponser {
     public static final String INTENT_INTRODUCE = "INTRODUCE";
     public static final String INTENT_BORED = "BORED";
     public static final String INTENT_LAUGH = "LAUGH";
+    public static final String INTENT_FORTUNE = "FORTUNE";
     public static final String INTENT_HELP = "HELP";
 
     public static String talk(String intent){
@@ -43,6 +44,7 @@ public class StaticResponser {
             case INTENT_INTRODUCE: response = ResponseConstant.INTRODUCE[new Random().nextInt(ResponseConstant.INTRODUCE.length)]; break;
             case INTENT_BORED: response = ResponseConstant.BORED[new Random().nextInt(ResponseConstant.BORED.length)]; break;
             case INTENT_LAUGH: response = ResponseConstant.LAUGH[new Random().nextInt(ResponseConstant.LAUGH.length)]; break;
+            case INTENT_FORTUNE: response = ResponseConstant.FORTUNE[new Random().nextInt(ResponseConstant.FORTUNE.length)]; break;
             case INTENT_HELP: response = ResponseConstant.HELP[new Random().nextInt(ResponseConstant.HELP.length)]; break;
             default : break;
         }
