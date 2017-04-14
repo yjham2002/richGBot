@@ -75,6 +75,11 @@ public class KoreanUtil {
         return false;
     }
 
+    public static boolean isConcatenation(Pair<String, String> pair){
+        if(pair.getSecond().equals("JC") || (pair.getFirst().equals("랑") && pair.getSecond().equals("JKB"))) return true;
+        return false;
+    }
+
     public static boolean isMetaQuestion(Pair<String, String> pair){
         if(pair.getSecond().equals("NP")){
             switch (pair.getFirst()){
@@ -102,7 +107,9 @@ public class KoreanUtil {
         String str2_m = str2.toString().trim();
         if(eliminateMeaningless){
             str1_m = str1.replaceAll("ㅋ", "").trim();
+            if(str1_m.length() == 0) str1_m = str1;
             str2_m = str2.replaceAll("ㅋ", "").trim();
+            if(str2_m.length() == 0) str2_m = str2;
         }
         int length = str1_m.length();
         if(length < str2_m.length()) length = str2_m.length();

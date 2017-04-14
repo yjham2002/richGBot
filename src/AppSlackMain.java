@@ -24,7 +24,7 @@ public class AppSlackMain {
         Linker linker = new Linker();
 
         try {
-            SlackSession session = SlackSessionFactory.createWebSocketSlackSession("xoxb-168613915715-wh9BrR4nhjgOoG1voyrRz2Y6");
+            SlackSession session = SlackSessionFactory.createWebSocketSlackSession("xoxb-168613915715-G3J81b9ojwlodriaI3ZWS0fj");
             session.connect();
 
             SlackChannel channel_general = session.findChannelByName("general"); //make sure bot is a member of the channel.

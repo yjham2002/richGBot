@@ -150,6 +150,46 @@ public class Linker {
         return retVal;
     }
 
+    private List<ParallelLinkage> linkParallels(List<TypedPair> cores, List<Integer> adjIdx){
+        List<ParallelLinkage> retVal = new ArrayList<>();
+
+        boolean flag = false;
+        ParallelLinkage unit = null;
+
+        for(int i = 0; i < cores.size(); i++){
+            TypedPair pair = cores.get(i);
+            if(GENERAL_NOUN.contains(pair.getSecond())){
+                if(flag){ // 이미 생성되었으며 추가해야하는 경우
+                    unit.add(i);
+                }else{ // 최초 병합 개시
+                    unit = new ParallelLinkage();
+                    unit.add(i);
+                    flag = true;
+                }
+            }else{
+                if(adjIdx.contains(i)){ // 문법적으로 무의미한 요소 통과
+                    continue;
+                }else{
+                    if(KoreanUtil.isConcatenation(pair)){ // 현재 페어가 접속조사로 추정되는 경우
+                        continue;
+                    }else{
+                        if (flag) {
+                            retVal.add(unit);
+                        }else{
+                            // Do nothing
+                        }
+                        flag = false;
+                    }
+                }
+            }
+        }
+        if(flag){
+            retVal.add(unit);
+        }
+
+        return retVal;
+    }
+
     private MorphemeArc getLinkedArc(List<TypedPair> cores){
 
         List<Integer> vIdx = new ArrayList<>(); // VERB INDEX
@@ -159,6 +199,8 @@ public class Linker {
         List<Integer> aIdx = new ArrayList<>(); // ADVERB INDEX
         List<Integer> soIdx = new ArrayList<>(); // SUBJECT + OBJECT INDEX
         List<Integer> mIdx = new ArrayList<>(); // METAPHORICAL INDEX
+        List<ParallelLinkage> parallelLinkages = new ArrayList<>(); // 병렬 구조 명사
+        Stack<Integer> linkageStack = new Stack<>();
 
         MorphemeArc retVal = new MorphemeArc(cores);
 
@@ -224,6 +266,8 @@ public class Linker {
                 }
             }
         }
+
+        parallelLinkages = linkParallels(cores, adjIdx);
 
         // 형용사 기준 링킹
 
@@ -597,11 +641,11 @@ public class Linker {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
                 if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
             }else if(know.get(1).getType() == TypedPair.TYPE_VADJ){
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
-                if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
+                System.out.println(MY_NAME + " : " + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! 알아둘게요.");
+                if(stream) responses.add("" + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! 알아둘게요.");
             }else {
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + metaBase.getRootMeaning(action) + "하겠습니다. [서비스 호출]");
-                if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + metaBase.getRootMeaning(action) + "하겠습니다. [서비스 호출]");
+                System.out.println(MY_NAME + " : [대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
+                if(stream) responses.add("[대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
             }
         }else if(what == SENTENCE_QUESTION) {
             if (know.get(1).getType() == TypedPair.TYPE_ADV) {
@@ -620,8 +664,8 @@ public class Linker {
                 System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
                 if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
             } else {
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + metaBase.getRootMeaning(action) + "하겠습니다. [서비스 호출]");
-                if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "을", "를") + " " + metaBase.getRootMeaning(action) + "하겠습니다. [서비스 호출]");
+                System.out.println(MY_NAME + " : [대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
+                if(stream) responses.add("[대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
             }
         }else if(what == SENTENCE_META){
             if (metaBase.doYouKnow(know) > 0) {
