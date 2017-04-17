@@ -19,6 +19,9 @@ public class TypedPair extends Pair<String, String> {
     public static final int TYPE_METAPHORE    = 7; // 형용사 - 관형형전성어미에 의한 동사의 형용사화
 
     private int type = TYPE_DEFAULT;
+    private boolean linked = false;
+
+    private ParallelLinkage parallelLinkage;
 
     public TypedPair(){}
 
@@ -31,6 +34,22 @@ public class TypedPair extends Pair<String, String> {
         this.setFirst(first);
         this.setSecond(second);
         this.type = type;
+    }
+
+    public ParallelLinkage getParallelLinkage() {
+        return parallelLinkage;
+    }
+
+    public void setParallelLinkage(ParallelLinkage parallelLinkage) {
+        this.parallelLinkage = parallelLinkage;
+    }
+
+    public boolean isLinked() {
+        return linked;
+    }
+
+    public void setLinked(boolean linked) {
+        this.linked = linked;
     }
 
     public boolean equals(TypedPair pair){

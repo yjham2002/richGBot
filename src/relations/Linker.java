@@ -269,19 +269,36 @@ public class Linker {
 
         parallelLinkages = linkParallels(cores, adjIdx);
 
+        // 형용사와 명사 연결
+        soIdx.addAll(sIdx);
+        soIdx.addAll(oIdx);
+
+        List<Integer> pairSet = new ArrayList<>();
+
+        for(Integer idx : soIdx) {
+            ParallelLinkage parallelLinkage = isLinkedPair(idx, parallelLinkages);
+            if(parallelLinkage != null){
+                cores.get(idx).setLinked(true);
+                cores.get(idx).setParallelLinkage(parallelLinkage);
+                pairSet.add(idx);
+            }
+        }
+
+        for(Integer idx : pairSet){
+            int min = cores.get(idx).getParallelLinkage().getFirstIndex();
+            int max = cores.get(idx).getParallelLinkage().getLastIndex();
+            if(idx != min && idx != max) soIdx.remove(idx);
+        }
+
         // 형용사 기준 링킹
 
-        for(int k = 0; k < adjIdx.size(); k++){
+        for(int k = 0; k < adjIdx.size(); k++){ // TODO Parallel
 
             double weight = 0;
             int candidate = -1;
             int dependantNoun = -1;
 
             Pair<String, String> adj = cores.get(adjIdx.get(k));
-
-            // 형용사와 명사 연결
-            soIdx.addAll(sIdx);
-            soIdx.addAll(oIdx);
 
             for (int j = 0; j < soIdx.size(); j++) { // 본 루프에서는 형용사의 접미사로서 관형형전성어미가 접속되어 'ㄴ' 까지를 인덱스로 간주, 해당 형용사에 대해 우측을 검사할 때는 관형형전성어미의 인덱스를 기준으로 가중치를 계산
                 double currentWofOJ = 0;
@@ -290,10 +307,13 @@ public class Linker {
                     if(soIdx.get(j) == adjIdx.get(k) + 1 && KoreanUtil.isDependantNoun(cores.get(soIdx.get(j)))){
                         dependantNoun = soIdx.get(j);
                     }
-                    else if (soIdx.get(j) >= adjIdx.get(k))
+                    else if (soIdx.get(j) >= adjIdx.get(k)) {
                         currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - adjIdx.get(k))) / (double) sD);
-                    else
+                    }
+                    else {
+
                         currentWofOJ = base.getWeightOf(cores.get(soIdx.get(j)).getFirst(), adj.getFirst()) + (((double) sD - (double) Math.abs(soIdx.get(j) - (adjIdx.get(k) + 1))) / (double) sD);
+                    }
 
                     if (weight <= currentWofOJ) { // IMPORTANT : 등호가 포함됨(우측 수식거리 우선)
                         weight = currentWofOJ;
@@ -316,7 +336,7 @@ public class Linker {
         }
 
         // 은유형 표현 링킹
-        for(int i = 0; i < mIdx.size(); i++){
+        for(int i = 0; i < mIdx.size(); i++){ // TODO Parallel
             double weight = 0;
             int candidate = -1;
 
@@ -348,7 +368,8 @@ public class Linker {
                 Pair<String, String> verb = cores.get(vIdx.get(i));
 
                 // 목적어와 동사 연결
-                for (int j = 0; j < oIdx.size(); j++) {
+                for (int j = 0; j < oIdx.size(); j++) { // TODO Parallel
+
                     double currentWofNV = base.getWeightOf(cores.get(oIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(oIdx.get(j) - vIdx.get(i))) / (double) sD);
                     if (weight < currentWofNV) {
                         weight = currentWofNV;
@@ -384,8 +405,10 @@ public class Linker {
                 candidate = -1;
 
                 // 주어와 동사 연결
-                for (int j = 0; j < sIdx.size(); j++) {
-                    double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD);
+                for (int j = 0; j < sIdx.size(); j++) { // TODO Parallel
+                    double prob = 1.0;
+                    if(sIdx.get(j) - vIdx.get(i) > 0) prob = (((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD);
+                    double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + ((((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD) * prob);
                     if (weight < currentWofAV) {
                         weight = currentWofAV;
                         candidate = sIdx.get(j);
@@ -400,6 +423,13 @@ public class Linker {
         }
 
         return retVal;
+    }
+
+    private ParallelLinkage isLinkedPair(Integer i, List<ParallelLinkage> pList){
+        for (ParallelLinkage pLink : pList) {
+            if(pLink.contains(i)) return pLink;
+        }
+        return null;
     }
 
     private void link(boolean stream){
@@ -470,8 +500,8 @@ public class Linker {
             return;
         }else{
             if(prev.equals(temporaryMemory) && memory.size() >= 1){
-                System.out.println(MY_NAME + " : 같은 말을 두 번하지 않아도 다 알아듣고 있어요!!!");
-                if(stream) responses.add("같은 말을 두 번하지 않아도 다 알아듣고 있어요!!!");
+                System.out.println(MY_NAME + " : 동일 어휘 반복 입력");
+                if(stream) responses.add("동일 어휘 반복 입력");
                 return;
             }
 
@@ -498,9 +528,10 @@ public class Linker {
                 }
             }
 
-            System.out.println("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
-            //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
         }
+
+        System.out.println("[Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%]");
+        //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
 
         if(procArc.keySet().size() == 0){
             if(prob >= SIMILARITY_THRESHOLD){
@@ -554,12 +585,12 @@ public class Linker {
     private void addProcData(MorphemeArc arc, int what){
         for(Integer key : arc.keySet()) {
             for(Integer subKey : arc.get(key)) {
-                addProcData(arc.getWord(key), arc.getWord(subKey), what);
+                addProcData(arc.getWord(key), arc.getWord(subKey), what, arc);
             }
         }
     }
 
-    private void addProcData(TypedPair pop, TypedPair word, int what){
+    private void addProcData(TypedPair pop, TypedPair word, int what, MorphemeArc arc){
         int type = what;
         if(pop == null) System.out.println("pop null");
         if(word == null) System.out.println("word null");
@@ -570,135 +601,120 @@ public class Linker {
 
         temp.add(word);
         temp.add(pop);
-        learnLinkPair(temp, type);
+        learnLinkPair(temp, type, arc);
     }
 
-    private void learnLinkPair(List<TypedPair> know, int what){
-        String action = know.get(1).getFirst();
-        if(action.charAt(action.length() - 1) == '하') action = action.substring(0, action.length() - 1);
+    private List<TypedPair> expandLinkage(TypedPair pair, MorphemeArc arc){
+        List<TypedPair> list = new ArrayList<>();
+        if(pair.isLinked()){
+            Iterator<Integer> iterator = pair.getParallelLinkage().iterator();
+            while(iterator.hasNext()){
+                Integer unit = iterator.next();
+                list.add(arc.getWords().get(unit));
+            }
+        }else{
+            list.add(pair);
+        }
+        return list;
+    }
 
-        if(what == SENTENCE_PLAIN) {
-            if (base.doYouKnow(know) > 0) {
-                String concat = "는";
-                if (know.get(1).getSecond().equals("VA")) concat = "은";
+    private void learnLinkPair(List<TypedPair> know, int what, MorphemeArc arc){
 
-                if (know.get(1).getType() == TypedPair.TYPE_ADV) {
-                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
-                    if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 이미 " + base.doYouKnow(know) + "번 들었어요.");
-                } else if (know.get(1).getType() == TypedPair.TYPE_SUBJECT) {
-                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
-                    if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
-                } else if (know.get(1).getType() == TypedPair.TYPE_QUESTION) {
-                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금한거죠? " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
-                    if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금한거죠? " + base.doYouKnow(know) + "번 봤던 문장구조예요.");
-                } else if (know.get(1).getType() == TypedPair.TYPE_ADJ) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠! " + base.doYouKnow(know) + "번 봤던 수식구조예요.");
-                    if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠! " + base.doYouKnow(know) + "번 봤던 수식구조예요.");
-                } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
-                    System.out.println(MY_NAME + " : " + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! " + base.doYouKnow(know) + "번 봤던 구조예요.");
-                    if(stream) responses.add("" + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! " + base.doYouKnow(know) + "번 봤던 구조예요.");
+        TypedPair objFirst = know.get(0);
+        TypedPair objLast = know.get(1);
+        if(know.get(0).isLinked()){ // TEMPORARY
+            TypedPair temp = new TypedPair();
+            String first = "";
+            String tempPOS = "NNG";
+            for(int loop = 0; loop < expandLinkage(know.get(0), arc).size(); loop++){
+                TypedPair pair = expandLinkage(know.get(0), arc).get(loop);
+                first += pair.getFirst();
+                if(loop + 1 < expandLinkage(know.get(0), arc).size()) {
+                    first += ",";
+                }
+            }
+            temp.setFirst(first);
+            temp.setSecond(tempPOS);
+            objFirst = temp;
+        }
+        if(know.get(1).isLinked()){ // TEMPORARY
+            TypedPair temp = new TypedPair();
+            String first = "";
+            String tempPOS = "NNG";
+            for(int loop = 0; loop < expandLinkage(know.get(1), arc).size(); loop++){
+                TypedPair pair = expandLinkage(know.get(1), arc).get(loop);
+                first += pair.getFirst();
+                if(loop + 1 < expandLinkage(know.get(1), arc).size()) {
+                    first += ",";
+                }
+            }
+            temp.setFirst(first);
+            temp.setSecond(tempPOS);
+            objLast = temp;
+        }
+
+        String classified = "";
+
+        switch(what){
+            case SENTENCE_PLAIN: classified = "[평서문] >> "; break;
+            case SENTENCE_ORDER: classified = "[명령문] >> "; break;
+            case SENTENCE_QUESTION: classified = "[의문문] >> "; break;
+            case SENTENCE_META: classified = "[은유형 대입문] >> "; break;
+            case SENTENCE_METAPHORICAL_QUESTION: classified = "[은유형 의문문] >> "; break;
+            default: break;
+        }
+        System.out.print(classified);
+
+        switch(what){
+            case SENTENCE_PLAIN: case SENTENCE_ORDER: case SENTENCE_QUESTION:
+                if (objLast.getType() == TypedPair.TYPE_ADV) {
+                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                } else if (objLast.getType() == TypedPair.TYPE_SUBJECT) {
+                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                } else if (objLast.getType() == TypedPair.TYPE_QUESTION) {
+                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                } else if (objLast.getType() == TypedPair.TYPE_ADJ) {
+                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                } else if (objLast.getType() == TypedPair.TYPE_VADJ) {
+                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
                 } else {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
-                    if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 이미 알고 있다구요!!!!! 사람들이 이미 " + base.doYouKnow(know) + "번 말했어요.");
+                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
                 }
-
-            } else {
-                String concat = "는";
-                if (know.get(1).getSecond().equals("VA")) concat = "은";
-
-                if (know.get(1).getType() == TypedPair.TYPE_ADV) {
-                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!-");
-                    if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!-");
-                } else if (know.get(1).getType() == TypedPair.TYPE_SUBJECT) {
-                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
-                    if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
-                } else if (know.get(1).getType() == TypedPair.TYPE_QUESTION) {
-                    System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금하신가요?!");
-                    if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금하신가요?!");
-                } else if (know.get(1).getType() == TypedPair.TYPE_ADJ) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
-                    if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
-                } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
-                    System.out.println(MY_NAME + " : " + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! 알아둘게요.");
-                    if(stream) responses.add("" + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! 알아둘게요.");
-                } else {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
-                    if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + concat + " 것이라고 기억해둘게요.");
+                break;
+            case SENTENCE_META:
+                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
+                    System.out.println(MY_NAME + " : [종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
+                    if(stream) responses.add("[종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
                 }
-            }
-
-        }else if(what == SENTENCE_ORDER){
-            if(know.get(1).getType() == TypedPair.TYPE_ADV){
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!!");
-                if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!!");
-            }else if(know.get(1).getType() == TypedPair.TYPE_SUBJECT){
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
-                if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
-            }else if(know.get(1).getType() == TypedPair.TYPE_QUESTION){
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금하신가요?!");
-                if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'에 해당하는 게 " + know.get(1).getFirst() + "인지 궁금하신가요?!");
-            }else if(know.get(1).getType() == TypedPair.TYPE_ADJ){
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
-                if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
-            }else if(know.get(1).getType() == TypedPair.TYPE_VADJ){
-                System.out.println(MY_NAME + " : " + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! 알아둘게요.");
-                if(stream) responses.add("" + know.get(0).getFirst() + "! " + know.get(1).getFirst() + "다! 알아둘게요.");
-            }else {
-                System.out.println(MY_NAME + " : [대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
-                if(stream) responses.add("[대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
-            }
-        }else if(what == SENTENCE_QUESTION) {
-            if (know.get(1).getType() == TypedPair.TYPE_ADV) {
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!?");
-                if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'는 " + know.get(1).getFirst() + "게!!! 새롭게 알게됐어요!?");
-            } else if (know.get(1).getType() == TypedPair.TYPE_SUBJECT) {
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
-                if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'의 주체는 " + know.get(1).getFirst() + "인거죠?! 처음보는 문장구조네요.");
-            } else if (know.get(1).getType() == TypedPair.TYPE_QUESTION) {
-                System.out.println(MY_NAME + " : \'" + know.get(0).getFirst() + "다\'에 해당하는 정보가 " + know.get(1).getFirst() + "인지 탐색합니다. [검색 호출]");
-                if(stream) responses.add("\'" + know.get(0).getFirst() + "다\'에 해당하는 정보가 " + know.get(1).getFirst() + "인지 탐색합니다. [검색 호출]");
-            } else if (know.get(1).getType() == TypedPair.TYPE_ADJ) {
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
-                if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "은", "는") + " " + know.get(1).getFirst() + "다는거죠?!");
-            } else if (know.get(1).getType() == TypedPair.TYPE_VADJ) {
-                System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
-                if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "이", "가") + " " + know.get(1).getFirst() + "다! 알아둘게요.");
-            } else {
-                System.out.println(MY_NAME + " : [대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
-                if(stream) responses.add("[대상 : " + know.get(0).getFirst() + "] [행위 : " + metaBase.getRootMeaning(action) + "(하)다]");
-            }
-        }else if(what == SENTENCE_META){
-            if (metaBase.doYouKnow(know) > 0) {
-                if (know.get(0).getType() == TypedPair.TYPE_METAPHORE) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "과", "와") + " 같은 의미라고 " + metaBase.doYouKnow(know) + "번 들었어요.");
-                    if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "과", "와") + " 같은 의미라고 " + metaBase.doYouKnow(know) + "번 들었어요.");
-                }
-            }else{
-                if (know.get(0).getType() == TypedPair.TYPE_METAPHORE) {
-                    System.out.println(MY_NAME + " : " + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "과", "와") + " 같은 의미라고 알아둘게요.");
-                    if(stream) responses.add("" + KoreanUtil.getComleteWordByJongsung(know.get(1).getFirst(), "은", "는") + " " + KoreanUtil.getComleteWordByJongsung(know.get(0).getFirst(), "과", "와") + " 같은 의미라고 알아둘게요.");
-                }
-            }
-        }else if(what == SENTENCE_METAPHORICAL_QUESTION){
-            if (know.get(0).getType() == TypedPair.TYPE_METAPHORE) {
-                List<String> backTrack = metaBase.getBackTrackingList(know.get(1).getFirst(), new ArrayList<>());
-                System.out.print("\'" + know.get(1).getFirst() + "\'에 대한 지식 백트랙킹 결과 : [");
-                String streamStr = "\'" + know.get(1).getFirst() + "\'에 대한 지식 백트랙킹 결과 : [";
-                for(int e = 0; e < backTrack.size(); e++){
-                    System.out.print(backTrack.get(e));
-                    streamStr += backTrack.get(e);
-                    if(e < backTrack.size() - 1) {
-                        System.out.print(", ");
-                        streamStr += ", ";
+                break;
+            case SENTENCE_METAPHORICAL_QUESTION:
+                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
+                    List<String> backTrack = metaBase.getBackTrackingList(objLast.getFirst(), new ArrayList<>());
+                    System.out.print("\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [");
+                    String streamStr = "\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [";
+                    for(int e = 0; e < backTrack.size(); e++){
+                        System.out.print(backTrack.get(e));
+                        streamStr += backTrack.get(e);
+                        if(e < backTrack.size() - 1) {
+                            System.out.print(", ");
+                            streamStr += ", ";
+                        }
+                        else {
+                            System.out.print("]\n");
+                            streamStr += "]\n";
+                        }
                     }
-                    else {
-                        System.out.print("]\n");
-                        streamStr += "]\n";
-                    }
+                    if(stream) responses.add(streamStr);
                 }
-                if(stream) responses.add(streamStr);
-            }
-        }else{}
+                break;
+            default: break;
+        }
 
         if(what != SENTENCE_META && what != SENTENCE_METAPHORICAL_QUESTION) {
             base.learn(know);

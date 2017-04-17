@@ -2,6 +2,7 @@ package relations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -12,20 +13,23 @@ import java.util.List;
  */
 public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
 
-    private static boolean semaphore = false;
+    protected static boolean semaphore = false;
 
-    private static final int MODE_DEBUG = 100;
-    private static final int MODE_ONGOING = 200;
+    protected static final int MODE_DEBUG = 100;
+    protected static final int MODE_ONGOING = 200;
 
-    private static final int CURRENT = MODE_DEBUG;
+    protected static final int CURRENT = MODE_DEBUG;
 
-    private static final int INVALID = -1;
-    private static final int VALID = 1;
+    protected static final int INVALID = -1;
+    protected static final int VALID = 1;
 
-    private List<TypedPair> words;
+    protected HashSet<Integer> valueSet;
+
+    protected List<TypedPair> words;
 
     public MorphemeArc(List<TypedPair> linearWords){
         super();
+        valueSet = new HashSet<>();
         if(linearWords == null) words = new ArrayList<>();
         else words = linearWords;
     }
@@ -100,7 +104,7 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
         }
 
         this.put(dependant, dominant);
-        if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+        //if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
         return VALID;
     }
 
@@ -111,13 +115,20 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
         return false;
     }
 
+    public boolean containsVerbose(Integer i){
+        return valueSet.contains(i);
+    }
+
     @Override
     public ArrayList<Integer> put(Integer i, ArrayList<Integer> ii){
         if(semaphore){
             if(this.containsKey(i)){
-                for(Integer subKey : ii) this.get(i).add(subKey);
+                this.get(i).addAll(ii);
             }else {
                 super.put(i, ii);
+            }
+            for(Integer subKey : ii) {
+                valueSet.add(subKey);
             }
             semaphore = false;
             return ii;

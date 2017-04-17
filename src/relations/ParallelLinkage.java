@@ -7,6 +7,9 @@ import java.util.HashSet;
  */
 public class ParallelLinkage extends HashSet<Integer> {
 
+    private int maxValue = -1;
+    private int minValue = Integer.MAX_VALUE;
+
     public ParallelLinkage(){
         super();
     }
@@ -16,13 +19,18 @@ public class ParallelLinkage extends HashSet<Integer> {
         for(Integer i : integers) this.add(i);
     }
 
-    public int getLastIndex(){
-        int max = 0;
-        while(this.iterator().hasNext()){
-            int tmp = this.iterator().next();
-            if(max < tmp) max = tmp;
-        }
+    @Override
+    public boolean add(Integer i){
+        if(i < minValue) minValue = i;
+        if(maxValue < i) maxValue = i;
+        return super.add(i);
+    }
 
-        return max;
+    public int getFirstIndex(){
+        return minValue;
+    }
+
+    public int getLastIndex(){
+        return maxValue;
     }
 }

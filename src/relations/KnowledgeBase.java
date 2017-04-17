@@ -202,8 +202,12 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         if(CURRENT_MODE == REAL_MODE) {
             boolean reverse = linkPair.get(1).getType() == TypedPair.TYPE_ADV;
             switch (current_set){
-                case SET_SENTENCE_RECOGNIZE : dbManager.saveKnowledgeLink(linkPair.get(0), linkPair.get(1), reverse); break;
-                case SET_METAPHOR_RECOGNIZE : dbManager.saveMetaLink(linkPair.get(0), linkPair.get(1)); break;
+                case SET_SENTENCE_RECOGNIZE : {
+                    dbManager.saveKnowledgeLink(linkPair.get(0), linkPair.get(1), reverse);
+                } break;
+                case SET_METAPHOR_RECOGNIZE : {
+                    dbManager.saveMetaLink(linkPair.get(0), linkPair.get(1));
+                } break;
                 default: break;
             }
         }
