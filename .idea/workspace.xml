@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/closed/ClosedIntention.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/closed/Intention.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/AppSlackMain.class" afterPath="$PROJECT_DIR$/out/production/GBot/AppSlackMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/KnowledgeBase.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/KnowledgeBase.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Linker.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/Linker.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/MorphemeArc.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/MorphemeArc.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/ParallelLinkage.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/ParallelLinkage.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/TypedPair.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/TypedPair.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppSlackMain.java" afterPath="$PROJECT_DIR$/src/AppSlackMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/KnowledgeBase.java" afterPath="$PROJECT_DIR$/src/relations/KnowledgeBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linker.java" afterPath="$PROJECT_DIR$/src/relations/Linker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/MorphemeArc.java" afterPath="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/ParallelLinkage.java" afterPath="$PROJECT_DIR$/src/relations/ParallelLinkage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/TypedPair.java" afterPath="$PROJECT_DIR$/src/relations/TypedPair.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,18 +25,18 @@
       <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+            <state relative-caret-position="304">
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Linker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="544" column="88" lean-forward="false" selection-start-line="544" selection-start-column="88" selection-end-line="544" selection-end-column="88" />
+            <state relative-caret-position="271">
+              <caret line="614" column="14" lean-forward="true" selection-start-line="614" selection-start-column="14" selection-end-line="614" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -59,7 +46,7 @@
         <entry file="file://$PROJECT_DIR$/src/closed/ClosedIntention.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="171">
-              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -78,7 +65,7 @@
       <file leaf-file-name="MorphemeArc.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/MorphemeArc.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
+            <state relative-caret-position="1881">
               <caret line="106" column="10" lean-forward="false" selection-start-line="106" selection-start-column="10" selection-end-line="106" selection-end-column="10" />
               <folding>
                 <element signature="e#4100#4101#0" expanded="true" />
@@ -88,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AppSlackMain.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AppSlackMain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppSlackMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="712">
-              <caret line="57" column="1" lean-forward="true" selection-start-line="57" selection-start-column="1" selection-end-line="57" selection-end-column="1" />
+            <state relative-caret-position="176">
+              <caret line="26" column="129" lean-forward="true" selection-start-line="26" selection-start-column="129" selection-end-line="26" selection-end-column="129" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -115,11 +102,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="361">
               <caret line="25" column="28" lean-forward="false" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#589#590#0" expanded="false" />
-                <element signature="e#616#617#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -233,7 +216,6 @@
         <option value="$PROJECT_DIR$/src/util/KoreanUtil.java" />
         <option value="$PROJECT_DIR$/src/statics/StaticResponser.java" />
         <option value="$PROJECT_DIR$/src/statics/ResponseConstant.java" />
-        <option value="$PROJECT_DIR$/src/AppSlackMain.java" />
         <option value="$PROJECT_DIR$/src/relations/LinkableArc.java" />
         <option value="$PROJECT_DIR$/src/relations/InterconnectionArc.java" />
         <option value="$PROJECT_DIR$/src/relations/PararellLinkedArc.java" />
@@ -243,6 +225,7 @@
         <option value="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
         <option value="$PROJECT_DIR$/src/closed/ClosedIntention.java" />
         <option value="$PROJECT_DIR$/src/relations/Linker.java" />
+        <option value="$PROJECT_DIR$/src/AppSlackMain.java" />
       </list>
     </option>
   </component>
@@ -270,7 +253,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -390,6 +372,7 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -713,7 +696,6 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12447917" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32879582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -725,6 +707,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32879582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -878,11 +861,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="361">
           <caret line="25" column="28" lean-forward="false" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#589#590#0" expanded="false" />
-            <element signature="e#616#617#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -935,14 +914,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/ParallelLinkage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="351">
@@ -974,7 +945,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/MorphemeArc.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
+        <state relative-caret-position="1881">
           <caret line="106" column="10" lean-forward="false" selection-start-line="106" selection-start-column="10" selection-end-line="106" selection-end-column="10" />
           <folding>
             <element signature="e#4100#4101#0" expanded="true" />
@@ -994,26 +965,34 @@
     <entry file="file://$PROJECT_DIR$/src/closed/ClosedIntention.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="614" column="14" lean-forward="true" selection-start-line="614" selection-start-column="14" selection-end-line="614" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppSlackMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="712">
-          <caret line="57" column="1" lean-forward="true" selection-start-line="57" selection-start-column="1" selection-end-line="57" selection-end-column="1" />
+        <state relative-caret-position="176">
+          <caret line="26" column="129" lean-forward="true" selection-start-line="26" selection-start-column="129" selection-end-line="26" selection-end-column="129" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/Linker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="544" column="88" lean-forward="false" selection-start-line="544" selection-start-column="88" selection-end-line="544" selection-end-column="88" />
-          <folding />
         </state>
       </provider>
     </entry>
