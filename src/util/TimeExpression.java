@@ -12,6 +12,8 @@ public class TimeExpression {
     public static final int TYPE_RELATIVE = 100;
     public static final int TYPE_ABSOLUTE = 200;
 
+    private String expression = "";
+
     private Integer start = -1;
     private Integer end = -1;
     private int unit = -1; // Calendar 클래스를 따름
@@ -31,6 +33,10 @@ public class TimeExpression {
                 '}';
     }
 
+    public String getDateTime(){
+        return date.get(Calendar.YEAR) + "-" + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH) + " " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND);
+    }
+
     public Integer getStart() {
         return start;
     }
@@ -45,6 +51,22 @@ public class TimeExpression {
 
     public void setEnd(Integer end) {
         this.end = end;
+    }
+
+    public int getUnit() {
+        return unit;
+    }
+
+    public void setUnit(int unit) {
+        this.unit = unit;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
     }
 
     public TimeExpression(){}

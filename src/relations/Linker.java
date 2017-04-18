@@ -5,6 +5,7 @@ import kr.co.shineware.util.common.model.Pair;
 import statics.ResponseConstant;
 import statics.StaticResponser;
 import util.KoreanUtil;
+import util.TimeExpression;
 import util.TimeParser;
 
 import java.util.*;
@@ -97,7 +98,7 @@ public class Linker {
         for(String s : new String[]{"VV"}) REQUESTS.add(s);
         for(String s : new String[]{"MM"}) DETERMINERS.add(s);
         for(String s : new String[]{"XR"}) BASES.add(s);
-        for(String s : new String[]{"SL", "SH", "SW", "NF", "SN", "NA"}) GENERAL_NOUN.add(s);
+        for(String s : new String[]{"SL", "SH", "SW", "NF", "SN", "NA", "NR"}) GENERAL_NOUN.add(s);
         GENERAL_NOUN.addAll(SUBJECTS);
     }
 
@@ -108,6 +109,13 @@ public class Linker {
     }
 
     private List<TypedPair> shortenNounNounPhrase(List<TypedPair> cores){
+
+        List<TimeExpression> times = timeParser.parse(cores);
+        for(TimeExpression time : times) {
+            System.out.println(time.getExpression() + " :: " + time.getDateTime());
+            if(stream) responses.add(time.getExpression() + " :: " + time.getDateTime());
+        }
+
         List<TypedPair> retVal = new ArrayList<>();
 
         boolean flag = false;
@@ -205,7 +213,6 @@ public class Linker {
         List<Integer> soIdx = new ArrayList<>(); // SUBJECT + OBJECT INDEX
         List<Integer> mIdx = new ArrayList<>(); // METAPHORICAL INDEX
         List<ParallelLinkage> parallelLinkages = new ArrayList<>(); // 병렬 구조 명사
-        Stack<Integer> linkageStack = new Stack<>();
 
         MorphemeArc retVal = new MorphemeArc(cores);
 
@@ -459,8 +466,6 @@ public class Linker {
                 cores.add(new TypedPair(wordMorph));
             }
         }
-
-        timeParser.parse(cores);
 
         String intention = "";
         String serialWords = "";

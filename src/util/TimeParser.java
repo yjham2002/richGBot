@@ -57,13 +57,14 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
         return false;
     }
 
-    public void parse(List<TypedPair> pairs){
+    public List<TimeExpression> parse(List<TypedPair> pairs){
 
         List<TimeExpression> list = new ArrayList<>();
         List<Pair<Integer, Integer>> history = new ArrayList<>();
 
         boolean flag = false;
         TimeExpression timeExpression = null;
+        String express = "";
 
         for(int i = 0; i < pairs.size(); i++){
             TypedPair pair = pairs.get(i);
@@ -89,6 +90,7 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
                     if(!flag) {
                         flag = true;
                         timeExpression = new TimeExpression();
+                        timeExpression.setStart(i - 1);
                         history.clear();
 
                         if (unit != -1) {
@@ -96,10 +98,11 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
                             if(!isRelative) {
                                 timeExpression.getDate().set(unit, value);
                                 history.add(new Pair<>(unit, value));
+                                express += (unit == Calendar.MONTH ? value + 1 : value) + pair.getFirst() + " ";
                             }else{
-                                System.out.println(" ::RELATIVE:: ");
                                 timeExpression.getDate().set(unit, value);
                                 history.add(new Pair<>(unit, value));
+                                express += (unit == Calendar.MONTH ? value + 1 : value) + pair.getFirst() + " ";
 
                                 Calendar cal = Calendar.getInstance();
                                 for(Pair<Integer, Integer> tpair : history){
@@ -108,6 +111,9 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
                                     cal.add(tpair.getFirst(), beforeAfter * newVal);
                                 }
                                 timeExpression.setDate(cal);
+
+                                if(beforeAfter == 1) express += "후 ";
+                                else express += "전 ";
                             }
                         }
                     }else{
@@ -116,10 +122,11 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
                             if(!isRelative) {
                                 timeExpression.getDate().set(unit, value);
                                 history.add(new Pair<>(unit, value));
+                                express += (unit == Calendar.MONTH ? value + 1 : value) + pair.getFirst() + " ";
                             }else{
-                                System.out.println(" ::RELATIVE:: ");
                                 timeExpression.getDate().set(unit, value);
                                 history.add(new Pair<>(unit, value));
+                                express += (unit == Calendar.MONTH ? value + 1 : value) + pair.getFirst() + " ";
 
                                 Calendar cal = Calendar.getInstance();
                                 for(Pair<Integer, Integer> tpair : history) {
@@ -128,33 +135,51 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
                                     cal.add(tpair.getFirst(), beforeAfter * newVal);
                                 }
                                 timeExpression.setDate(cal);
+
+                                if(beforeAfter == 1) express += "후 ";
+                                else express += "전 ";
                             }
                         }
                     }
                 }
                 else if(isStandalone(pair)) {
-                    System.out.println("시간 검출됨 : " + pair.getFirst());
+                    int unit = TimeUnit.toCalendarType(TIME_DICTIONARY.get(pair.getFirst()).getMeaning());
+                    int value = TIME_DICTIONARY.get(pair.getFirst()).getDiff();
+
+                    timeExpression = new TimeExpression();
+                    timeExpression.setStart(i);
+                    timeExpression.setEnd(i);
+                    timeExpression.setExpression(pair.getFirst());
+
+                    if(unit == Calendar.DAY_OF_WEEK){
+                        timeExpression.getDate().set(unit, value);
+                    }else{
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(unit, value);
+                        timeExpression.setDate(cal);
+                    }
+                    list.add(timeExpression);
                 }
             }else if(containsAndEqualWithNumber(pair)){
                 // DO NOTHING
             }else{
                 if(flag) {
+                    timeExpression.setExpression(express.trim());
+                    timeExpression.setEnd(i);
                     list.add(timeExpression);
                     flag = false;
                 }
             }
 
             if(i + 1 >= pairs.size() && flag){
+                timeExpression.setExpression(express.trim());
+                timeExpression.setEnd(i);
                 list.add(timeExpression);
                 flag = false;
             }
         }
 
-        for(TimeExpression time : list) {
-            System.out.println("Date : " + time.getDate().get(Calendar.YEAR)
-                    + "/" + (time.getDate().get(Calendar.MONTH)+1) + "/" + time.getDate().get(Calendar.DAY_OF_MONTH)
-                    + " " + time.getDate().get(Calendar.HOUR_OF_DAY) + ":" + time.getDate().get(Calendar.MINUTE) + ":" + time.getDate().get(Calendar.SECOND));
-        }
+        return list;
     }
 
     private void init(){
