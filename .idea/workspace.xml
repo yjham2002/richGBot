@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppSlackMain.java" afterPath="$PROJECT_DIR$/src/AppSlackMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linker.java" afterPath="$PROJECT_DIR$/src/relations/Linker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/TimeExpression.java" afterPath="$PROJECT_DIR$/src/util/TimeExpression.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/TimeParser.java" afterPath="$PROJECT_DIR$/src/util/TimeParser.java" />
-    </list>
+    <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -241,8 +236,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="919" />
+    <option name="y" value="45" />
     <option name="width" value="1936" />
     <option name="height" value="1066" />
   </component>
@@ -710,7 +705,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <frame x="919" y="45" width="1936" height="1066" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
