@@ -19,6 +19,7 @@ public class AppMain {
         Scanner scanner = new Scanner(System.in);
 
         Linker linker = new Linker();
+        linker.setSimilarityMode(false);
 
         while(true) {
             System.out.print("USER : ");

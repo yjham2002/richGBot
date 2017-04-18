@@ -3,6 +3,8 @@ package DB;
 import relations.KnowledgeBase;
 import relations.KnowledgeFraction;
 import relations.TypedPair;
+import util.NumberUnit;
+import util.TimeUnit;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -58,6 +60,52 @@ public class DBManager extends DBConstManager {
 //                }
                 know.setFrequency(rs.getInt("frequency"));
                 retVal.add(know);
+            }
+
+            rs.close();
+            st.close();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    public List<NumberUnit> getNumberDictionary(){
+        List<NumberUnit> retVal = new ArrayList<>();
+        try{
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            String sql = "SELECT `desc`, `value`, `tag` FROM tblNumber GROUP BY `desc` ORDER BY `desc`;";
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()){
+                NumberUnit time = new NumberUnit(rs.getString("desc"), rs.getString("tag"), rs.getInt("value"));
+                retVal.add(time);
+            }
+
+            rs.close();
+            st.close();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    public List<TimeUnit> getTimeDictionary(){
+        List<TimeUnit> retVal = new ArrayList<>();
+        try{
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            String sql = "SELECT `desc`, `standalone`, `meaning`, `diff` FROM tblTime GROUP BY `desc` ORDER BY `desc`;";
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()){
+                boolean sa = false;
+                if(rs.getInt("standalone") == 1) sa = true;
+                TimeUnit time = new TimeUnit(rs.getString("desc"), rs.getString("meaning"), rs.getInt("diff"), sa);
+                retVal.add(time);
             }
 
             rs.close();

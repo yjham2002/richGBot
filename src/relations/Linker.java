@@ -5,6 +5,7 @@ import kr.co.shineware.util.common.model.Pair;
 import statics.ResponseConstant;
 import statics.StaticResponser;
 import util.KoreanUtil;
+import util.TimeParser;
 
 import java.util.*;
 
@@ -50,6 +51,8 @@ public class Linker {
     private static final Set<String> DETERMINERS = new HashSet<>();
     private static final Set<String> BASES = new HashSet<>();
 
+    private TimeParser timeParser;
+
     private List<List<Pair<String, String>>> morphemes;
 
     private KnowledgeBase base; // 가중치 부여 및 단순 문장 링킹를 위한 지식베이스
@@ -83,6 +86,8 @@ public class Linker {
         this.base = new KnowledgeBase(dbManager, KnowledgeBase.SET_SENTENCE_RECOGNIZE);
         this.metaBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_METAPHOR_RECOGNIZE);
         this.staticBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_STATIC_QUESTION);
+
+        timeParser = new TimeParser(dbManager);
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
         for(String s : new String[]{"NP", "NN", "NNG", "NA", "SL", "SH", "SW", "NF", "SN", "NA"}) OBJECTS.add(s);
@@ -455,6 +460,8 @@ public class Linker {
             }
         }
 
+        timeParser.parse(cores);
+
         String intention = "";
         String serialWords = "";
         String serialTags = "";
@@ -516,43 +523,44 @@ public class Linker {
         double prob = 0.0; // 유사도 척도
         String prediction = ""; // 예측된 사용자 의도
 
-        if(SIMILARITY_MODE){
+        if(SIMILARITY_MODE) {
 
             prediction = "";
             prob = 0.0;
-            for(String str : staticBase.keySet()){
+            for (String str : staticBase.keySet()) {
                 double newProb = KoreanUtil.getEditDistanceRate(str, serialWords, true);
-                if(prob < newProb) {
+                if (prob < newProb) {
                     prediction = staticBase.get(str).keySet().iterator().next();
                     prob = newProb;
                 }
             }
 
-        }
 
-        System.out.println("[Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%]");
-        //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
+            System.out.println("[Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%]");
+            //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
 
-        if(procArc.keySet().size() == 0){
-            if(prob >= SIMILARITY_THRESHOLD){
-                System.out.println(StaticResponser.talk(prediction));
-                if(stream) {
-                    responses.add(StaticResponser.talk(prediction));
+            if (procArc.keySet().size() == 0) {
+                if (prob >= SIMILARITY_THRESHOLD) {
+                    System.out.println(StaticResponser.talk(prediction));
+                    if (stream) {
+                        responses.add(StaticResponser.talk(prediction));
+                    }
+                } else {
+                    System.out.println(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
+                    if (stream) {
+                        responses.add(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
+                    }
                 }
-            }else{
-                System.out.println(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
-                if(stream) {
-                    responses.add(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
-                }
+            } else {
+                if (prob >= SIMILARITY_HIJACKING_THRESHOLD) {
+                    System.out.println(StaticResponser.talk(prediction));
+                    if (stream) {
+                        responses.add(StaticResponser.talk(prediction));
+                    }
+                } else addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
             }
-        }else {
-            if(prob >= SIMILARITY_HIJACKING_THRESHOLD) {
-                System.out.println(StaticResponser.talk(prediction));
-                if(stream) {
-                    responses.add(StaticResponser.talk(prediction));
-                }
-            }
-            else addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
+        }else{
+            addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
         }
 
     }
