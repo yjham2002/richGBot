@@ -27,9 +27,12 @@ public class StaticResponser {
     public static final String INTENT_FORTUNE = "FORTUNE";
     public static final String INTENT_HELP = "HELP";
 
+    public static final String INTENT_REDUNDANT = "REDUNDANT";
+
     public static String talk(String intent){
         String response = "";
         switch (intent){
+            case INTENT_REDUNDANT : response = "동일 어휘 반복 입력"; break;
             case INTENT_TIME: response = "현재 시각은 [" + new Date() + "] 입니다."; break;
             case INTENT_HELLO: response = ResponseConstant.HELLO[new Random().nextInt(ResponseConstant.HELLO.length)]; break;
             case INTENT_CALL: response = ResponseConstant.CALL[new Random().nextInt(ResponseConstant.CALL.length)]; break;

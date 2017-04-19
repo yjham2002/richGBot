@@ -2,6 +2,7 @@ package relations;
 
 import DB.DBManager;
 import kr.co.shineware.util.common.model.Pair;
+import response.ResponseGenerator;
 import statics.ResponseConstant;
 import statics.StaticResponser;
 import util.KoreanUtil;
@@ -13,7 +14,7 @@ import java.util.*;
 /**
  * Created by a on 2017-03-23.
  */
-public class Linker {
+public class LinkageFactory {
 
     /*
     문법 검사를 진행하지 않는 강제 명령이 필요할 경우, 이하의 패턴을 문장의 처음에 붙히고 공백으로 구분하여 문장을 시작한다.
@@ -23,70 +24,78 @@ public class Linker {
     private static final String COMMAND_PATTERN_FORCE = "#FORCE#"; // 정적 문장에 대한 답변을 문법 분석없이 진행하기 위한 커맨드
     // PATTERN_FORCE END
 
-    public static List<String> memory;
+    private Linkage linkage;
 
     public static final String MY_NAME = "RES";
-
-    private boolean stream = false;
-
-    private static final int MEMORY_SIZE = 100;
 
     private static boolean SIMILARITY_MODE = true;
     private static final double SIMILARITY_THRESHOLD = 0.5;
     private static final double SIMILARITY_HIJACKING_THRESHOLD = 0.80;
 
-    private static final int SENTENCE_ORDER = 10;
-    private static final int SENTENCE_PLAIN = 20;
-    private static final int SENTENCE_QUESTION = 30;
-    private static final int SENTENCE_META = 40;
-    private static final int SENTENCE_METAPHORICAL_QUESTION = 50;
+    public static final int SENTENCE_ORDER = 10;
+    public static final int SENTENCE_PLAIN = 20;
+    public static final int SENTENCE_QUESTION = 30;
+    public static final int SENTENCE_META = 40;
+    public static final int SENTENCE_METAPHORICAL_QUESTION = 50;
 
-    private static final Set<String> SUBJECTS = new HashSet<>();
-    private static final Set<String> GENERAL_NOUN = new HashSet<>();
-    private static final Set<String> DEPNOUN = new HashSet<>();
-    private static final Set<String> VERBS = new HashSet<>();
-    private static final Set<String> REQUESTS = new HashSet<>();
-    private static final Set<String> OBJECTS= new HashSet<>();
-    private static final Set<String> ADJECTIVES= new HashSet<>();
-    private static final Set<String> ADVERBS = new HashSet<>();
-    private static final Set<String> DETERMINERS = new HashSet<>();
-    private static final Set<String> BASES = new HashSet<>();
+    public static final Set<String> SUBJECTS = new HashSet<>();
+    public static final Set<String> GENERAL_NOUN = new HashSet<>();
+    public static final Set<String> DEPNOUN = new HashSet<>();
+    public static final Set<String> VERBS = new HashSet<>();
+    public static final Set<String> REQUESTS = new HashSet<>();
+    public static final Set<String> OBJECTS= new HashSet<>();
+    public static final Set<String> ADJECTIVES= new HashSet<>();
+    public static final Set<String> ADVERBS = new HashSet<>();
+    public static final Set<String> DETERMINERS = new HashSet<>();
+    public static final Set<String> BASES = new HashSet<>();
 
-    private TimeParser timeParser;
+    private TimeParser timeParser; // Time Expression Parser
+    private List<TimeExpression> times; // Time Expression List
+    private HashMap<Integer, Integer> timeRange;
 
-    private List<List<Pair<String, String>>> morphemes;
+    private List<List<Pair<String, String>>> morphemes; // Analyzed morpheme units
 
     private KnowledgeBase base; // 가중치 부여 및 단순 문장 링킹를 위한 지식베이스
     private KnowledgeBase metaBase; // 은유적 1:N 관계를 기술하기 위한 지식베이스 (단, 1은 큰 범위의 의미이고 N은 작은 범위의 의미)
     private KnowledgeBase staticBase; // 정적 문장에 대한 단순 매칭을 수행하는 정적 지식베이스
 
-    private DBManager dbManager;
+    private DBManager dbManager; // DB Connection Manager
 
-    private String temporaryMemory = "";
+    private String temporaryMemory = ""; // Temporary Sentence memory variable
 
-    private ArrayList<String> responses;
+    private ArrayList<String> responses; // Stream Response Storage
 
-    public Linker(List<List<Pair<String, String>>> morphemes){
+    public LinkageFactory(List<List<Pair<String, String>>> morphemes){
         this.morphemes = morphemes;
         init();
     }
 
-    public Linker(){
+    public LinkageFactory(){
         init();
     }
 
     public void setMorphemes(List<List<Pair<String, String>>> morphemes, String origin){
         this.morphemes = morphemes;
         temporaryMemory = origin;
+
+        linkage.setOriginalMessage(origin);
     }
 
     private void init(){
+        linkage = new Linkage();
+
         responses = new ArrayList<>();
         dbManager = new DBManager();
-        memory = new ArrayList<>();
+
+        // 지식 베이스 캐싱 시작
         this.base = new KnowledgeBase(dbManager, KnowledgeBase.SET_SENTENCE_RECOGNIZE);
         this.metaBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_METAPHOR_RECOGNIZE);
         this.staticBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_STATIC_QUESTION);
+
+        linkage.setBase(base);
+        linkage.setMetaBase(metaBase);
+        linkage.setStaticBase(staticBase);
+        // 지식 베이스 캐싱 종료
 
         timeParser = new TimeParser(dbManager);
 
@@ -110,11 +119,18 @@ public class Linker {
 
     private List<TypedPair> shortenNounNounPhrase(List<TypedPair> cores){
 
-        List<TimeExpression> times = timeParser.parse(cores);
-        for(TimeExpression time : times) {
+        times = timeParser.parse(cores);
+        timeRange = new HashMap<>();
+
+        for(int tIdx = 0; tIdx < times.size(); tIdx++) {
+            TimeExpression time = times.get(tIdx);
+            for(int tr = time.getStart(); tr <= time.getEnd(); tr++) timeRange.put(tr, tIdx);
             System.out.println(time.getExpression() + " :: " + time.getDateTime());
-            if(stream) responses.add(time.getExpression() + " :: " + time.getDateTime());
+            responses.add(time.getExpression() + " :: " + time.getDateTime());
         }
+
+        linkage.setTimeExpressions(times);
+        linkage.setTimeRange(timeRange);
 
         List<TypedPair> retVal = new ArrayList<>();
 
@@ -444,20 +460,13 @@ public class Linker {
         return null;
     }
 
-    private void link(boolean stream){
-
-        this.stream = stream;
+    public Linkage link(){
 
         responses.clear();
 
         if(this.morphemes == null){
             System.out.println("There is no morpheme data.");
         }
-
-        String prev = "";
-        if(memory.size() >= 1) prev = memory.get(memory.size() - 1);
-
-        memory.add(temporaryMemory);
 
         List<TypedPair> cores = new ArrayList<>();
 
@@ -466,6 +475,8 @@ public class Linker {
                 cores.add(new TypedPair(wordMorph));
             }
         }
+
+        linkage.setOriginalWords(cores);
 
         String intention = "";
         String serialWords = "";
@@ -483,7 +494,7 @@ public class Linker {
         if(temporaryMemory.indexOf(COMMAND_PATTERN_FORCE) == 0){
             if(cores.size() < 4){
                 System.out.println("[WARN :: INVALID PARAMETER HAS BEEN DETECTED]");
-                return;
+                return linkage;
             }else{
                 intention = cores.get(3).getFirst();
                 serialWords = "";
@@ -498,7 +509,7 @@ public class Linker {
                 staticBase.memorize(serialWords.trim(), serialTags.trim(), intention);
                 System.out.println("[INFO :: 강제 학습 명령이 정상적으로 수행됨]");
             }
-            return;
+            return linkage;
         }
         // PATTERN DETECTING END
 
@@ -506,21 +517,11 @@ public class Linker {
         if(staticBase.containsKey(cleanedSerial)){
             String intent = staticBase.get(cleanedSerial).keySet().iterator().next();
             System.out.println(StaticResponser.talk(intent));
-            if(stream) {
-                responses.add(StaticResponser.talk(intent));
-            }
-            return;
-        }else{
-            if(prev.equals(temporaryMemory) && memory.size() >= 1){
-                System.out.println(MY_NAME + " : 동일 어휘 반복 입력");
-                if(stream) responses.add("동일 어휘 반복 입력");
-                return;
-            }
+            responses.add(StaticResponser.talk(intent));
 
-            if(memory.size() > MEMORY_SIZE) {
-                memory.clear();
-                memory.add(prev);
-            }
+            linkage.setArc(null);
+            linkage.setInstantResponses(responses);
+            return linkage;
         }
 
         MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores)); // 아크를 연결하고 분석을 수행
@@ -547,207 +548,28 @@ public class Linker {
             if (procArc.keySet().size() == 0) {
                 if (prob >= SIMILARITY_THRESHOLD) {
                     System.out.println(StaticResponser.talk(prediction));
-                    if (stream) {
-                        responses.add(StaticResponser.talk(prediction));
-                    }
+                    responses.add(StaticResponser.talk(prediction));
                 } else {
                     System.out.println(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
-                    if (stream) {
-                        responses.add(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
-                    }
+                    responses.add(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
                 }
             } else {
                 if (prob >= SIMILARITY_HIJACKING_THRESHOLD) {
                     System.out.println(StaticResponser.talk(prediction));
-                    if (stream) {
-                        responses.add(StaticResponser.talk(prediction));
-                    }
-                } else addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
+                    responses.add(StaticResponser.talk(prediction));
+                }
             }
-        }else{
-            addProcData(procArc, isOrder(procArc.getWords())); // 위 단계에 대한 학습을 수행하고 DB에 저장
         }
+
+        linkage.setArc(procArc);
+        linkage.setInstantResponses(responses);
+
+        return linkage;
 
     }
 
     public void setSimilarityMode(boolean mode){ // 유사도 검증 모드 설정 시 실행속도가 크게 저하될 수 있음
         this.SIMILARITY_MODE = mode;
-    }
-
-    private int isOrder(List<TypedPair> words){
-        int questions = 0;
-        for(int i = 0; i < words.size() ; i++) {
-            TypedPair pair = words.get(i); // TODO 문장 구분
-            if(pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
-        }
-
-        for(int i = 0; i < words.size() ; i++) {
-            TypedPair pair = words.get(i); // TODO 문장 구분
-            if(pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
-                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
-            }else if(pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))){
-                questions++;
-            }
-        }
-
-        if(questions > 0) return SENTENCE_QUESTION;
-
-        return SENTENCE_ORDER;
-    }
-
-    private void addProcData(MorphemeArc arc, int what){
-        for(Integer key : arc.keySet()) {
-            for(Integer subKey : arc.get(key)) {
-                addProcData(arc.getWord(key), arc.getWord(subKey), what, arc);
-            }
-        }
-    }
-
-    private void addProcData(TypedPair pop, TypedPair word, int what, MorphemeArc arc){
-        int type = what;
-        if(pop == null) System.out.println("pop null");
-        if(word == null) System.out.println("word null");
-        List<TypedPair> temp = new ArrayList<>();
-        if(KoreanUtil.isMetaQuestion(word)){
-            type = SENTENCE_METAPHORICAL_QUESTION;
-        }
-
-        temp.add(word);
-        temp.add(pop);
-        learnLinkPair(temp, type, arc);
-    }
-
-    private List<TypedPair> expandLinkage(TypedPair pair, MorphemeArc arc){
-        List<TypedPair> list = new ArrayList<>();
-        if(pair.isLinked()){
-            Iterator<Integer> iterator = pair.getParallelLinkage().iterator();
-            while(iterator.hasNext()){
-                Integer unit = iterator.next();
-                list.add(arc.getWords().get(unit));
-            }
-        }else{
-            list.add(pair);
-        }
-        return list;
-    }
-
-    private void learnLinkPair(List<TypedPair> know, int what, MorphemeArc arc){
-
-        TypedPair objFirst = know.get(0);
-        TypedPair objLast = know.get(1);
-        if(know.get(0).isLinked()){ // TEMPORARY
-            TypedPair temp = new TypedPair();
-            String first = "";
-            String tempPOS = "NNG";
-            for(int loop = 0; loop < expandLinkage(know.get(0), arc).size(); loop++){
-                TypedPair pair = expandLinkage(know.get(0), arc).get(loop);
-                first += pair.getFirst();
-                if(loop + 1 < expandLinkage(know.get(0), arc).size()) {
-                    first += ",";
-                }
-            }
-            temp.setFirst(first);
-            temp.setSecond(tempPOS);
-            objFirst = temp;
-        }
-        if(know.get(1).isLinked()){ // TEMPORARY
-            TypedPair temp = new TypedPair();
-            String first = "";
-            String tempPOS = "NNG";
-            for(int loop = 0; loop < expandLinkage(know.get(1), arc).size(); loop++){
-                TypedPair pair = expandLinkage(know.get(1), arc).get(loop);
-                first += pair.getFirst();
-                if(loop + 1 < expandLinkage(know.get(1), arc).size()) {
-                    first += ",";
-                }
-            }
-            temp.setFirst(first);
-            temp.setSecond(tempPOS);
-            objLast = temp;
-        }
-
-        String classified = "";
-
-        switch(what){
-            case SENTENCE_PLAIN: classified = "[평서문] >> "; break;
-            case SENTENCE_ORDER: classified = "[명령문] >> "; break;
-            case SENTENCE_QUESTION: classified = "[의문문] >> "; break;
-            case SENTENCE_META: classified = "[은유형 대입문] >> "; break;
-            case SENTENCE_METAPHORICAL_QUESTION: classified = "[은유형 의문문] >> "; break;
-            default: break;
-        }
-        System.out.print(classified);
-
-        switch(what){
-            case SENTENCE_PLAIN: case SENTENCE_ORDER: case SENTENCE_QUESTION:
-                if (objLast.getType() == TypedPair.TYPE_ADV) {
-                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                } else if (objLast.getType() == TypedPair.TYPE_SUBJECT) {
-                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                } else if (objLast.getType() == TypedPair.TYPE_QUESTION) {
-                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                } else if (objLast.getType() == TypedPair.TYPE_ADJ) {
-                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                } else if (objLast.getType() == TypedPair.TYPE_VADJ) {
-                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                } else {
-                    System.out.println(MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                    if(stream) responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                }
-                break;
-            case SENTENCE_META:
-                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
-                    System.out.println(MY_NAME + " : [종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
-                    if(stream) responses.add("[종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
-                }
-                break;
-            case SENTENCE_METAPHORICAL_QUESTION:
-                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
-                    List<String> backTrack = metaBase.getBackTrackingList(objLast.getFirst(), new ArrayList<>());
-                    System.out.print("\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [");
-                    String streamStr = "\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [";
-                    for(int e = 0; e < backTrack.size(); e++){
-                        System.out.print(backTrack.get(e));
-                        streamStr += backTrack.get(e);
-                        if(e < backTrack.size() - 1) {
-                            System.out.print(", ");
-                            streamStr += ", ";
-                        }
-                        else {
-                            System.out.print("]\n");
-                            streamStr += "]\n";
-                        }
-                    }
-                    if(stream) responses.add(streamStr);
-                }
-                break;
-            default: break;
-        }
-
-        if(what != SENTENCE_META && what != SENTENCE_METAPHORICAL_QUESTION) {
-            base.learn(know);
-        }
-        else if(what == SENTENCE_METAPHORICAL_QUESTION){
-            // DO NOTHING
-        }
-        else{
-            metaBase.learn(know);
-        }
-
-    }
-
-    public void printResult(){
-        link(false);
-    }
-
-    public List<String> interaction(){
-        link(true);
-        return responses;
     }
 
 

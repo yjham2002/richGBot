@@ -165,7 +165,7 @@ public class KoreanUtil {
     }
 
     public static boolean isBefore(TypedPair pair){
-        if((pair.getFirst().equals("전") || pair.getFirst().equals("이전")) && pair.getSecond().equals("NNG")) return true;
+        if((pair.getFirst().equals("전") || pair.getFirst().equals("이전")) && (pair.getSecond().equals("NNG") || pair.getSecond().equals("MM"))) return true;
         return false;
     }
 

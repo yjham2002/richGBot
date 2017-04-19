@@ -70,13 +70,22 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
             TypedPair pair = pairs.get(i);
             if(containsAndEqualWithTime(pair)){
                 if((i > 0 && containsAndEqualWithNumber(pairs.get(i - 1)))) {
-                    int value;
+                    int value = 0;
                     if(isNumeric(pairs.get(i - 1).getFirst())){
                         value = Integer.parseInt(pairs.get(i - 1).getFirst());
                     }else if(NUMBER_DICTIONARY.containsKey(pairs.get(i - 1))){
                         value = NUMBER_DICTIONARY.get(pairs.get(i - 1).getFirst()).getValue();
                     }else{
-                        value = (int)KoreanUtil.toNumber(pairs.get(i - 1).getFirst());
+                        try {
+                            if(NUMBER_DICTIONARY.containsKey(pairs.get(i - 1).getFirst())){
+                                value = NUMBER_DICTIONARY.get(pairs.get(i - 1).getFirst()).getValue();
+                            }else {
+                                value = (int) KoreanUtil.toNumber(pairs.get(i - 1).getFirst());
+                            }
+                        }catch (IndexOutOfBoundsException e){
+                            e.printStackTrace();
+                            return list;
+                        }
                     }
                     int unit = TimeUnit.toCalendarType(TIME_DICTIONARY.get(pair.getFirst()).getMeaning());
 
@@ -91,6 +100,7 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
                         flag = true;
                         timeExpression = new TimeExpression();
                         timeExpression.setStart(i - 1);
+                        express = "";
                         history.clear();
 
                         if (unit != -1) {
