@@ -16,7 +16,6 @@ import static relations.LinkageFactory.*;
  */
 public class Linkage {
 
-    private List<TypedPair> originalWords;
     private String originalMessage;
     private List<TimeExpression> timeExpressions;
     private HashMap<Integer, Integer> timeRange;
@@ -27,14 +26,6 @@ public class Linkage {
     private KnowledgeBase staticBase; // 정적 문장에 대한 단순 매칭을 수행하는 정적 지식베이스
 
     public Linkage(){}
-
-    public List<TypedPair> getOriginalWords() {
-        return originalWords;
-    }
-
-    public void setOriginalWords(List<TypedPair> originalWords) {
-        this.originalWords = originalWords;
-    }
 
     public String getOriginalMessage() {
         return originalMessage;
@@ -149,6 +140,14 @@ public class Linkage {
     public List<String> interaction(){
         if(arc != null) addProcData(arc, isOrder(arc.getWords()));
         return instantResponses;
+    }
+
+    public List<Sentence> toSentences(){
+        List<Sentence> sentences = new ArrayList<>();
+
+
+
+        return sentences;
     }
 
 }

@@ -71,6 +71,34 @@ public class DBManager extends DBConstManager {
         return retVal;
     }
 
+    public String getDirectResponse(String msg){
+        try {
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            String sql = "SELECT static FROM tblStaticSentence WHERE serialWord=\'" + msg + "\';";
+            ResultSet rs = st.executeQuery(sql);
+
+            String res = "";
+
+            while(rs.next()){
+                res = rs.getString("static");
+            }
+
+            rs.close();
+            st.close();
+
+            connection.close();
+
+            if(res == null) res = "";
+
+            return res;
+        }catch(SQLException e){
+            e.printStackTrace();
+
+            return "";
+        }
+    }
+
     public List<NumberUnit> getNumberDictionary(){
         List<NumberUnit> retVal = new ArrayList<>();
         try{
@@ -241,14 +269,17 @@ public class DBManager extends DBConstManager {
         }
     }
 
-    public boolean saveStaticSentence(String sWord, String sTag, String intention){
+    public boolean saveStaticSentence(String sWord, String sTag, String intention, String resp){
         boolean retVal = false;
 
         try {
             String sql;
 
-            if(getFrequentOfStatic(sWord, sTag, intention) == 0) sql = "INSERT INTO `GBot`.`tblStaticSentence`(`serialWord`,`serialTag`,`intention`,`uptDate`,`regDate`) " +
-                    "VALUES (\'" + sWord + "\',\'" + sTag + "\',\'" + intention + "\',NOW(),NOW());";
+            if(resp.equals("")) resp = "NULL";
+            else resp = "\'" + resp + "\'";
+
+            if(getFrequentOfStatic(sWord, sTag, intention) == 0) sql = "INSERT INTO `GBot`.`tblStaticSentence`(`serialWord`,`serialTag`,`intention`,`static`,`uptDate`,`regDate`) " +
+                    "VALUES (\'" + sWord + "\',\'" + sTag + "\',\'" + intention + "\'," + resp + ",NOW(),NOW());";
             else sql = "UPDATE `GBot`.`tblStaticSentence` SET `frequency` = (`frequency` + 1), `uptDate` = NOW()  WHERE serialWord='" + sWord + "' AND serialTag='" + sTag + "' AND intention='" + intention + "';";
 
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);

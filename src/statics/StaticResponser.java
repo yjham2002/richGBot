@@ -1,5 +1,6 @@
 package statics;
 
+import DB.DBManager;
 import util.WeatherParser;
 
 import java.util.Date;
@@ -9,6 +10,8 @@ import java.util.Random;
  * Created by a on 2017-04-13.
  */
 public class StaticResponser {
+
+    private DBManager dbManager;
 
     public static final String INTENT_TIME = "TIME";
     public static final String INTENT_HELLO = "HELLO";
@@ -26,12 +29,18 @@ public class StaticResponser {
     public static final String INTENT_LAUGH = "LAUGH";
     public static final String INTENT_FORTUNE = "FORTUNE";
     public static final String INTENT_HELP = "HELP";
+    public static final String INTENT_DIRECT = "DIRECT";
 
     public static final String INTENT_REDUNDANT = "REDUNDANT";
 
-    public static String talk(String intent){
+    public StaticResponser(DBManager dbManager){
+        this.dbManager = dbManager;
+    }
+
+    public String talk(String intent, String msg){
         String response = "";
         switch (intent){
+            case INTENT_DIRECT: response = dbManager.getDirectResponse(msg); break;
             case INTENT_REDUNDANT : response = "동일 어휘 반복 입력"; break;
             case INTENT_TIME: response = "현재 시각은 [" + new Date() + "] 입니다."; break;
             case INTENT_HELLO: response = ResponseConstant.HELLO[new Random().nextInt(ResponseConstant.HELLO.length)]; break;

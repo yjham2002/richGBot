@@ -26,6 +26,8 @@ public class LinkageFactory {
 
     private Linkage linkage;
 
+    private StaticResponser staticResponser;
+
     public static final String MY_NAME = "RES";
 
     private static boolean SIMILARITY_MODE = true;
@@ -77,12 +79,9 @@ public class LinkageFactory {
     public void setMorphemes(List<List<Pair<String, String>>> morphemes, String origin){
         this.morphemes = morphemes;
         temporaryMemory = origin;
-
-        linkage.setOriginalMessage(origin);
     }
 
     private void init(){
-        linkage = new Linkage();
 
         responses = new ArrayList<>();
         dbManager = new DBManager();
@@ -91,13 +90,10 @@ public class LinkageFactory {
         this.base = new KnowledgeBase(dbManager, KnowledgeBase.SET_SENTENCE_RECOGNIZE);
         this.metaBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_METAPHOR_RECOGNIZE);
         this.staticBase = new KnowledgeBase(dbManager, KnowledgeBase.SET_STATIC_QUESTION);
-
-        linkage.setBase(base);
-        linkage.setMetaBase(metaBase);
-        linkage.setStaticBase(staticBase);
         // 지식 베이스 캐싱 종료
 
         timeParser = new TimeParser(dbManager);
+        staticResponser = new StaticResponser(dbManager);
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
         for(String s : new String[]{"NP", "NN", "NNG", "NA", "SL", "SH", "SW", "NF", "SN", "NA"}) OBJECTS.add(s);
@@ -461,6 +457,12 @@ public class LinkageFactory {
     }
 
     public Linkage link(){
+        linkage = new Linkage();
+
+        linkage.setOriginalMessage(temporaryMemory);
+        linkage.setBase(base);
+        linkage.setMetaBase(metaBase);
+        linkage.setStaticBase(staticBase);
 
         responses.clear();
 
@@ -476,8 +478,6 @@ public class LinkageFactory {
             }
         }
 
-        linkage.setOriginalWords(cores);
-
         String intention = "";
         String serialWords = "";
         String serialTags = "";
@@ -492,9 +492,25 @@ public class LinkageFactory {
 
         // PATTERN DETECTING START
         if(temporaryMemory.indexOf(COMMAND_PATTERN_FORCE) == 0){
-            if(cores.size() < 4){
+            if(cores.size() < 4) {
                 System.out.println("[WARN :: INVALID PARAMETER HAS BEEN DETECTED]");
-                return linkage;
+            }else if(cores.get(3).getFirst().equals(StaticResponser.INTENT_DIRECT)){
+
+                intention = cores.get(3).getFirst();
+
+                String raw = temporaryMemory.replaceAll("#FORCE# DIRECT", "").trim();
+
+                int sharpIndex = raw.indexOf("#");
+                if(sharpIndex == -1) return linkage;
+
+                String leftHand = raw.substring(0, sharpIndex).trim();
+                if(sharpIndex + 1 > raw.length()) return linkage;
+
+                String rightHand = raw.substring(sharpIndex + 1, raw.length()).trim();
+
+                staticBase.memorize(leftHand, "NNG", intention, rightHand);
+                System.out.println("[INFO :: 강제 학습 명령이 정상적으로 수행됨]");
+
             }else{
                 intention = cores.get(3).getFirst();
                 serialWords = "";
@@ -506,7 +522,7 @@ public class LinkageFactory {
                         serialTags += pair.getSecond();
                     }
                 }
-                staticBase.memorize(serialWords.trim(), serialTags.trim(), intention);
+                staticBase.memorize(serialWords.trim(), serialTags.trim(), intention, "");
                 System.out.println("[INFO :: 강제 학습 명령이 정상적으로 수행됨]");
             }
             return linkage;
@@ -516,8 +532,8 @@ public class LinkageFactory {
         String cleanedSerial = KoreanUtil.eliminateMeaningLess(serialWords);
         if(staticBase.containsKey(cleanedSerial)){
             String intent = staticBase.get(cleanedSerial).keySet().iterator().next();
-            System.out.println(StaticResponser.talk(intent));
-            responses.add(StaticResponser.talk(intent));
+            System.out.println(staticResponser.talk(intent, temporaryMemory));
+            responses.add(staticResponser.talk(intent, temporaryMemory));
 
             linkage.setArc(null);
             linkage.setInstantResponses(responses);
@@ -533,30 +549,33 @@ public class LinkageFactory {
 
             prediction = "";
             prob = 0.0;
+            String matched = "";
             for (String str : staticBase.keySet()) {
                 double newProb = KoreanUtil.getEditDistanceRate(str, serialWords, true);
                 if (prob < newProb) {
                     prediction = staticBase.get(str).keySet().iterator().next();
                     prob = newProb;
+                    matched = str;
                 }
             }
 
+            if(prediction.equals(StaticResponser.INTENT_DIRECT)) temporaryMemory = matched;
 
             System.out.println("[Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%]");
             //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
 
             if (procArc.keySet().size() == 0) {
                 if (prob >= SIMILARITY_THRESHOLD) {
-                    System.out.println(StaticResponser.talk(prediction));
-                    responses.add(StaticResponser.talk(prediction));
+                    System.out.println(staticResponser.talk(prediction, temporaryMemory));
+                    responses.add(staticResponser.talk(prediction, temporaryMemory));
                 } else {
-                    System.out.println(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
-                    responses.add(StaticResponser.talk(StaticResponser.INTENT_NOTHING));
+                    System.out.println(staticResponser.talk(StaticResponser.INTENT_NOTHING, temporaryMemory));
+                    responses.add(staticResponser.talk(StaticResponser.INTENT_NOTHING, temporaryMemory));
                 }
             } else {
                 if (prob >= SIMILARITY_HIJACKING_THRESHOLD) {
-                    System.out.println(StaticResponser.talk(prediction));
-                    responses.add(StaticResponser.talk(prediction));
+                    System.out.println(staticResponser.talk(prediction, temporaryMemory));
+                    responses.add(staticResponser.talk(prediction, temporaryMemory));
                 }
             }
         }

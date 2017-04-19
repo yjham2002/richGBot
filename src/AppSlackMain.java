@@ -19,7 +19,7 @@ public class AppSlackMain {
         NaturalLanguageEngine nlpEngine = NaturalLanguageEngine.getInstance().setDebugMode(true);
 
         try {
-            SlackSession session = SlackSessionFactory.createWebSocketSlackSession("xoxb-168613915715-lZ3sqZQmoNlbdwp3kw4yRC5o");
+            SlackSession session = SlackSessionFactory.createWebSocketSlackSession("xoxb-168613915715-4Bs6PDyCCbkAuTm7LDQvfUCC");
             session.connect();
 
             SlackChannel channel_general = session.findChannelByName("general"); //make sure bot is a member of the channel.

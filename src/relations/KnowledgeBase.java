@@ -155,7 +155,7 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         }
     }
 
-    public boolean memorize(String sWord, String sTag, String intention){
+    public boolean memorize(String sWord, String sTag, String intention, String resp){
         HashMap<String, Integer> entry = new HashMap<>();
         if(this.containsKey(sWord)){
             int freq = this.get(sWord).get(intention);
@@ -165,7 +165,7 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
             this.put(sWord, entry);
         }
 
-        return dbManager.saveStaticSentence(sWord, sTag, intention);
+        return dbManager.saveStaticSentence(sWord, sTag, intention, resp);
     }
 
     public String getRootMeaning(String current){
