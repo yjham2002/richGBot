@@ -2,8 +2,6 @@ package relations;
 
 import DB.DBManager;
 import kr.co.shineware.util.common.model.Pair;
-import response.ResponseGenerator;
-import statics.ResponseConstant;
 import statics.StaticResponser;
 import util.KoreanUtil;
 import util.TimeExpression;
@@ -494,7 +492,7 @@ public class LinkageFactory {
         if(temporaryMemory.indexOf(COMMAND_PATTERN_FORCE) == 0){
             if(cores.size() < 4) {
                 System.out.println("[WARN :: INVALID PARAMETER HAS BEEN DETECTED]");
-            }else if(cores.get(3).getFirst().equals(StaticResponser.INTENT_DIRECT)){
+            }else if(cores.get(3).getFirst().equals(StaticResponser.INTENT_DIRECT)){ // 다이렉트 메시지 강제 학습
 
                 intention = cores.get(3).getFirst();
 
@@ -511,7 +509,7 @@ public class LinkageFactory {
                 staticBase.memorize(leftHand, "NNG", intention, rightHand);
                 System.out.println("[INFO :: 강제 학습 명령이 정상적으로 수행됨]");
 
-            }else{
+            }else{ // 강제 의도 매핑 학습
                 intention = cores.get(3).getFirst();
                 serialWords = "";
                 serialTags = "";

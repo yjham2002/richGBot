@@ -1,4 +1,4 @@
-package response;
+package relations;
 
 import relations.KnowledgeBase;
 import relations.LinkageFactory;
@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by a on 2017-04-19.
  */
-public class ResponseGenerator { // TODO 임시 분리임 - 설계필요
+public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
 
-    public ResponseGenerator(List<TypedPair> know, int what, MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses){
+    public SentenceMultiplexer(List<TypedPair> know, int what, MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses){
 
         TypedPair objFirst = know.get(0);
         TypedPair objLast = know.get(1);

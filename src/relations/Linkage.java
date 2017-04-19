@@ -1,12 +1,10 @@
 package relations;
 
-import response.ResponseGenerator;
 import util.KoreanUtil;
 import util.TimeExpression;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import static relations.LinkageFactory.*;
@@ -130,7 +128,7 @@ public class Linkage {
         temp.add(word);
         temp.add(pop);
 
-        ResponseGenerator responseGenerator = new ResponseGenerator(temp, type, arc, base, metaBase, instantResponses);
+        SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(temp, type, arc, base, metaBase, instantResponses);
     }
 
     public void printResult(){
