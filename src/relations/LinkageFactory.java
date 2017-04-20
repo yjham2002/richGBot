@@ -409,7 +409,7 @@ public class LinkageFactory {
 
                 // 아크 생성
                 if (candidate != -1) {
-                    retVal.connect(candidate, vIdx.get(i));
+                    retVal.connect(vIdx.get(i), candidate);
                 }
 
                 // 사용된 변수 초기화
@@ -439,6 +439,7 @@ public class LinkageFactory {
                     double prob = 1.0;
                     if(sIdx.get(j) - vIdx.get(i) > 0) prob = (((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD);
                     double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + ((((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD) * prob);
+                    if(sIdx.get(j) > vIdx.get(i)) currentWofAV /= 2.0;
                     if (weight < currentWofAV) {
                         weight = currentWofAV;
                         candidate = sIdx.get(j);
