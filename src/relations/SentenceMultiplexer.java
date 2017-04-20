@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
 
+
     public SentenceMultiplexer(List<TypedPair> know, int what, MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses){
 
         TypedPair objFirst = know.get(0);

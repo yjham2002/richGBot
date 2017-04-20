@@ -35,18 +35,6 @@ public class Sentence extends HashMap<String, ArrayList<TypedPair>>{
     private double score = 0.0; // 화행 분석 예상 정확도
 
     /**
-     * 해당 클래스의 키셋으로 이용되는 도메인 선언
-     */
-    public static final String TAG_UNDEFINED = "UNDEFINED";
-    public static final String TAG_SUBJECT = "SUBJECT";
-    public static final String TAG_SUBJECT_A = "SUBJECT_A";
-    public static final String TAG_OBJECT = "OBJECT";
-    public static final String TAG_OBJECT_A = "OBJECT_A";
-    public static final String TAG_VERB = "VERB";
-    public static final String TAG_VERB_A = "VERB_A";
-    public static final String TAG_ADJ = "ADJ";
-
-    /**
      * 문장 추상화 클래스 생성자 - 생성과 동시에 화행 분석을 수행하여 speechAct 변수를 설정하고 확신의 정도를 score에 기록함
      *
      * @param wordList 문장 구성 요소를 입력받기 위한 파라미터로 문장별로 구분되어 전달된 점이 링키지 클래스와 구분됨
