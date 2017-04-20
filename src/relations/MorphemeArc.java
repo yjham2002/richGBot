@@ -48,15 +48,34 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
             rightSide = dependant;
         }
         for(Integer i : this.keySet()){
-            for(Integer j : this.get(i)) {
+            for(int cursor = 0; cursor < this.get(i).size(); cursor++) {
+                Integer j = this.get(i).get(cursor);
+                int key = i;
+
+                int scoreOrigin = Math.abs(key - j);
+                int scoreNewly =  Math.abs(dominant - dependant);
+
                 int mLeft = i;
                 int mRight = j;
                 if (mLeft > mRight) {
                     mLeft = j;
                     mRight = i;
                 }
-                if (leftSide > mLeft && rightSide > mRight && mRight > leftSide) return true;
-                if (leftSide < mLeft && rightSide < mRight && mRight < leftSide) return true;
+
+                if (leftSide > mLeft && rightSide > mRight && mRight > leftSide) {
+                    if(scoreNewly <= scoreOrigin) {
+                        this.get(i).remove(cursor);
+                        return false;
+                    }
+                    return true;
+                }
+                if (leftSide < mLeft && rightSide < mRight && mRight < leftSide) {
+                    if(scoreNewly <= scoreOrigin) {
+                        this.get(i).remove(cursor);
+                        return false;
+                    }
+                    return true;
+                }
             }
         }
         return false;
@@ -87,10 +106,10 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
 //            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [지배소 후위의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
 //            doNothing = true;
 //        }
-//        if(isCrossed(dominant, dependant)){
-//            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [투영의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
-//            doNothing = true;
-//        }
+        if(isCrossed(dominant, dependant)){
+            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [투영의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+            doNothing = true;
+        }
 //        if(this.containsKey(dependant)){
 //            if(isNotTheOnlyOne(dependant, dominant)){
 //                if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [지배소 유일의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
@@ -104,7 +123,7 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
         }
 
         this.put(dependant, dominant);
-        //if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+        if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
         return VALID;
     }
 
