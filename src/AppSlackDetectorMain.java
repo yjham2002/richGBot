@@ -7,7 +7,6 @@ import com.ullink.slack.simpleslackapi.events.SlackMessagePosted;
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory;
 import com.ullink.slack.simpleslackapi.listeners.SlackMessagePostedListener;
 import nlp.NaturalLanguageEngine;
-import vision.FaceDetector;
 import vision.ImageRecognizer;
 
 import javax.imageio.ImageIO;
@@ -22,10 +21,9 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by a on 2017-04-13.
+ * Created by a on 2017-04-20.
  */
-public class AppSlackMain {
-
+public class AppSlackDetectorMain {
     private static String slackAuth = "xoxb-168613915715-UIO4CMVM6ataWqC6rSNQTQQ7";
 
     public static void main(String[] args) {
@@ -58,7 +56,7 @@ public class AppSlackMain {
                             BufferedImage img = ImageIO.read(content);
                             File local = new File(fileName);
                             ImageIO.write(img, file.getFiletype(), local);
-                            //FaceDetector.getDetectedPath("t.jpg", "out.jpg");
+
                             entityList = ImageRecognizer.getEntitySet(fileName);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -90,5 +88,4 @@ public class AppSlackMain {
 
 
     }
-
 }
