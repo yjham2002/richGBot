@@ -292,24 +292,32 @@ public class LinkageFactory {
         parallelLinkages = linkParallels(cores, adjIdx);
 
         // 형용사와 명사 연결
-        soIdx.addAll(sIdx);
-        soIdx.addAll(oIdx);
+        soIdx.addAll(oIdx); // addAll 순서 중요!!!
+        soIdx.addAll(sIdx); // addAll 순서 중요!!!
 
-        List<Integer> pairSet = new ArrayList<>();
-
-        for(Integer idx : soIdx) {
+        HashSet<Integer> minSet = new HashSet<>();
+        List<Integer> toDelete = new ArrayList<>();
+        for(int idxn = 0; idxn < soIdx.size(); idxn++) {
+            Integer idx = soIdx.get(idxn);
             ParallelLinkage parallelLinkage = isLinkedPair(idx, parallelLinkages);
             if(parallelLinkage != null){
                 cores.get(idx).setLinked(true);
                 cores.get(idx).setParallelLinkage(parallelLinkage);
-                pairSet.add(idx);
+
+                int min = cores.get(idx).getParallelLinkage().getFirstIndex();
+                int max = cores.get(idx).getParallelLinkage().getLastIndex();
+                if(idx != min && idx != max) toDelete.add(idxn);
+                else if(min != max && cores.get(idx).getParallelLinkage().size() == 2 && !minSet.contains(min)) {
+                    minSet.add(min);
+                    toDelete.add(idxn);
+                }
             }
         }
 
-        for(Integer idx : pairSet){
-            int min = cores.get(idx).getParallelLinkage().getFirstIndex();
-            int max = cores.get(idx).getParallelLinkage().getLastIndex();
-            if(idx != min && idx != max) soIdx.remove(idx);
+        HashSet<Integer> unlinkables = new HashSet<>();
+        for(Integer del : toDelete) {
+            unlinkables.add(soIdx.get(del));
+            soIdx.remove(del);
         }
 
         // 형용사 기준 링킹
@@ -391,7 +399,7 @@ public class LinkageFactory {
 
                 // 목적어와 동사 연결
                 for (int j = 0; j < oIdx.size(); j++) { // TODO Parallel
-
+                    if(unlinkables.contains(oIdx.get(j))) continue;
                     double currentWofNV = base.getWeightOf(cores.get(oIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(oIdx.get(j) - vIdx.get(i))) / (double) sD);
                     if (weight < currentWofNV) {
                         weight = currentWofNV;

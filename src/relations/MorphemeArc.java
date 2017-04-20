@@ -123,7 +123,7 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
         }
 
         this.put(dependant, dominant);
-        if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+        if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "[" + dominant + "]" + "/" + words.get(dependant).getFirst() + "[" + dependant + "]" + "]");
         return VALID;
     }
 

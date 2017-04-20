@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class AppSlackMain {
 
-    private static String slackAuth = "xoxb-168613915715-4vHmjm58Oo6bUqZhwsTAtZhL";
+    private static String slackAuth = "xoxb-168613915715-cdi5kzDgCEQ2sQcauip3IguF";
 
     public static void main(String[] args) {
 
