@@ -7,6 +7,7 @@ import com.ullink.slack.simpleslackapi.events.SlackMessagePosted;
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory;
 import com.ullink.slack.simpleslackapi.listeners.SlackMessagePostedListener;
 import nlp.NaturalLanguageEngine;
+import vision.FaceDetector;
 import vision.ImageRecognizer;
 
 import javax.imageio.ImageIO;
@@ -16,6 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -24,7 +29,7 @@ import java.util.List;
  * Created by a on 2017-04-20.
  */
 public class AppSlackDetectorMain {
-    private static String slackAuth = "xoxb-168613915715-UIO4CMVM6ataWqC6rSNQTQQ7";
+    private static String slackAuth = "xoxb-168613915715-WnVbQa95OwiJ7VPt1u8VHIVJ";
 
     public static void main(String[] args) {
 
@@ -40,6 +45,10 @@ public class AppSlackDetectorMain {
                 public void onEvent(SlackMessagePosted slackMessagePosted, SlackSession slackSession) {
                     List<EntityAnnotation> entityList = new ArrayList<>();
 
+                    byte[] data = null;
+                    String outName = "";
+                    String fileName = "";
+
                     if(slackMessagePosted.getSender().isBot()) return;
                     SlackFile file = slackMessagePosted.getSlackFile();
                     if(file != null) {
@@ -51,22 +60,40 @@ public class AppSlackDetectorMain {
 
                             InputStream content = uc.getInputStream();
 
-                            String fileName = Long.toString(Calendar.getInstance().getTimeInMillis());
+                            fileName = Long.toString(Calendar.getInstance().getTimeInMillis());
 
                             BufferedImage img = ImageIO.read(content);
                             File local = new File(fileName);
                             ImageIO.write(img, file.getFiletype(), local);
 
+                            outName = fileName + "_output.jpg";
+
                             entityList = ImageRecognizer.getEntitySet(fileName);
-                        } catch (IOException e) {
+                        } catch (Exception e) {
+
                             e.printStackTrace();
                         }
 
                     }
+
+                    try {
+                        FaceDetector.getDetectedPath(fileName, outName);
+                        Path path = Paths.get(outName);
+                        data = Files.readAllBytes(path);
+                    }catch (IOException e){
+                    }catch (GeneralSecurityException e){
+                    }
+
                     String message = slackMessagePosted.getMessageContent();
                     SlackUser slackUser = slackMessagePosted.getSender();
                     System.out.println("Slack Message ::: " + message);
                     List<String> rMsgs = nlpEngine.analyzeInstantly(message, true);
+
+                    try {
+                        if(data != null) session.sendFile(slackMessagePosted.getChannel(), data, "Face_Detection");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
                     if(entityList.size() > 0) {
                         rMsgs.clear();

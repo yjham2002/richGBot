@@ -40,6 +40,10 @@ public class TypedPair extends Pair<String, String> {
         return parallelLinkage;
     }
 
+    public PairCluster toPairCluster(){
+        return new PairCluster(this.getSecond(), this);
+    }
+
     public void setParallelLinkage(ParallelLinkage parallelLinkage) {
         this.parallelLinkage = parallelLinkage;
     }

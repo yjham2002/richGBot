@@ -52,10 +52,6 @@ public class FaceDetector {
 
         Path inputPath = Paths.get(input);
         Path outputPath = Paths.get(output);
-        if (!outputPath.toString().toLowerCase().endsWith(".jpg")) {
-            System.err.println("outputImagePath must have the file extension 'jpg'.");
-            System.exit(1);
-        }
 
         FaceDetector app = new FaceDetector(getVisionService());
         List<FaceAnnotation> faces = app.detectFaces(inputPath, MAX_RESULTS);
@@ -147,6 +143,7 @@ public class FaceDetector {
      * Annotates an image {@code img} with a polygon defined by {@code face}.
      */
     private static void annotateWithFace(BufferedImage img, FaceAnnotation face) {
+        int dotSize = img.getHeight() > 1000 ? img.getHeight() / 120 : 5;
         Graphics2D gfx = img.createGraphics();
         Polygon poly = new Polygon();
         for (Vertex vertex : face.getFdBoundingPoly().getVertices()) {
@@ -154,12 +151,12 @@ public class FaceDetector {
         }
 
         for (Landmark landmark : face.getLandmarks()) {
-            Rectangle2D.Double dot = new Rectangle2D.Double(landmark.getPosition().getX(),landmark.getPosition().getY(),3,3);
+            Rectangle2D.Double dot = new Rectangle2D.Double(landmark.getPosition().getX(),landmark.getPosition().getY(),dotSize,dotSize);
             gfx.draw(dot);
             gfx.setColor(new Color(0x00ff00));
             gfx.fill(dot);
         }
-        gfx.setStroke(new BasicStroke(5));
+        gfx.setStroke(new BasicStroke(dotSize));
         gfx.setColor(new Color(0x00ff00));
         gfx.draw(poly);
     }

@@ -20,34 +20,12 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
         TypedPair objFirst = know.get(0);
         TypedPair objLast = know.get(1);
         if(know.get(0).isLinked()){ // TEMPORARY
-            TypedPair temp = new TypedPair();
-            String first = "";
-            String tempPOS = "NNG";
-            for(int loop = 0; loop < expandLinkage(know.get(0), arc).size(); loop++){
-                TypedPair pair = expandLinkage(know.get(0), arc).get(loop);
-                first += pair.getFirst();
-                if(loop + 1 < expandLinkage(know.get(0), arc).size()) {
-                    first += ",";
-                }
-            }
-            temp.setFirst(first);
-            temp.setSecond(tempPOS);
-            objFirst = temp;
+            PairCluster pairCluster = new PairCluster("NNG", expandLinkage(know.get(0), arc));
+            objFirst = pairCluster.toCSVTypedPair();
         }
         if(know.get(1).isLinked()){ // TEMPORARY
-            TypedPair temp = new TypedPair();
-            String first = "";
-            String tempPOS = "NNG";
-            for(int loop = 0; loop < expandLinkage(know.get(1), arc).size(); loop++){
-                TypedPair pair = expandLinkage(know.get(1), arc).get(loop);
-                first += pair.getFirst();
-                if(loop + 1 < expandLinkage(know.get(1), arc).size()) {
-                    first += ",";
-                }
-            }
-            temp.setFirst(first);
-            temp.setSecond(tempPOS);
-            objLast = temp;
+            PairCluster pairCluster = new PairCluster("NNG", expandLinkage(know.get(1), arc));
+            objLast = pairCluster.toCSVTypedPair();
         }
 
         String classified = "";
