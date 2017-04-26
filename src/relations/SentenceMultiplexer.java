@@ -89,7 +89,8 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
             if(debug) System.out.println("Sentence constructed :: ");
             HashMap<Integer, List<Integer>> unit = new HashMap<>();
             Sentence sentence = new Sentence(clusters, base, metaBase);
-            sentence.putAll(BFS(remainings, topologies, visited, unit, debug));
+//            sentence.putAll(BFS(remainings, topologies, visited, unit, debug));
+            BFS(remainings, topologies, visited, unit, debug);
             sentences.add(sentence);
 
             if(debug) System.out.println();
@@ -160,3 +161,4 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
     }
 
 }
+

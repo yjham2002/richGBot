@@ -1,5 +1,8 @@
 package relations;
 
+import tree.GenericTree;
+import tree.GenericTreeNode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +13,7 @@ import java.util.List;
  * @since 2017.04.20
  * 화행 분석 및 문장 단위 추상화를 위한 캡슐화 클래스
  */
-public class Sentence extends HashMap<Integer, List<Integer>>{
+public class Sentence extends GenericTree<Integer>{
     /**
      * 참고 논문 : 서강대학교 "한국어 대화체 문장의 화행 분석", 이현정 외, 1996
      */
@@ -51,6 +54,7 @@ public class Sentence extends HashMap<Integer, List<Integer>>{
         this.wordList = wordList;
         this.base = base;
         this.metaBase = metaBase;
+        this.setRoot(new GenericTreeNode<>(GenericTreeNode.DUMMY_HEAD));
     }
 
     public boolean isVaild() {
