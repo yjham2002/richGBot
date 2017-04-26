@@ -89,61 +89,15 @@ public class Linkage {
         this.instantResponses = instantResponses;
     }
 
-    private int isOrder(List<TypedPair> words){
-        int questions = 0;
-        for(int i = 0; i < words.size() ; i++) {
-            TypedPair pair = words.get(i); // TODO 문장 구분
-            if(pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
-        }
-
-        for(int i = 0; i < words.size() ; i++) {
-            TypedPair pair = words.get(i); // TODO 문장 구분
-            if(pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
-                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
-            }else if(pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))){
-                questions++;
-            }
-        }
-
-        if(questions > 0) return SENTENCE_QUESTION;
-
-        return SENTENCE_ORDER;
-    }
-
-    private void addProcData(MorphemeArc arc, int what){
-        for(Integer key : arc.keySet()) {
-            for(Integer subKey : arc.get(key)) {
-                addProcData(arc.getWord(key), arc.getWord(subKey), what, arc);
-            }
-        }
-    }
-
-    private void addProcData(TypedPair pop, TypedPair word, int what, MorphemeArc arc){
-        int type = what;
-        List<TypedPair> temp = new ArrayList<>();
-        if(KoreanUtil.isMetaQuestion(word)){
-            type = SENTENCE_METAPHORICAL_QUESTION;
-        }
-
-        temp.add(word);
-        temp.add(pop);
-
-        SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(temp, type, arc, base, metaBase, instantResponses);
-    }
-
-    public void printResult(){
-        if(arc != null) addProcData(arc, isOrder(arc.getWords()));
-    }
-
     public List<String> interaction(){
-        if(arc != null) addProcData(arc, isOrder(arc.getWords()));
+        if(arc != null) toSentences();
         return instantResponses;
     }
 
     public List<Sentence> toSentences(){
-        List<Sentence> sentences = new ArrayList<>();
+        SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(arc, base, metaBase, instantResponses);
 
-
+        List<Sentence> sentences = sentenceMultiplexer.extractSentences();
 
         return sentences;
     }

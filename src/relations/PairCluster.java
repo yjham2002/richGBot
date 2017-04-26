@@ -1,5 +1,7 @@
 package relations;
 
+import kr.co.shineware.util.common.model.Pair;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,6 +13,7 @@ import java.util.List;
  */
 public class PairCluster extends HashSet<TypedPair> {
 
+    private int uniqueKey;
     private List<TypedPair> list;
     private String csv = "";
     private String tag = "";
@@ -29,6 +32,11 @@ public class PairCluster extends HashSet<TypedPair> {
         }
     }
 
+    public PairCluster(String tag, List<TypedPair> pairs, int uniqueKey){
+        this(tag, pairs);
+        this.uniqueKey = uniqueKey;
+    }
+
     public PairCluster(String tag, TypedPair... pairs){
         super();
 
@@ -41,6 +49,14 @@ public class PairCluster extends HashSet<TypedPair> {
             if(i + 1 < pairs.length) this.csv += ",";
             this.add(pair);
         }
+    }
+
+    public int getUniqueKey() {
+        return uniqueKey;
+    }
+
+    public void setUniqueKey(int uniqueKey) {
+        this.uniqueKey = uniqueKey;
     }
 
     public TypedPair toCSVTypedPair(){

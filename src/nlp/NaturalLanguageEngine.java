@@ -91,7 +91,7 @@ public class NaturalLanguageEngine {
         Linkage linkage = linkageFactory.link();
         memorize(linkage);
 
-        linkage.printResult();
+        linkage.interaction();
     }
 
 }

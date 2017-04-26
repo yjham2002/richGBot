@@ -1,110 +1,149 @@
 package relations;
 
+import kr.co.shineware.util.common.model.Pair;
 import relations.KnowledgeBase;
 import relations.LinkageFactory;
 import relations.MorphemeArc;
 import relations.TypedPair;
+import util.KoreanUtil;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import static relations.LinkageFactory.*;
 
 /**
  * Created by a on 2017-04-19.
  */
 public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
 
+    private MorphemeArc arc;
+    private KnowledgeBase base;
+    private KnowledgeBase metaBase;
+    private List<String> instantRes;
 
-    public SentenceMultiplexer(List<TypedPair> know, int what, MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses){
+    /**
+     *
+     * 본 메소드는 Sentence에 특화시켜 재작성이 필요함
+     */
+//    //        int type = isOrder(arc.getWords());
+//    private int isOrder(List<TypedPair> words){
+//        int questions = 0;
+//        for(int i = 0; i < words.size() ; i++) {
+//            TypedPair pair = words.get(i); // TODO 문장 구분
+//            if(pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
+//        }
+//
+//        for(int i = 0; i < words.size() ; i++) {
+//            TypedPair pair = words.get(i); // TODO 문장 구분
+//            if(pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
+//                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
+//            }else if(pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))){
+//                questions++;
+//            }
+//        }
+//
+//        if(questions > 0) return SENTENCE_QUESTION;
+//
+//        return SENTENCE_ORDER;
+//    }
 
-        TypedPair objFirst = know.get(0);
-        TypedPair objLast = know.get(1);
-        if(know.get(0).isLinked()){ // TEMPORARY
-            PairCluster pairCluster = new PairCluster("NNG", expandLinkage(know.get(0), arc));
-            objFirst = pairCluster.toCSVTypedPair();
-        }
-        if(know.get(1).isLinked()){ // TEMPORARY
-            PairCluster pairCluster = new PairCluster("NNG", expandLinkage(know.get(1), arc));
-            objLast = pairCluster.toCSVTypedPair();
-        }
+    public List<Sentence> extractSentences(){
+        List<Sentence> sentences = new ArrayList<>();
 
-        String classified = "";
+        HashMap<Integer, List<Integer>> topologies = new HashMap<>();
+        HashMap<Integer, PairCluster> clusters = new HashMap<>();
 
-        switch(what){
-            case LinkageFactory.SENTENCE_PLAIN: classified = "[평서문] >> "; break;
-            case LinkageFactory.SENTENCE_ORDER: classified = "[명령문] >> "; break;
-            case LinkageFactory.SENTENCE_QUESTION: classified = "[의문문] >> "; break;
-            case LinkageFactory.SENTENCE_META: classified = "[은유형 대입문] >> "; break;
-            case LinkageFactory.SENTENCE_METAPHORICAL_QUESTION: classified = "[은유형 의문문] >> "; break;
-            default: break;
-        }
-        System.out.print(classified);
+        HashSet<Integer> visited = new HashSet<>();
+        HashSet<Integer> remainings = new HashSet<>();
 
-        switch(what){
-            case LinkageFactory.SENTENCE_PLAIN: case LinkageFactory.SENTENCE_ORDER: case LinkageFactory.SENTENCE_QUESTION:
-                System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-                responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                if (objLast.getType() == TypedPair.TYPE_ADV) {
-//                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                } else if (objLast.getType() == TypedPair.TYPE_SUBJECT) {
-//                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                } else if (objLast.getType() == TypedPair.TYPE_QUESTION) {
-//                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                } else if (objLast.getType() == TypedPair.TYPE_ADJ) {
-//                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                } else if (objLast.getType() == TypedPair.TYPE_VADJ) {
-//                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                } else {
-//                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
-//                }
-                break;
-            case LinkageFactory.SENTENCE_META:
-                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
-                    System.out.println(LinkageFactory.MY_NAME + " : [종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
-                    responses.add("[종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
+        for(Integer key : arc.keySet()) {
+            for(Integer subKey : arc.get(key)) {
+                clusters.put(key, getTypedPairToExpandedPairCluster(arc.getWord(key), key));
+                clusters.put(subKey, getTypedPairToExpandedPairCluster(arc.getWord(subKey), subKey));
+
+                // Interdirective Connection - Upper Way
+                if(topologies.containsKey(key)){
+                    topologies.get(key).add(subKey);
+                }else{
+                    List<Integer> entry = new ArrayList<>();
+                    entry.add(subKey);
+                    topologies.put(key, entry);
                 }
-                break;
-            case LinkageFactory.SENTENCE_METAPHORICAL_QUESTION:
-                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
-                    List<String> backTrack = metaBase.getBackTrackingList(objLast.getFirst(), new ArrayList<>());
-                    System.out.print("\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [");
-                    String streamStr = "\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [";
-                    for(int e = 0; e < backTrack.size(); e++){
-                        System.out.print(backTrack.get(e));
-                        streamStr += backTrack.get(e);
-                        if(e < backTrack.size() - 1) {
-                            System.out.print(", ");
-                            streamStr += ", ";
-                        }
-                        else {
-                            System.out.print("]\n");
-                            streamStr += "]\n";
-                        }
-                    }
-                    responses.add(streamStr);
+                // Interdirective Connection - Lower Way
+                if(topologies.containsKey(subKey)){
+                    topologies.get(subKey).add(key);
+                }else{
+                    List<Integer> entry = new ArrayList<>();
+                    entry.add(key);
+                    topologies.put(subKey, entry);
                 }
-                break;
-            default: break;
+
+                remainings.add(key);
+                remainings.add(subKey);
+            }
         }
 
-        if(what != LinkageFactory.SENTENCE_META && what != LinkageFactory.SENTENCE_METAPHORICAL_QUESTION) {
-            base.learn(know);
-        }
-        else if(what == LinkageFactory.SENTENCE_METAPHORICAL_QUESTION){
-            // DO NOTHING
-        }
-        else{
-            metaBase.learn(know);
+        boolean debug = true;
+        // BFS 를 통해 불연속 경로를 분리/추출한다.
+        while(!remainings.isEmpty()) {
+            if(debug) System.out.println("Sentence constructed :: ");
+            HashMap<Integer, List<Integer>> unit = new HashMap<>();
+            Sentence sentence = new Sentence(clusters, base, metaBase);
+            sentence.putAll(BFS(remainings, topologies, visited, unit, debug));
+            sentences.add(sentence);
+
+            if(debug) System.out.println();
         }
 
+        return sentences;
     }
 
+    public HashMap<Integer, List<Integer>> BFS(HashSet<Integer> remainings, HashMap<Integer, List<Integer>> map, HashSet<Integer> visited, HashMap<Integer, List<Integer>> unit, boolean debug) {
+        if(map.isEmpty() || !remainings.iterator().hasNext()) return null;
+        Integer start = remainings.iterator().next();
+        unit.put(start, new ArrayList<>());
+        remainings.remove(start);
+        visited.add(start);
+        if(debug) System.out.print(start + "->");
+        BFS(remainings, start, map, visited, unit, debug);
+        return unit;
+    }
+
+    private void BFS(HashSet<Integer> remainings, Integer start, HashMap<Integer, List<Integer>> map, HashSet<Integer> visited, HashMap<Integer, List<Integer>> unit, boolean debug) {
+        if(!map.containsKey(start)) return;
+
+        if(!unit.containsKey(start)) unit.put(start, new ArrayList<>());
+
+        for( Integer neighbor : map.get(start)) {
+            if(!visited.contains(neighbor)) {
+                remainings.remove(neighbor);
+                unit.get(start).add(neighbor);
+                if (debug) System.out.print(neighbor + " * ");
+            }
+        }
+
+        for(Integer neighbor : map.get(start)) {
+            if(!visited.contains(neighbor)) {
+                visited.add(neighbor);
+                BFS(remainings, neighbor, map, visited, unit, debug);
+            }
+        }
+    }
+
+    public SentenceMultiplexer(MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses){
+        this.arc = arc;
+        this.base = base;
+        this.metaBase = metaBase;
+        this.instantRes = responses;
+    }
+
+    public PairCluster getTypedPairToExpandedPairCluster(TypedPair pair, int uniqueKey){
+        PairCluster pc = pair.toPairCluster();
+        if(pair.isLinked()){ // TEMPORARY
+            pc = new PairCluster("NNG", expandLinkage(pair, arc), uniqueKey);
+        }
+        return pc;
+    }
 
     private List<TypedPair> expandLinkage(TypedPair pair, MorphemeArc arc){
         List<TypedPair> list = new ArrayList<>();

@@ -29,7 +29,7 @@ import java.util.List;
  * Created by a on 2017-04-20.
  */
 public class AppSlackDetectorMain {
-    private static String slackAuth = "xoxb-168613915715-WnVbQa95OwiJ7VPt1u8VHIVJ";
+    private static String slackAuth = "xoxb-168613915715-aS76Vm0aULjwEaoM5mtuIyfD";
 
     public static void main(String[] args) {
 
