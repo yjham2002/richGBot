@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/LinkageFactory.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/LinkageFactory.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/PairCluster.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/PairCluster.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/SentenceMultiplexer.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/SentenceMultiplexer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/TypedPair.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/TypedPair.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" afterPath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linkage.java" afterPath="$PROJECT_DIR$/src/relations/Linkage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/LinkageFactory.java" afterPath="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/PairCluster.java" afterPath="$PROJECT_DIR$/src/relations/PairCluster.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Sentence.java" afterPath="$PROJECT_DIR$/src/relations/Sentence.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" afterPath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/TypedPair.java" afterPath="$PROJECT_DIR$/src/relations/TypedPair.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/KoreanUtil.java" afterPath="$PROJECT_DIR$/src/util/KoreanUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,8 +34,8 @@
       <file leaf-file-name="LinkageFactory.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/LinkageFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="159" column="73" lean-forward="false" selection-start-line="159" selection-start-column="73" selection-end-line="159" selection-end-column="73" />
+            <state relative-caret-position="-1446">
+              <caret line="129" column="0" lean-forward="true" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -76,8 +64,8 @@
       <file leaf-file-name="SentenceMultiplexer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/relations/SentenceMultiplexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="108" column="37" lean-forward="true" selection-start-line="108" selection-start-column="37" selection-end-line="108" selection-end-column="37" />
+            <state relative-caret-position="361">
+              <caret line="124" column="36" lean-forward="true" selection-start-line="124" selection-start-column="36" selection-end-line="124" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1081,16 +1069,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/LinkageFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="159" column="73" lean-forward="false" selection-start-line="159" selection-start-column="73" selection-end-line="159" selection-end-column="73" />
+        <state relative-caret-position="-1446">
+          <caret line="129" column="0" lean-forward="true" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/SentenceMultiplexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="108" column="37" lean-forward="true" selection-start-line="108" selection-start-column="37" selection-end-line="108" selection-end-column="37" />
+        <state relative-caret-position="361">
+          <caret line="124" column="36" lean-forward="true" selection-start-line="124" selection-start-column="36" selection-end-line="124" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

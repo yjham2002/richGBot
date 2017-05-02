@@ -120,7 +120,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
 
         for(List<Integer> list : units){
             Sentence sentence = new Sentence(base, metaBase);
-//  멋진 세호는 맛있는 밥과 반찬을 빠르게 먹었다 그리고 잘생긴 현수는 잠을 잤다.
+        //  멋진 세호는 맛있는 밥과 반찬을 빠르게 먹고 토했다 그리고 잘생긴 현수는 잠을 잤다.
 
             sentences.add(sentence);
             for(Integer i : list){
