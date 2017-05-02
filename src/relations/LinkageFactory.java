@@ -118,7 +118,7 @@ public class LinkageFactory {
 
         for(int tIdx = 0; tIdx < times.size(); tIdx++) {
             TimeExpression time = times.get(tIdx);
-            for(int tr = time.getStart(); tr <= time.getEnd(); tr++) timeRange.put(tr, tIdx);
+            timeRange.put(time.getStart(), time.getEnd());
             System.out.println(time.getExpression() + " :: " + time.getDateTime());
             responses.add(time.getExpression() + " :: " + time.getDateTime());
         }
@@ -134,6 +134,11 @@ public class LinkageFactory {
         String newFirst = "";
 
         for(int i = 0; i < cores.size(); i++){
+            if(timeRange.containsKey(i)){
+                int temp = timeRange.get(i);
+                if(temp != i) i = temp;
+                continue;
+            }
             TypedPair pair = cores.get(i);
             if(GENERAL_NOUN.contains(pair.getSecond())){
                 if(flag){
@@ -153,7 +158,6 @@ public class LinkageFactory {
                         }
                     }
                     if(flag) newFirst = newFirst + " " + pair.getFirst();
-
                 }else{
                     newFirst = pair.getFirst();
                     flag = true;
@@ -169,6 +173,9 @@ public class LinkageFactory {
                 retVal.add(pair);
             }
         }
+
+        int div = 0;
+        for(TypedPair pair : retVal) pair.setDivisionKey(div++);
 
         return retVal;
     }
@@ -314,12 +321,6 @@ public class LinkageFactory {
             }
         }
 
-        HashSet<Integer> unlinkables = new HashSet<>();
-        for(Integer del : toDelete) {
-            unlinkables.add(soIdx.get(del));
-            soIdx.remove(del);
-        }
-
         // 형용사 기준 링킹
 
         for(int k = 0; k < adjIdx.size(); k++){ // TODO Parallel
@@ -399,7 +400,6 @@ public class LinkageFactory {
 
                 // 목적어와 동사 연결
                 for (int j = 0; j < oIdx.size(); j++) { // TODO Parallel
-                    if(unlinkables.contains(oIdx.get(j))) continue;
                     double currentWofNV = base.getWeightOf(cores.get(oIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(oIdx.get(j) - vIdx.get(i))) / (double) sD);
                     if (weight < currentWofNV) {
                         weight = currentWofNV;

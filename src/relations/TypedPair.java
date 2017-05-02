@@ -7,6 +7,8 @@ import kr.co.shineware.util.common.model.Pair;
  */
 public class TypedPair extends Pair<String, String> {
 
+    public static final int DIVISION_NONE = -1;
+
     public static final int TYPE_DEFAULT = -1;
 
     public static final int TYPE_VERB        = 0; // 동사
@@ -20,6 +22,8 @@ public class TypedPair extends Pair<String, String> {
 
     private int type = TYPE_DEFAULT;
     private boolean linked = false;
+
+    private int divisionKey = DIVISION_NONE;
 
     private ParallelLinkage parallelLinkage;
 
@@ -46,6 +50,14 @@ public class TypedPair extends Pair<String, String> {
 
     public void setParallelLinkage(ParallelLinkage parallelLinkage) {
         this.parallelLinkage = parallelLinkage;
+    }
+
+    public int getDivisionKey() {
+        return divisionKey;
+    }
+
+    public void setDivisionKey(int divisionKey) {
+        this.divisionKey = divisionKey;
     }
 
     public boolean isLinked() {

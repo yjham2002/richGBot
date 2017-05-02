@@ -16,7 +16,26 @@ public class PairCluster extends HashSet<TypedPair> {
     private int uniqueKey;
     private List<TypedPair> list;
     private String csv = "";
+    private String csvUnique = "";
     private String tag = "";
+
+    public boolean equals(PairCluster pairCluster){
+        if(this.list.size() != pairCluster.list.size()) return false;
+        for(int i = 0; i < this.list.size(); i++){
+            if(this.list.get(i).getDivisionKey() != pairCluster.list.get(i).getDivisionKey()) return false;
+            if(!this.list.get(i).getFirst().equals(pairCluster.list.get(i).getFirst())) return false;
+            if(!this.list.get(i).getSecond().equals(pairCluster.list.get(i).getSecond())) return false;
+        }
+        return true;
+    }
+
+    public String hash(){
+        String hash = "HASH_START_" + this.list.size() + "_SIZE_";
+        for(int i = 0; i < this.list.size(); i++){
+            hash += i + "_IDX_" + this.list.get(i).getDivisionKey() + "_DIV_" + this.list.get(i).getFirst() + "_PAIR_" + this.list.get(i).getSecond() + "_HASH_END";
+        }
+        return hash;
+    }
 
     public PairCluster(String tag, List<TypedPair> pairs){
         super();
@@ -27,7 +46,11 @@ public class PairCluster extends HashSet<TypedPair> {
             TypedPair pair = pairs.get(i);
             list.add(pair);
             this.csv += pair.getFirst();
-            if(i + 1 < pairs.size()) this.csv += ",";
+            this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";
+            if(i + 1 < pairs.size()) {
+                this.csv += ",";
+                this.csvUnique += ",";
+            }
             this.add(pair);
         }
     }
@@ -46,7 +69,11 @@ public class PairCluster extends HashSet<TypedPair> {
             TypedPair pair = pairs[i];
             list.add(pair);
             this.csv += pair.getFirst();
-            if(i + 1 < pairs.length) this.csv += ",";
+            this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";
+            if(i + 1 < pairs.length) {
+                this.csv += ",";
+                this.csvUnique += ",";
+            }
             this.add(pair);
         }
     }
@@ -69,6 +96,10 @@ public class PairCluster extends HashSet<TypedPair> {
 
     public String toCSV() {
         return csv;
+    }
+
+    public String toUniqueCSV(){
+        return csvUnique;
     }
 
     public String getTag() {

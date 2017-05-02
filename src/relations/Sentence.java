@@ -13,7 +13,7 @@ import java.util.List;
  * @since 2017.04.20
  * 화행 분석 및 문장 단위 추상화를 위한 캡슐화 클래스
  */
-public class Sentence extends GenericTree<Integer>{
+public class Sentence extends GenericTree<PairCluster>{
     /**
      * 참고 논문 : 서강대학교 "한국어 대화체 문장의 화행 분석", 이현정 외, 1996
      */
@@ -36,7 +36,6 @@ public class Sentence extends GenericTree<Integer>{
      */
     private String speechAct = SPEECH_ACT_UNDEFINED; // 화행 분석 결과
     private double score = 0.0; // 화행 분석 예상 정확도
-    private HashMap<Integer, PairCluster> wordList;
     private KnowledgeBase base;
     private KnowledgeBase metaBase;
 
@@ -49,12 +48,11 @@ public class Sentence extends GenericTree<Integer>{
      * @param base 문장 구조 지식 베이스
      * @param metaBase 단어 기반 지식 베이스
      */
-    public Sentence(HashMap<Integer, PairCluster> wordList, KnowledgeBase base, KnowledgeBase metaBase){
+    public Sentence(KnowledgeBase base, KnowledgeBase metaBase){
         super();
-        this.wordList = wordList;
         this.base = base;
         this.metaBase = metaBase;
-        this.setRoot(new GenericTreeNode<>(GenericTreeNode.DUMMY_HEAD));
+        this.setRoot(new GenericTreeNode<PairCluster>());
     }
 
     public boolean isVaild() {

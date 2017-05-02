@@ -79,7 +79,7 @@ public class KoreanUtil {
     }
 
     public static boolean isConcatenation(Pair<String, String> pair){
-        if(pair.getSecond().equals("JC") || (pair.getFirst().equals("랑") && pair.getSecond().equals("JKB"))) return true;
+        if(pair.getFirst().equals(",") || pair.getSecond().equals("JC") || (pair.getFirst().equals("랑") && pair.getSecond().equals("JKB"))) return true;
         return false;
     }
 

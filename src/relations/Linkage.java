@@ -95,7 +95,8 @@ public class Linkage {
     }
 
     public List<Sentence> toSentences(){
-        SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(arc, base, metaBase, instantResponses);
+
+        SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(arc, base, metaBase, instantResponses, timeExpressions);
 
         List<Sentence> sentences = sentenceMultiplexer.extractSentences();
 

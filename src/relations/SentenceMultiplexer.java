@@ -6,6 +6,7 @@ import relations.LinkageFactory;
 import relations.MorphemeArc;
 import relations.TypedPair;
 import util.KoreanUtil;
+import util.TimeExpression;
 
 import java.util.*;
 
@@ -19,6 +20,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
     private MorphemeArc arc;
     private KnowledgeBase base;
     private KnowledgeBase metaBase;
+    private  List<TimeExpression> timeExpressions;
     private List<String> instantRes;
 
     /**
@@ -83,59 +85,87 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
             }
         }
 
-        boolean debug = true;
+        List<List<Integer>> units = new ArrayList<>();
+        HashMap<String, List<Integer>> mapper = new HashMap<>();
+
         // BFS 를 통해 불연속 경로를 분리/추출한다.
         while(!remainings.isEmpty()) {
-            if(debug) System.out.println("Sentence constructed :: ");
-            HashMap<Integer, List<Integer>> unit = new HashMap<>();
-            Sentence sentence = new Sentence(clusters, base, metaBase);
-//            sentence.putAll(BFS(remainings, topologies, visited, unit, debug));
-            BFS(remainings, topologies, visited, unit, debug);
-            sentences.add(sentence);
+            List<Integer> unit = BFS(remainings, topologies, visited);
+            units.add(unit);
+        }
 
-            if(debug) System.out.println();
+        List<Integer> redundant = new ArrayList<>();
+
+        for(int q = 0; q < units.size(); q++) {
+            List<Integer> unit = units.get(q);
+            for (Integer i : unit) {
+                String hashCode = clusters.get(i).hash();
+                if (mapper.containsKey(hashCode) && mapper.get(hashCode) != unit) {
+                    for (int e = 0; e < unit.size(); e++) {
+                        if (unit.get(e) != i) {
+                            mapper.get(hashCode).add(unit.get(e));
+                        }
+                    }
+                    redundant.add(q);
+                    break;
+                } else {
+                    mapper.put(hashCode, unit);
+                }
+            }
+        }
+
+        for(Integer del : redundant) {
+            units.remove((int)del);
+        }
+
+        for(List<Integer> list : units){
+            Sentence sentence = new Sentence(base, metaBase);
+//  멋진 세호는 맛있는 밥과 반찬을 빠르게 먹었다 그리고 잘생긴 현수는 잠을 잤다.
+
+            sentences.add(sentence);
+            for(Integer i : list){
+                System.out.print("[" + clusters.get(i).toCSV() + "]->");
+            }
+            System.out.println();
         }
 
         return sentences;
     }
 
-    public HashMap<Integer, List<Integer>> BFS(HashSet<Integer> remainings, HashMap<Integer, List<Integer>> map, HashSet<Integer> visited, HashMap<Integer, List<Integer>> unit, boolean debug) {
+    public List<Integer> BFS(HashSet<Integer> remainings, HashMap<Integer, List<Integer>> map, HashSet<Integer> visited) {
         if(map.isEmpty() || !remainings.iterator().hasNext()) return null;
         Integer start = remainings.iterator().next();
-        unit.put(start, new ArrayList<>());
+        List<Integer> unit = new ArrayList<>();
+        unit.add(start);
         remainings.remove(start);
         visited.add(start);
-        if(debug) System.out.print(start + "->");
-        BFS(remainings, start, map, visited, unit, debug);
+        BFS(remainings, start, map, visited, unit);
         return unit;
     }
 
-    private void BFS(HashSet<Integer> remainings, Integer start, HashMap<Integer, List<Integer>> map, HashSet<Integer> visited, HashMap<Integer, List<Integer>> unit, boolean debug) {
+    private void BFS(HashSet<Integer> remainings, Integer start, HashMap<Integer, List<Integer>> map, HashSet<Integer> visited, List<Integer> unit) {
         if(!map.containsKey(start)) return;
-
-        if(!unit.containsKey(start)) unit.put(start, new ArrayList<>());
-
         for( Integer neighbor : map.get(start)) {
             if(!visited.contains(neighbor)) {
                 remainings.remove(neighbor);
-                unit.get(start).add(neighbor);
-                if (debug) System.out.print(neighbor + " * ");
+                unit.add(neighbor);
             }
         }
 
         for(Integer neighbor : map.get(start)) {
             if(!visited.contains(neighbor)) {
                 visited.add(neighbor);
-                BFS(remainings, neighbor, map, visited, unit, debug);
+                BFS(remainings, neighbor, map, visited, unit);
             }
         }
     }
 
-    public SentenceMultiplexer(MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses){
+    public SentenceMultiplexer(MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses, List<TimeExpression> timeExpressions){
         this.arc = arc;
         this.base = base;
         this.metaBase = metaBase;
         this.instantRes = responses;
+        this.timeExpressions = timeExpressions;
     }
 
     public PairCluster getTypedPairToExpandedPairCluster(TypedPair pair, int uniqueKey){
