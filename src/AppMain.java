@@ -11,7 +11,7 @@ public class AppMain {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        NaturalLanguageEngine nlpEngine = NaturalLanguageEngine.getInstance().setDebugMode(true);
+        NaturalLanguageEngine nlpEngine = NaturalLanguageEngine.getInstance().setDebugMode(false);
 
         while(true) {
             System.out.print("USER : ");

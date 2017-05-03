@@ -175,7 +175,9 @@ public class LinkageFactory {
         }
 
         int div = 0;
-        for(TypedPair pair : retVal) pair.setDivisionKey(div++);
+        for(TypedPair pair : retVal) {
+            pair.setDivisionKey(div++);
+        }
 
         return retVal;
     }
@@ -277,6 +279,7 @@ public class LinkageFactory {
                 if(KoreanUtil.isDerivable(cores.get(i))) {
                     if (cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1))) { // 파생접미사 처리
                         TypedPair typedPair = new TypedPair();
+                        typedPair.setDivisionKey(cores.get(i).getDivisionKey());
                         typedPair.setFirst(cores.get(i).getFirst() + cores.get(i + 1).getFirst());
                         if (KoreanUtil.isVerbalDeriver(cores.get(i + 1))) {
                             typedPair.setSecond("VV");
@@ -450,6 +453,7 @@ public class LinkageFactory {
                 if (candidate != -1) {
                     retVal.connect(vIdx.get(i), candidate);
                 }
+
             }
         }
 

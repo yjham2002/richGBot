@@ -44,7 +44,6 @@ public class Sentence extends GenericTree<PairCluster>{
     /**
      * 문장 추상화 클래스 생성자 - 생성과 동시에 화행 분석을 수행하여 speechAct 변수를 설정하고 확신의 정도를 score에 기록함
      *
-     * @param wordList 문장 구성 요소를 입력받기 위한 파라미터로 문장별로 구분되어 전달된 점이 링키지 클래스와 구분됨
      * @param base 문장 구조 지식 베이스
      * @param metaBase 단어 기반 지식 베이스
      */
@@ -152,5 +151,29 @@ public class Sentence extends GenericTree<PairCluster>{
 //        }
 //
 //    }
+
+    public void printStructure(){
+        printStructure(this.getRoot(), 0);
+    }
+
+    private void printStructure(GenericTreeNode<PairCluster> cluster, int depth){
+        if(cluster == null) return;
+        System.out.print(" :: DEPTH[" + depth + "] :: NODES["
+                + cluster.getChildren().size() + "] :: THIS[" + cluster.getData().toUniqueCSV()
+                + "]");
+        if(cluster.getParent() != null){
+            System.out.print(" :: PARENT[ ");
+            for(GenericTreeNode<PairCluster> parent : cluster.getParent()){
+                System.out.print(parent.getData().toUniqueCSV() + " *");
+            }
+            System.out.print("]");
+
+        }
+        System.out.println();
+
+        for(GenericTreeNode<PairCluster> unit : cluster.getChildren()){
+            printStructure(unit, depth + 1);
+        }
+    }
 
 }

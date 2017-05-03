@@ -161,6 +161,11 @@ public class GenericTree<T> {
         traversalResult.put(node, depth);
     }
 
+    /**
+     * This method is deprecated because of changes on GenericTreeNode
+     * @return
+     */
+    @Deprecated
     public String toString() {
         /*
         We're going to assume a pre-order traversal by default
@@ -176,6 +181,11 @@ public class GenericTree<T> {
         return stringRepresentation;
     }
 
+    /**
+     * This method is deprecated because of changes on GenericTreeNode
+     * @return
+     */
+    @Deprecated
     public String toStringWithDepth() {
         /*
         We're going to assume a pre-order traversal by default
@@ -189,4 +199,5 @@ public class GenericTree<T> {
 
         return stringRepresentation;
     }
+
 }

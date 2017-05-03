@@ -13,12 +13,13 @@ public class GenericTreeNode<T> {
     public static final Integer DUMMY_HEAD = -1;
     private T data;
     private List<GenericTreeNode<T>> children;
-    private GenericTreeNode<T> parent;
+    private List<GenericTreeNode<T>> parent;
 
     public GenericTreeNode() {
         super();
         keySet = new HashSet<T>();
-        children = new ArrayList<GenericTreeNode<T>>();
+        children = new ArrayList<>();
+        parent = new ArrayList<>();
     }
 
     public HashSet<T> getKeySet() {
@@ -34,7 +35,7 @@ public class GenericTreeNode<T> {
         setData(data);
     }
 
-    public GenericTreeNode<T> getParent() {
+    public List<GenericTreeNode<T>> getParent() {
         return this.parent;
     }
 
@@ -52,7 +53,7 @@ public class GenericTreeNode<T> {
 
     public void setChildren(List<GenericTreeNode<T>> children) {
         for(GenericTreeNode<T> child : children) {
-           child.parent = this;
+           child.parent.add(this);
             keySet.add(child.data);
         }
 
@@ -60,13 +61,13 @@ public class GenericTreeNode<T> {
     }
 
     public void addChild(GenericTreeNode<T> child) {
-        child.parent = this;
+        child.parent.add(this);
         keySet.add(child.data);
         children.add(child);
     }
 
     public void addChildAt(int index, GenericTreeNode<T> child) throws IndexOutOfBoundsException {
-        child.parent = this;
+        child.parent.add(this);
         children.add(index, child);
     }
 

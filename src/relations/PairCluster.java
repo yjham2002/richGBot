@@ -13,6 +13,9 @@ import java.util.List;
  */
 public class PairCluster extends HashSet<TypedPair> {
 
+    public static final String TAG_ROOT = "TAG_ROOT_CONST_STRING";
+    public static final int KEY_ROOT = -100;
+
     private int uniqueKey;
     private List<TypedPair> list;
     private String csv = "";
@@ -58,6 +61,19 @@ public class PairCluster extends HashSet<TypedPair> {
     public PairCluster(String tag, List<TypedPair> pairs, int uniqueKey){
         this(tag, pairs);
         this.uniqueKey = uniqueKey;
+    }
+
+    private PairCluster(){}
+
+    public static PairCluster createDummy(){
+        PairCluster dummy = new PairCluster();
+        dummy.tag = TAG_ROOT;
+
+        return dummy;
+    }
+
+    public static boolean isDummy(PairCluster cluster){
+        return cluster.tag.equals(PairCluster.TAG_ROOT);
     }
 
     public PairCluster(String tag, TypedPair... pairs){

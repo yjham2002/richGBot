@@ -23,13 +23,10 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
     protected static final int INVALID = -1;
     protected static final int VALID = 1;
 
-    protected HashSet<Integer> valueSet;
-
     protected List<TypedPair> words;
 
     public MorphemeArc(List<TypedPair> linearWords){
         super();
-        valueSet = new HashSet<>();
         if(linearWords == null) words = new ArrayList<>();
         else words = linearWords;
     }
@@ -63,17 +60,17 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
                 }
 
                 if (leftSide > mLeft && rightSide > mRight && mRight > leftSide) {
-                    if(scoreNewly <= scoreOrigin) {
-                        this.get(i).remove(cursor);
-                        return false;
-                    }
+//                    if(scoreNewly <= scoreOrigin) {
+//                        this.get(i).remove(cursor);
+//                        return false;
+//                    }
                     return true;
                 }
                 if (leftSide < mLeft && rightSide < mRight && mRight < leftSide) {
-                    if(scoreNewly <= scoreOrigin) {
-                        this.get(i).remove(cursor);
-                        return false;
-                    }
+//                    if(scoreNewly <= scoreOrigin) {
+//                        this.get(i).remove(cursor);
+//                        return false;
+//                    }
                     return true;
                 }
             }
@@ -94,22 +91,25 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
      * @param dominant
      * @param dependant
      */
-    public int connect(int dominant, int dependant){
+    public int connect(Integer dominant, Integer dependant){
+
         semaphore = true;
         String debugPos = "DO[" + dominant + "] DE[" + dependant + "]";
         boolean doNothing = false;
         if(dominant < 0 || dependant < 0 || dominant >= words.size() || dependant >= words.size()){
-            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [참조할 수 없는 위치] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [Unable to Refer] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
             doNothing = true;
         }
 //        if(dominant <= dependant){
 //            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [지배소 후위의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
 //            doNothing = true;
 //        }
+
         if(isCrossed(dominant, dependant)){
-            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [투영의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [Projection's Law] has been violated  : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
             doNothing = true;
         }
+
 //        if(this.containsKey(dependant)){
 //            if(isNotTheOnlyOne(dependant, dominant)){
 //                if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [지배소 유일의 원칙]이 위반된 아크입니다. : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
@@ -123,7 +123,11 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
         }
 
         this.put(dependant, dominant);
-        if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [아크가 정상적으로 연결됨] : " + debugPos + " [" + words.get(dominant).getFirst() + "[" + dominant + "]" + "/" + words.get(dependant).getFirst() + "[" + dependant + "]" + "]");
+
+        if(CURRENT == MODE_DEBUG) System.out.println("INFO :: [Arc Linked] : "
+                + debugPos + " [" + words.get(dominant).getFirst() + "["
+                + dominant + "]" + "/" + words.get(dependant).getFirst() + "[" + dependant + "]" + "] :: SIZE [" + this.get(dependant).size() + "]");
+
         return VALID;
     }
 
@@ -134,21 +138,11 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
         return false;
     }
 
-    public boolean containsVerbose(Integer i){
-        return valueSet.contains(i);
-    }
-
     @Override
     public ArrayList<Integer> put(Integer i, ArrayList<Integer> ii){
         if(semaphore){
-            if(this.containsKey(i)){
-                this.get(i).addAll(ii);
-            }else {
-                super.put(i, ii);
-            }
-            for(Integer subKey : ii) {
-                valueSet.add(subKey);
-            }
+            if(!this.containsKey(i)) super.put(i, new ArrayList<>());
+            this.get(i).addAll(ii);
             semaphore = false;
             return ii;
         }else {
@@ -160,6 +154,7 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
     public ArrayList<Integer> put(Integer i, Integer ii){
         ArrayList<Integer> entry = new ArrayList<>();
         entry.add(ii);
+
 
         return this.put(i, entry);
     }
