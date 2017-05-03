@@ -25,15 +25,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://C:/lib/mysql-connector-java-5.1.41-bin.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="com.ullink.slack:simpleslackapi:0.6.0" level="project" />
     <orderEntry type="library" name="org.jsoup:jsoup:1.10.2" level="project" />
     <orderEntry type="library" name="com.google.cloud:google-cloud-vision:0.11.0-beta" level="project" />
@@ -46,5 +37,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="mysql:mysql-connector-java:5.1.41" level="project" />
   </component>
 </module>

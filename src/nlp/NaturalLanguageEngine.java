@@ -26,7 +26,7 @@ public class NaturalLanguageEngine {
     private static Komoran komoran;
     private static LinkageFactory linkageFactory;
 
-    private static String modelPath = "C:\\Users\\a\\IdeaProjects\\richGBot\\models";
+    private static String modelPath = "./models";
     private static String dicPath = "C:\\Users\\a\\IdeaProjects\\GBot\\user_data\\NIADic.user";
 
     private static NaturalLanguageEngine instance; // Singleton instance
