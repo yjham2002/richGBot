@@ -119,7 +119,7 @@ public class LinkageFactory {
         for(int tIdx = 0; tIdx < times.size(); tIdx++) {
             TimeExpression time = times.get(tIdx);
             timeRange.put(time.getStart(), time.getEnd());
-            System.out.println(time.getExpression() + " :: " + time.getDateTime());
+//            System.out.println(time.getExpression() + " :: " + time.getDateTime());
             responses.add(time.getExpression() + " :: " + time.getDateTime());
         }
 

@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/AppMain.class" afterPath="$PROJECT_DIR$/out/production/GBot/AppMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/MorphemeArc.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/MorphemeArc.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/PairCluster.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/PairCluster.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Sentence.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/Sentence.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/SentenceMultiplexer.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/SentenceMultiplexer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppMain.java" afterPath="$PROJECT_DIR$/src/AppMain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/LinkageFactory.java" afterPath="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/MorphemeArc.java" afterPath="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/PairCluster.java" afterPath="$PROJECT_DIR$/src/relations/PairCluster.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Sentence.java" afterPath="$PROJECT_DIR$/src/relations/Sentence.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" afterPath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tree/GenericTree.java" afterPath="$PROJECT_DIR$/src/tree/GenericTree.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tree/GenericTreeNode.java" afterPath="$PROJECT_DIR$/src/tree/GenericTreeNode.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,8 +36,8 @@
       <file leaf-file-name="LinkageFactory.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/LinkageFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="414" column="59" lean-forward="false" selection-start-line="414" selection-start-column="59" selection-end-line="414" selection-end-column="59" />
+            <state relative-caret-position="154">
+              <caret line="122" column="78" lean-forward="true" selection-start-line="122" selection-start-column="78" selection-end-line="122" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -64,24 +53,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Sentence.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Sentence.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/relations/Sentence.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="176" column="5" lean-forward="true" selection-start-line="176" selection-start-column="5" selection-end-line="176" selection-end-column="5" />
+            <state relative-caret-position="208">
+              <caret line="60" column="64" lean-forward="false" selection-start-line="60" selection-start-column="64" selection-end-line="60" selection-end-column="64" />
               <folding>
-                <element signature="e#8071#8072#0" expanded="true" />
-                <element signature="e#8120#8121#0" expanded="true" />
+                <element signature="e#9180#9181#0" expanded="true" />
+                <element signature="e#9229#9230#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SentenceMultiplexer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SentenceMultiplexer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/SentenceMultiplexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="172" column="0" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="195" column="0" lean-forward="false" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -174,7 +163,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>eoj</find>
       <find>express += value + pair.getFirst() + &quot; &quot;;</find>
       <find>timeP</find>
       <find>stream</find>
@@ -204,6 +192,7 @@
       <find>clear</find>
       <find>remove</find>
       <find>connect</find>
+      <find>getDateT</find>
     </findStrings>
     <replaceStrings>
       <replace>System.out.println</replace>
@@ -273,11 +262,11 @@
         <option value="$PROJECT_DIR$/src/DB/DBManager.java" />
         <option value="$PROJECT_DIR$/src/relations/PairCluster.java" />
         <option value="$PROJECT_DIR$/src/AppMain.java" />
-        <option value="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" />
-        <option value="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
         <option value="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
         <option value="$PROJECT_DIR$/src/tree/GenericTree.java" />
         <option value="$PROJECT_DIR$/src/tree/GenericTreeNode.java" />
+        <option value="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" />
+        <option value="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
         <option value="$PROJECT_DIR$/src/relations/Sentence.java" />
       </list>
     </option>
@@ -804,13 +793,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3853403" sideWeight="0.28229168" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41852286" sideWeight="0.71770835" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41852286" sideWeight="0.71770835" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19513889" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19513889" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1084,14 +1073,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/LinkageFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="414" column="59" lean-forward="false" selection-start-line="414" selection-start-column="59" selection-end-line="414" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/MorphemeArc.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9">
@@ -1124,23 +1105,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/Sentence.java">
+    <entry file="file://$PROJECT_DIR$/src/relations/SentenceMultiplexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="176" column="5" lean-forward="true" selection-start-line="176" selection-start-column="5" selection-end-line="176" selection-end-column="5" />
+        <state relative-caret-position="0">
+          <caret line="195" column="0" lean-forward="false" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
           <folding>
-            <element signature="e#8071#8072#0" expanded="true" />
-            <element signature="e#8120#8121#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/SentenceMultiplexer.java">
+    <entry file="file://$PROJECT_DIR$/src/relations/LinkageFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="172" column="0" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+        <state relative-caret-position="154">
+          <caret line="122" column="78" lean-forward="true" selection-start-line="122" selection-start-column="78" selection-end-line="122" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/relations/Sentence.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="60" column="64" lean-forward="false" selection-start-line="60" selection-start-column="64" selection-end-line="60" selection-end-column="64" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#9180#9181#0" expanded="true" />
+            <element signature="e#9229#9230#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -128,7 +128,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
         }
 
         for(List<Integer> list : units){
-            Sentence sentence = new Sentence(base, metaBase); // 지식베이스 인스턴스 전달
+
         //  멋진 세호는 맛있는 밥과 반찬을 빠르게 먹고 토했다 그리고 잘생긴 현수는 잠을 잤다.
 
             // TODO 추상 구문 트리에 대해 방향성을 가진 N-ary 트리로 링크해야 함
@@ -145,8 +145,6 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
                 }
 
                 if(arc.containsKey(i)){
-
-                    System.out.println(clusters.get(i).toUniqueCSV() + " :: " + arc.get(i).size());
                     for(Integer l : arc.get(i)) {
                         if(clusters.containsKey(l)) {
                             PairCluster link = clusters.get(l);
@@ -162,14 +160,22 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
             }
 
             GenericTreeNode<PairCluster> temporaryRoot = new GenericTreeNode<>(PairCluster.createDummy());
-
             temporaryRoot.setChildren(roots);
 
-            sentence.setRoot(temporaryRoot);
+            double weightOfTime = Double.MAX_VALUE;
+            TimeExpression candidate = null;
+
+            for(TimeExpression time : timeExpressions){
+                double weight = Math.abs(((double)time.getStart() + (double)time.getEnd() - (double)temporaryRoot.getData().getUniqueKey()));
+                if(weightOfTime > weight) {
+                    weightOfTime = weight;
+                    candidate = time;
+                }
+            }
+
+            Sentence sentence = new Sentence(base, metaBase, temporaryRoot, candidate, true); // 지식베이스 인스턴스 전달
 
             sentences.add(sentence); // 의도 추출 전 문장 객체를 수집
-
-            sentence.printStructure();
 
         }
 

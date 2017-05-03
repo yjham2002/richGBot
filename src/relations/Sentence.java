@@ -2,7 +2,9 @@ package relations;
 
 import tree.GenericTree;
 import tree.GenericTreeNode;
+import util.TimeExpression;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +40,7 @@ public class Sentence extends GenericTree<PairCluster>{
     private double score = 0.0; // 화행 분석 예상 정확도
     private KnowledgeBase base;
     private KnowledgeBase metaBase;
+    private TimeExpression timeExpression;
 
     private boolean vaild = false;
 
@@ -47,11 +50,22 @@ public class Sentence extends GenericTree<PairCluster>{
      * @param base 문장 구조 지식 베이스
      * @param metaBase 단어 기반 지식 베이스
      */
-    public Sentence(KnowledgeBase base, KnowledgeBase metaBase){
+    public Sentence(KnowledgeBase base, KnowledgeBase metaBase, GenericTreeNode<PairCluster> root, TimeExpression timeExpression, boolean printProcess){
         super();
         this.base = base;
         this.metaBase = metaBase;
-        this.setRoot(new GenericTreeNode<PairCluster>());
+        this.timeExpression = timeExpression;
+        this.setRoot(root);
+
+        if(printProcess){
+            System.out.println("INFO :: Sentence Construction :: [" + root.getChildren().size() + "]");
+            int intentionNo = 1;
+            for(GenericTreeNode<PairCluster> node : root.getChildren()){
+                if(timeExpression != null) System.out.println("Time :: " + timeExpression.getDateTime());
+                System.out.print(" > " + intentionNo++ + " :: ");
+                printIntentionLn(node);
+            }
+        }
     }
 
     public boolean isVaild() {
@@ -151,6 +165,20 @@ public class Sentence extends GenericTree<PairCluster>{
 //        }
 //
 //    }
+
+    public void printIntentionLn(GenericTreeNode<PairCluster> cluster){
+        printIntention(cluster);
+        System.out.println();
+
+    }
+
+    private void printIntention(GenericTreeNode<PairCluster> cluster){
+        if(cluster == null) return;
+        System.out.print(cluster.getData().toUniqueCSV() + "->");
+        for(GenericTreeNode<PairCluster> unit : cluster.getChildren()){
+            printIntention(unit);
+        }
+    }
 
     public void printStructure(){
         printStructure(this.getRoot(), 0);
