@@ -27,7 +27,7 @@ public class NaturalLanguageEngine {
     private static LinkageFactory linkageFactory;
 
     private static String modelPath = "./models";
-    private static String dicPath = "C:\\Users\\a\\IdeaProjects\\GBot\\user_data\\NIADic.user";
+    private static String dicPath = "./user_data/NIADic.user";
 
     private static NaturalLanguageEngine instance; // Singleton instance
 
