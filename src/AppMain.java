@@ -1,5 +1,6 @@
 
 import nlp.NaturalLanguageEngine;
+import relations.LinkageFactory;
 
 import java.util.*;
 
@@ -16,7 +17,10 @@ public class AppMain {
         while(true) {
             System.out.print("USER : ");
             String command = scanner.nextLine();
-            nlpEngine.analyzeAndPrint(command, true);
+            List<String> list = nlpEngine.analyzeInstantly(command, true);
+            for(String res : list){
+                System.out.println(LinkageFactory.MY_NAME + " : " + res);
+            }
         }
 
     }

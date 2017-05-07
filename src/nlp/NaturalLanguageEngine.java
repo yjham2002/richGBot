@@ -72,26 +72,14 @@ public class NaturalLanguageEngine {
         Linkage linkage = linkageFactory.link();
         memorize(linkage);
 
-        return linkage.interaction();
-    }
+        // TODO 임시 설계 - 응답 클래스가 별도로 생성될 경우, 변경이 필수적임
+        Pair<List<String>, List<String>> resPair = linkage.interaction();
 
-    public void analyzeAndPrint(String text, boolean enableSimilarityMode){
-        linkageFactory.setSimilarityMode(enableSimilarityMode);
-        List<List<Pair<String, String>>> result = komoran.analyze(text);
-        linkageFactory.setMorphemes(result, text);
+        List<String> merged = new ArrayList<>();
+        merged.addAll(resPair.getFirst());
+        merged.addAll(resPair.getSecond());
 
-        if(mode == MODE_DEBUG) {
-            for (List<Pair<String, String>> eojeolResult : result) {
-                for (Pair<String, String> wordMorph : eojeolResult) {
-                    System.out.print(wordMorph + "   ");
-                }
-                System.out.println();
-            }
-        }
-        Linkage linkage = linkageFactory.link();
-        memorize(linkage);
-
-        linkage.interaction();
+        return merged;
     }
 
 }

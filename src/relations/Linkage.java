@@ -1,5 +1,6 @@
 package relations;
 
+import kr.co.shineware.util.common.model.Pair;
 import util.KoreanUtil;
 import util.TimeExpression;
 
@@ -89,14 +90,34 @@ public class Linkage {
         this.instantResponses = instantResponses;
     }
 
-    public List<String> interaction(){
-        if(arc != null) toSentences();
-        return instantResponses;
+    /**
+     * 모든 상호작용에 대한 응답을 이곳에서 담당한다. 추후 응답 및 시나리오 관련 클래스 생성 시 이 부분을 설계변경해야 한다.
+     * @return
+     */
+    public Pair<List<String>, List<String>> interaction(){
+        List<Sentence> sentences;
+        if(arc != null) {
+            sentences = toSentences();
+        }else{
+            sentences = new ArrayList<>();
+        }
+
+        List<String> analysisResposes = new ArrayList<>();
+
+        for(Sentence sentence : sentences){
+            analysisResposes.add(sentence.getSummarized());
+        }
+
+        Pair<List<String>, List<String>> pair = new Pair<>(instantResponses, analysisResposes);
+
+        // TODO 임시 테스트 설계로서 문장 클래스로부터 응답을 수행하는 로직이 작성되어야 함
+
+        return pair;
     }
 
     public List<Sentence> toSentences(){
 
-        SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(arc, base, metaBase, instantResponses, timeExpressions);
+        SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(arc, base, metaBase, timeExpressions);
 
         List<Sentence> sentences = sentenceMultiplexer.extractSentences();
 

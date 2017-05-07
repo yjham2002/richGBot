@@ -1,18 +1,9 @@
 package relations;
 
-import kr.co.shineware.util.common.model.Pair;
-import relations.KnowledgeBase;
-import relations.LinkageFactory;
-import relations.MorphemeArc;
-import relations.TypedPair;
-import tree.GenericTree;
 import tree.GenericTreeNode;
-import util.KoreanUtil;
 import util.TimeExpression;
 
 import java.util.*;
-
-import static relations.LinkageFactory.*;
 
 /**
  * @author Ham.EuiJin
@@ -25,33 +16,6 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
     private KnowledgeBase base;
     private KnowledgeBase metaBase;
     private  List<TimeExpression> timeExpressions;
-    private List<String> instantRes;
-
-    /**
-     *
-     * 본 메소드는 Sentence에 특화시켜 재작성이 필요함
-     */
-//    //        int type = isOrder(arc.getWords());
-//    private int isOrder(List<TypedPair> words){
-//        int questions = 0;
-//        for(int i = 0; i < words.size() ; i++) {
-//            TypedPair pair = words.get(i); // TODO 문장 구분
-//            if(pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
-//        }
-//
-//        for(int i = 0; i < words.size() ; i++) {
-//            TypedPair pair = words.get(i); // TODO 문장 구분
-//            if(pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
-//                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
-//            }else if(pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))){
-//                questions++;
-//            }
-//        }
-//
-//        if(questions > 0) return SENTENCE_QUESTION;
-//
-//        return SENTENCE_ORDER;
-//    }
 
     /**
      * 문장 컬렉션 추출을 위한 메소드로 해시를 통해 병합 및 그래프 폐구간 추출을 통한 문장 분리를 수행
@@ -239,14 +203,12 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
      * @param arc
      * @param base
      * @param metaBase
-     * @param responses
      * @param timeExpressions
      */
-    public SentenceMultiplexer(MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<String> responses, List<TimeExpression> timeExpressions){
+    public SentenceMultiplexer(MorphemeArc arc, KnowledgeBase base, KnowledgeBase metaBase, List<TimeExpression> timeExpressions){
         this.arc = arc;
         this.base = base;
         this.metaBase = metaBase;
-        this.instantRes = responses;
         this.timeExpressions = timeExpressions;
     }
 

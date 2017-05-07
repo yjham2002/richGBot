@@ -32,12 +32,6 @@ public class LinkageFactory {
     private static final double SIMILARITY_THRESHOLD = 0.5;
     private static final double SIMILARITY_HIJACKING_THRESHOLD = 0.80;
 
-    public static final int SENTENCE_ORDER = 10;
-    public static final int SENTENCE_PLAIN = 20;
-    public static final int SENTENCE_QUESTION = 30;
-    public static final int SENTENCE_META = 40;
-    public static final int SENTENCE_METAPHORICAL_QUESTION = 50;
-
     public static final Set<String> SUBJECTS = new HashSet<>();
     public static final Set<String> GENERAL_NOUN = new HashSet<>();
     public static final Set<String> DEPNOUN = new HashSet<>();
@@ -119,8 +113,6 @@ public class LinkageFactory {
         for(int tIdx = 0; tIdx < times.size(); tIdx++) {
             TimeExpression time = times.get(tIdx);
             timeRange.put(time.getStart(), time.getEnd());
-//            System.out.println(time.getExpression() + " :: " + time.getDateTime());
-            responses.add(time.getExpression() + " :: " + time.getDateTime());
         }
 
         linkage.setTimeExpressions(times);
@@ -577,7 +569,6 @@ public class LinkageFactory {
             String intent = staticBase.get(cleanedSerial).keySet().iterator().next();
 
             if(SIMILARITY_MODE) {
-                System.out.println(staticResponser.talk(intent, temporaryMemory));
                 responses.add(staticResponser.talk(intent, temporaryMemory));
             }
 
@@ -612,15 +603,12 @@ public class LinkageFactory {
 
             if (procArc.keySet().size() == 0) {
                 if (prob >= SIMILARITY_THRESHOLD) {
-                    System.out.println(staticResponser.talk(prediction, temporaryMemory));
                     responses.add(staticResponser.talk(prediction, temporaryMemory));
                 } else {
-                    System.out.println(staticResponser.talk(StaticResponser.INTENT_NOTHING, temporaryMemory));
                     responses.add(staticResponser.talk(StaticResponser.INTENT_NOTHING, temporaryMemory));
                 }
             } else {
                 if (prob >= SIMILARITY_HIJACKING_THRESHOLD) {
-                    System.out.println(staticResponser.talk(prediction, temporaryMemory));
                     responses.add(staticResponser.talk(prediction, temporaryMemory));
                 }
             }

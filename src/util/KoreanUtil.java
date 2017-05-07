@@ -49,7 +49,8 @@ public class KoreanUtil {
     }
 
     public static boolean isSubjectivePost(Pair<String, String> pair){
-        if((pair.getSecond().equals("JKS") || pair.getSecond().equals("JX")) && !isEOS(pair)) return true;
+        // TODO '도' 에 대한 문맥적 구분 필요
+        if((pair.getSecond().equals("JKS") || pair.getSecond().equals("JX")) && !isEOS(pair) && !pair.getFirst().equals("도")) return true;
         return false;
     }
 

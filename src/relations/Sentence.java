@@ -1,13 +1,12 @@
 package relations;
 
+import analysis.DomainSpecifiedAnalyser;
+import analysis.SpeechActAnalyser;
 import tree.GenericTree;
 import tree.GenericTreeNode;
 import util.TimeExpression;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import static analysis.SpeechActAnalyser.SPEECH_ACT_UNDEFINED;
 
 /**
  * @author 함의진
@@ -16,33 +15,17 @@ import java.util.List;
  * 화행 분석 및 문장 단위 추상화를 위한 캡슐화 클래스
  */
 public class Sentence extends GenericTree<PairCluster>{
-    /**
-     * 참고 논문 : 서강대학교 "한국어 대화체 문장의 화행 분석", 이현정 외, 1996
-     */
-    public static final String SPEECH_ACT_UNDEFINED = "undefined"; // 미정
-    public static final String SPEECH_ACT_ASK_REF = "ask_ref"; // 정보요구 (REFERENCE)
-    public static final String SPEECH_ACT_ASK_IF = "ask_if"; // 정보 요구 (YES or NO)
-    public static final String SPEECH_ACT_INFORM = "inform"; // 정보 제공
-    public static final String SPEECH_ACT_RESPONSE = "response"; // 응답
-    public static final String SPEECH_ACT_REQUEST_CONF = "request_conf"; // 확인 요구
-    public static final String SPEECH_ACT_REQUEST_ACT = "request_act"; // 행위 요구
-    public static final String SPEECH_ACT_ACCEPT = "accept"; // 호응 (긍정적 반응)
-    public static final String SPEECH_ACT_CORRECT = "correct"; // 정정
-    public static final String SPEECH_ACT_CONFIRM = "confirm"; // 확인 (확인을 요구하는 발화에 대한 응답)
-    public static final String SPEECH_ACT_GREETING = "greeting"; // 인사말
-    public static final String SPEECH_ACT_PROMISE = "promise"; // 특정 행위를 약속
-    public static final String SPEECH_ACT_REJECT = "reject"; // 거절
 
     /**
      * 멤버 애트리뷰트
      */
-    private String speechAct = SPEECH_ACT_UNDEFINED; // 화행 분석 결과
+    private DomainSpecifiedAnalyser speechAct; // 화행 분석 결과
     private double score = 0.0; // 화행 분석 예상 정확도
     private KnowledgeBase base;
     private KnowledgeBase metaBase;
     private TimeExpression timeExpression;
 
-    private boolean vaild = false;
+    private String summarized = "";
 
     /**
      * 문장 추상화 클래스 생성자 - 생성과 동시에 화행 분석을 수행하여 speechAct 변수를 설정하고 확신의 정도를 score에 기록함
@@ -57,24 +40,91 @@ public class Sentence extends GenericTree<PairCluster>{
         this.timeExpression = timeExpression;
         this.setRoot(root);
 
+        init(true);
+
         if(printProcess){
-            System.out.println("INFO :: Sentence Construction :: [" + root.getChildren().size() + "]");
             int intentionNo = 1;
+
+            System.out.println("------------------------------------------------------------------------------------");
+            System.out.println(" VERBS(N)  :: " + root.getChildren().size());
+            System.out.println("------------------------------------------------------------------------------------");
+            System.out.println(" [ ATOMICS ]");
+
             for(GenericTreeNode<PairCluster> node : root.getChildren()){
-                if(timeExpression != null) System.out.println("Time :: " + timeExpression.getDateTime());
-                System.out.print(" > " + intentionNo++ + " :: ");
+                System.out.print(" :: " + intentionNo++ + " :: ");
                 printIntentionLn(node);
             }
+
+            if(timeExpression != null) summarized += "\n" + timeExpression.getExpression() + " :: " + timeExpression.getDateTime();
+
+            System.out.println("------------------------------------------------------------------------------------");
+            System.out.println(" INT/CONF  :: [" + this.speechAct.get(SpeechActAnalyser.INTENTION)
+                    + "] : " + ((double)this.speechAct.get(SpeechActAnalyser.CONFIDENT) * 100.0f) + "%");
+            if(this.speechAct.get(SpeechActAnalyser.TIME) != null)
+                System.out.println(" TIME      :: " + ((TimeExpression)this.speechAct.get(SpeechActAnalyser.TIME)).getDateTime());
+            System.out.println(" SUBJECT   :: " + this.speechAct.get(SpeechActAnalyser.SUBJECT));
+            System.out.println(" OBJECT    :: " + this.speechAct.get(SpeechActAnalyser.OBJECT));
+            System.out.println(" SENTENCE  :: " + this.speechAct.get(SpeechActAnalyser.SENTENCETYPE));
+            System.out.println(" SPEECH    :: " + this.speechAct.get(SpeechActAnalyser.SPEECH));
+            System.out.println(" VERBAL    :: " + this.speechAct.get(SpeechActAnalyser.VERBAL));
+            System.out.println("------------------------------------------------------------------------------------");
+            System.out.println();
         }
+
     }
 
-    public boolean isVaild() {
-        return vaild;
+    private void init(boolean isDomainSpecified){
+        if(isDomainSpecified) {
+            this.speechAct = new DomainSpecifiedAnalyser(base, metaBase, this);
+        }else{
+            // TODO Neural Network needed
+
+            this.speechAct = new DomainSpecifiedAnalyser(base, metaBase, this);
+        }
+
     }
 
-    public void setVaild(boolean vaild) {
-        this.vaild = vaild;
+    public TimeExpression getTimeExpression() {
+        return timeExpression;
     }
+
+    public void setTimeExpression(TimeExpression timeExpression) {
+        this.timeExpression = timeExpression;
+    }
+
+    public String getSummarized() {
+        return summarized;
+    }
+
+    public void setSummarized(String summarized) {
+        this.summarized = summarized;
+    }
+
+    /**
+     *
+     * 본 메소드는 Sentence에 특화시켜 재작성이 필요함
+     */
+//    private int getRoughType(){
+//        int questions = 0;
+//        for(int i = 0; i < words.size() ; i++) {
+//            TypedPair pair = words.get(i); // TODO 문장 구분
+//            if(pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
+//        }
+//
+//        for(int i = 0; i < words.size() ; i++) {
+//            TypedPair pair = words.get(i); // TODO 문장 구분
+//            if(pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
+//                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
+//            }else if(pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))){
+//                questions++;
+//            }
+//        }
+//
+//        if(questions > 0) return SENTENCE_QUESTION;
+//
+//        return SENTENCE_ORDER;
+//    }
+
 
 //    public void analyze(List<TypedPair> know, int what){
 //
@@ -167,6 +217,7 @@ public class Sentence extends GenericTree<PairCluster>{
 //    }
 
     public void printIntentionLn(GenericTreeNode<PairCluster> cluster){
+        summarized = "";
         printIntention(cluster);
         System.out.println();
 
@@ -175,6 +226,7 @@ public class Sentence extends GenericTree<PairCluster>{
     private void printIntention(GenericTreeNode<PairCluster> cluster){
         if(cluster == null) return;
         System.out.print(cluster.getData().toUniqueCSV() + "->");
+        summarized += cluster.getData().toUniqueCSV() + "->";
         for(GenericTreeNode<PairCluster> unit : cluster.getChildren()){
             printIntention(unit);
         }
