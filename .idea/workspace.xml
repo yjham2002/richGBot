@@ -2,24 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/analysis/SpeechActAnalyser.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/GBot/statics/PrivateResponser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/statics/PrivateResponser.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/LinkageFactory.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/LinkageFactory.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Sentence.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/Sentence.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/SentenceMultiplexer.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/SentenceMultiplexer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" afterPath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/util/TimeExpression.class" afterPath="$PROJECT_DIR$/out/production/GBot/util/TimeExpression.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppMain.java" afterPath="$PROJECT_DIR$/src/AppMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" afterPath="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linkage.java" afterPath="$PROJECT_DIR$/src/relations/Linkage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/LinkageFactory.java" afterPath="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Sentence.java" afterPath="$PROJECT_DIR$/src/relations/Sentence.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" afterPath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/KoreanUtil.java" afterPath="$PROJECT_DIR$/src/util/KoreanUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/TimeExpression.java" afterPath="$PROJECT_DIR$/src/util/TimeExpression.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" afterPath="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -102,16 +85,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KoreanUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/util/KoreanUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="53" column="21" lean-forward="true" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="TimeExpression.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/util/TimeExpression.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -132,16 +105,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Linkage.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Linkage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/Linkage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
+            <state relative-caret-position="221">
+              <caret line="97" column="33" lean-forward="true" selection-start-line="97" selection-start-column="33" selection-end-line="97" selection-end-column="33" />
               <folding>
                 <element signature="e#2058#2059#0" expanded="true" />
                 <element signature="e#2097#2098#0" expanded="true" />
                 <element signature="e#2167#2168#0" expanded="true" />
                 <element signature="e#2223#2224#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DomainSpecifiedAnalyser.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="236">
+              <caret line="29" column="39" lean-forward="true" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -268,13 +253,13 @@
         <option value="$PROJECT_DIR$/src/util/TimeExpression.java" />
         <option value="$PROJECT_DIR$/src/util/KoreanUtil.java" />
         <option value="$PROJECT_DIR$/src/analysis/SpeechActAnalyser.java" />
-        <option value="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
         <option value="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" />
         <option value="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" />
         <option value="$PROJECT_DIR$/src/AppMain.java" />
         <option value="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
         <option value="$PROJECT_DIR$/src/relations/Sentence.java" />
         <option value="$PROJECT_DIR$/src/relations/Linkage.java" />
+        <option value="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
       </list>
     </option>
   </component>
@@ -1064,16 +1049,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="10" lean-forward="true" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="431">
@@ -1138,13 +1113,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/Linkage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
+        <state relative-caret-position="221">
+          <caret line="97" column="33" lean-forward="true" selection-start-line="97" selection-start-column="33" selection-end-line="97" selection-end-column="33" />
           <folding>
             <element signature="e#2058#2059#0" expanded="true" />
             <element signature="e#2097#2098#0" expanded="true" />
             <element signature="e#2167#2168#0" expanded="true" />
             <element signature="e#2223#2224#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="29" column="39" lean-forward="true" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

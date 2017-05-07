@@ -24,6 +24,8 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
         this.clear();
 
+        // TODO START_POINT
+
         this.put(SUBJECT, ""); // 행위의 주체
         this.put(OBJECT, ""); // 행위의 대상
         this.put(SENTENCETYPE, ""); // 문장의 대략적 종류
