@@ -133,6 +133,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
 
             HashMap<String, GenericTreeNode<PairCluster>> nodeStorage = new HashMap<>();
             List<GenericTreeNode<PairCluster>> roots = new ArrayList<>();
+            double divMeanOfMean = 0.0;
 
             for(Integer i : list){
 
@@ -145,6 +146,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
                 if(arc.containsKey(i)){
                     if(arc.get(i).size() == 1 && arc.get(i).get(0) == i){
                         roots.add(nodeStorage.get(cursor.hash()));
+                        divMeanOfMean += nodeStorage.get(cursor.hash()).getData().getDivisionMean();
                     }else {
                         for (Integer l : arc.get(i)) {
                             if (clusters.containsKey(l)) {
@@ -158,21 +160,25 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
                     }
                 }else {
                     roots.add(nodeStorage.get(cursor.hash()));
+                    divMeanOfMean += nodeStorage.get(cursor.hash()).getData().getDivisionMean();
                 }
 
             }
 
             GenericTreeNode<PairCluster> temporaryRoot = new GenericTreeNode<>(PairCluster.createDummy());
             temporaryRoot.setChildren(roots);
+            temporaryRoot.setReserveData(divMeanOfMean / (double)roots.size());
 
             double weightOfTime = Double.MAX_VALUE;
             TimeExpression candidate = null;
 
-            for(TimeExpression time : timeExpressions){
-                double weight = Math.abs(((double)time.getStart() + (double)time.getEnd() - (double)temporaryRoot.getData().getUniqueKey()));
-                if(weightOfTime > weight) {
-                    weightOfTime = weight;
-                    candidate = time;
+            if(roots.size() > 0) {
+                for (TimeExpression time : timeExpressions) {
+                    double weight = Math.abs(((((double) time.getStart() + (double) time.getEnd())/2.0) - temporaryRoot.getReserveData()));
+                    if (weightOfTime > weight) {
+                        weightOfTime = weight;
+                        candidate = time;
+                    }
                 }
             }
 

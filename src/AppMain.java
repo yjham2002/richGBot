@@ -16,7 +16,7 @@ public class AppMain {
         while(true) {
             System.out.print("USER : ");
             String command = scanner.nextLine();
-            nlpEngine.analyzeAndPrint(command, false);
+            nlpEngine.analyzeAndPrint(command, true);
         }
 
     }

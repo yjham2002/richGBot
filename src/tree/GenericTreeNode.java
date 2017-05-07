@@ -12,6 +12,7 @@ public class GenericTreeNode<T> {
 
     public static final Integer DUMMY_HEAD = -1;
     private T data;
+    private double reserveData;
     private List<GenericTreeNode<T>> children;
     private List<GenericTreeNode<T>> parent;
 
@@ -20,6 +21,14 @@ public class GenericTreeNode<T> {
         keySet = new HashSet<T>();
         children = new ArrayList<>();
         parent = new ArrayList<>();
+    }
+
+    public double getReserveData() {
+        return reserveData;
+    }
+
+    public void setReserveData(double reserveData) {
+        this.reserveData = reserveData;
     }
 
     public HashSet<T> getKeySet() {

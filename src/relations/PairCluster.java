@@ -21,6 +21,7 @@ public class PairCluster extends HashSet<TypedPair> {
     private String csv = "";
     private String csvUnique = "";
     private String tag = "";
+    private double divisionMean = 0.0;
 
     public boolean equals(PairCluster pairCluster){
         if(this.list.size() != pairCluster.list.size()) return false;
@@ -50,12 +51,15 @@ public class PairCluster extends HashSet<TypedPair> {
             list.add(pair);
             this.csv += pair.getFirst();
             this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";
+            this.divisionMean += (double)pair.getDivisionKey();
             if(i + 1 < pairs.size()) {
                 this.csv += ",";
                 this.csvUnique += ",";
             }
             this.add(pair);
         }
+
+        this.divisionMean /= (double)pairs.size();
     }
 
     public PairCluster(String tag, List<TypedPair> pairs, int uniqueKey){
@@ -86,16 +90,23 @@ public class PairCluster extends HashSet<TypedPair> {
             list.add(pair);
             this.csv += pair.getFirst();
             this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";
+            this.divisionMean += (double)pair.getDivisionKey();
             if(i + 1 < pairs.length) {
                 this.csv += ",";
                 this.csvUnique += ",";
             }
             this.add(pair);
         }
+
+        this.divisionMean /= (double)pairs.length;
     }
 
     public int getUniqueKey() {
         return uniqueKey;
+    }
+
+    public double getDivisionMean() {
+        return divisionMean;
     }
 
     public void setUniqueKey(int uniqueKey) {
