@@ -391,10 +391,40 @@ public class LinkageFactory {
             }
         }
 
-        // 동사 기준 링킹
+        if(vIdx.size() == 0 && soIdx.size() == 0){
+            System.out.println("INFO - Nothing to link [Forwarding Simply-Linked Set]");
+            for(int m = 0; m < cores.size(); m++){
+                if(m > 0) retVal.connect(m - 1, m);
+            }
+        }else if(vIdx.size() > 0 && soIdx.size() == 0){
+            System.out.println("INFO - Nothing to link [Forwarding Verb-Multi-Root Set]");
 
-        if(vIdx.size() == 0){ // 동사 혹은 형용사가 없는 경우 - 의문문 / 홑단어
+            for (int i = 0; i < vIdx.size(); i++) { // 동사만으로 구성된 문장으로, 수식어만을 링킹하여 전달
+
+                double weight = 0;
+                int candidate = -1;
+
+                Pair<String, String> verb = cores.get(vIdx.get(i));
+
+                // 부사와 동사 연결
+                for (int j = 0; j < aIdx.size(); j++) {
+                    double currentWofAV = base.getWeightOf(cores.get(aIdx.get(j)).getFirst(), verb.getFirst()) + (((double) sD - (double) Math.abs(aIdx.get(j) - vIdx.get(i))) / (double) sD);
+                    if (weight < currentWofAV) {
+                        weight = currentWofAV;
+                        candidate = aIdx.get(j);
+                    }
+                }
+
+                // 아크 생성
+                if (candidate != -1) {
+                    retVal.connect(vIdx.get(i), candidate);
+                }else{
+                    retVal.connect(vIdx.get(i), vIdx.get(i));
+                }
+            }
+
         }else {
+
             for (int i = 0; i < vIdx.size(); i++) {
                 double weight = 0;
                 int candidate = -1;
@@ -440,9 +470,10 @@ public class LinkageFactory {
                 // 주어와 동사 연결
                 for (int j = 0; j < sIdx.size(); j++) { // TODO Parallel
                     double prob = 1.0;
-                    if(sIdx.get(j) - vIdx.get(i) > 0) prob = (((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD);
+                    if (sIdx.get(j) - vIdx.get(i) > 0)
+                        prob = (((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD);
                     double currentWofAV = base.getWeightOf(cores.get(sIdx.get(j)).getFirst(), verb.getFirst()) + ((((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD) * prob);
-                    if(sIdx.get(j) > vIdx.get(i)) currentWofAV /= 2.0;
+                    if (sIdx.get(j) > vIdx.get(i)) currentWofAV /= 2.0;
                     if (weight < currentWofAV) {
                         weight = currentWofAV;
                         candidate = sIdx.get(j);
@@ -455,6 +486,7 @@ public class LinkageFactory {
                 }
 
             }
+
         }
 
         return retVal;
@@ -541,10 +573,13 @@ public class LinkageFactory {
         // PATTERN DETECTING END
 
         String cleanedSerial = KoreanUtil.eliminateMeaningLess(serialWords);
-        if(staticBase.containsKey(cleanedSerial)){
+        if(staticBase.containsKey(cleanedSerial) && SIMILARITY_MODE){
             String intent = staticBase.get(cleanedSerial).keySet().iterator().next();
-            System.out.println(staticResponser.talk(intent, temporaryMemory));
-            responses.add(staticResponser.talk(intent, temporaryMemory));
+
+            if(SIMILARITY_MODE) {
+                System.out.println(staticResponser.talk(intent, temporaryMemory));
+                responses.add(staticResponser.talk(intent, temporaryMemory));
+            }
 
             linkage.setArc(null);
             linkage.setInstantResponses(responses);

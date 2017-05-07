@@ -131,8 +131,6 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
 
         //  멋진 세호는 맛있는 밥과 반찬을 빠르게 먹고 토했다 그리고 잘생긴 현수는 잠을 잤다.
 
-            // TODO 추상 구문 트리에 대해 방향성을 가진 N-ary 트리로 링크해야 함
-
             HashMap<String, GenericTreeNode<PairCluster>> nodeStorage = new HashMap<>();
             List<GenericTreeNode<PairCluster>> roots = new ArrayList<>();
 
@@ -145,12 +143,17 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
                 }
 
                 if(arc.containsKey(i)){
-                    for(Integer l : arc.get(i)) {
-                        if(clusters.containsKey(l)) {
-                            PairCluster link = clusters.get(l);
-                            if(!nodeStorage.containsKey(link.hash())) nodeStorage.put(link.hash(), new GenericTreeNode<>(link));
-                            nodeStorage.get(link.hash()).addChild(nodeStorage.get(cursor.hash()));
+                    if(arc.get(i).size() == 1 && arc.get(i).get(0) == i){
+                        roots.add(nodeStorage.get(cursor.hash()));
+                    }else {
+                        for (Integer l : arc.get(i)) {
+                            if (clusters.containsKey(l)) {
+                                PairCluster link = clusters.get(l);
+                                if (!nodeStorage.containsKey(link.hash()))
+                                    nodeStorage.put(link.hash(), new GenericTreeNode<>(link));
+                                nodeStorage.get(link.hash()).addChild(nodeStorage.get(cursor.hash()));
 
+                            }
                         }
                     }
                 }else {
