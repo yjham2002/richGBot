@@ -10,7 +10,7 @@ import java.util.HashMap;
  * @author 함의진
  * 화행 분석을 수행하기 위한 클래스로, 절대로 정적 멤버를 사용해서는 안됨
  */
-public abstract class SpeechActAnalyser extends HashMap<String, Object>{
+public abstract class SpeechActAnalyser{
 
     private KnowledgeBase base;
     private KnowledgeBase metaBase;

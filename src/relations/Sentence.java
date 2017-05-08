@@ -1,6 +1,7 @@
 package relations;
 
 import analysis.DomainSpecifiedAnalyser;
+import analysis.Intention;
 import analysis.SpeechActAnalyser;
 import tree.GenericTree;
 import tree.GenericTreeNode;
@@ -46,6 +47,8 @@ public class Sentence extends GenericTree<PairCluster>{
 
         init(true);
 
+        List<Intention> intentions = speechAct.execute();
+
         if(printProcess){
             int intentionNo = 1;
 
@@ -69,30 +72,13 @@ public class Sentence extends GenericTree<PairCluster>{
                 printIntentionLn(node);
             }
 
+            System.out.println("------------------------------------------------------------------------------------");
+
             if(timeExpression != null) summarized += "\n" + timeExpression.getExpression() + " :: " + timeExpression.getDateTime();
 
-            System.out.println("------------------------------------------------------------------------------------");
-            System.out.println(" INT/CONF  :: [" + this.speechAct.get(SpeechActAnalyser.INTENTION)
-                    + "] : " + ((double)this.speechAct.get(SpeechActAnalyser.CONFIDENT) * 100.0f) + "%");
-            if(this.speechAct.get(SpeechActAnalyser.TIME) != null) {
-                System.out.println(" TIME      :: " + ((TimeExpression) this.speechAct.get(SpeechActAnalyser.TIME)).getDateTime());
-            }
-            System.out.println(" SUBJECT   :: " + "");//((PairCluster)this.speechAct.get(SpeechActAnalyser.SUBJECT)).toUniqueCSV());
-            System.out.println(" OBJECT    :: " + "");//((PairCluster)this.speechAct.get(SpeechActAnalyser.OBJECT)).toUniqueCSV());
-            System.out.println(" SNT CLASS :: " + this.speechAct.get(SpeechActAnalyser.SENTENCETYPE));
-            System.out.println(" SPEECH    :: " + this.speechAct.get(SpeechActAnalyser.SPEECH));
-            List<PairCluster> pairClusters = (List<PairCluster>)this.speechAct.get(SpeechActAnalyser.VERBAL);
-            System.out.print(" VERBAL    :: ");
-            for(PairCluster cluster : pairClusters) System.out.print(cluster.toUniqueCSV() + " ");
-            System.out.println();
-            System.out.println("------------------------------------------------------------------------------------");
-            System.out.println();
-
-            summarized += "\n" + " INT/CONF  :: [" + this.speechAct.get(SpeechActAnalyser.INTENTION)
-                    + "] : " + ((double)this.speechAct.get(SpeechActAnalyser.CONFIDENT) * 100.0f) + "%";
-            summarized += "\n" + " SPEECH    :: " + this.speechAct.get(SpeechActAnalyser.SPEECH);
-            if(this.speechAct.get(SpeechActAnalyser.TIME) != null) {
-                summarized += "\n" + " TIME      :: " + ((TimeExpression) this.speechAct.get(SpeechActAnalyser.TIME)).getDateTime();
+            int cnt = 1;
+            for(Intention intention : intentions) {
+                summarized += "\n" + " Intention No." + cnt++ + " :: " + intention.toString();
             }
 
         }
@@ -104,7 +90,6 @@ public class Sentence extends GenericTree<PairCluster>{
             this.speechAct = new DomainSpecifiedAnalyser(base, metaBase, this);
         }else{
             // TODO Neural Network needed
-
             this.speechAct = new DomainSpecifiedAnalyser(base, metaBase, this);
         }
 

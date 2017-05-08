@@ -10,8 +10,6 @@ import util.KoreanUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import static relations.LinkageFactory.SUBJECTS;
-
 /**
  * @author 함의진
  * 화행 분석을 수행하기 위한 클래스로 닫힌 도메인 내에서 분석을 수행하며, 설계상 절대로 정적 멤버를 가져서는 안됨
@@ -24,8 +22,6 @@ import static relations.LinkageFactory.SUBJECTS;
 public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
     private Sentence sentence;
-    private PairCluster subject;
-    private PairCluster object;
 
     private boolean generalFact = false;
     private int subCnt = 0;
@@ -34,11 +30,6 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
     private int negatives = 0;
     private int positives = 0;
     private int questions = 0;
-    private String speechAct = SPEECH_ACT_UNDEFINED;
-
-    private int sentenceType;
-    private List<PairCluster> clusters;
-    private double confidence = 0.0d;
 
     private DomainSpecifiedAnalyser(KnowledgeBase base, KnowledgeBase metaBase){
         super(base, metaBase);
@@ -48,36 +39,28 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
         this(base, metaBase);
         this.sentence = sentence;
 
-        // TODO START_POINT
-
-        init();
-
-        this.put(SUBJECT, subject); // 행위의 주체
-        this.put(OBJECT, object); // 행위의 대상
-        this.put(SENTENCETYPE, sentenceType); // 문장의 대략적 종류
-        this.put(TIME, sentence.getTimeExpression()); // 시간 정보 삽입
-        this.put(SPEECH, speechAct); // 화행 분석 결과를 삽입
-        this.put(VERBAL, clusters); // 동사 삽입
-
-        this.put(INTENTION, ""); // 종합적 정리 문장 (위 모든 정보 요약)
-        // TODO 화행에 따라 Intention 또한 변화해야 함
-
-        this.put(CONFIDENT, confidence);
     }
 
-    private void init(){
-        this.clear();
-        clusters = new ArrayList<>();
+    public List<Intention> execute(){
+        List<Intention> list = new ArrayList<>();
+
         for(GenericTreeNode<PairCluster> clusterGenericTreeNode : sentence.getRoot().getChildren()){
-            clusters.add(clusterGenericTreeNode.getData());
+
+            // TODO START_POINT
+
+            String speechAct = SPEECH_ACT_UNDEFINED;
+            PairCluster subject = null;
+            PairCluster object = null;
+            int sentenceType = 0;
+            double confidence = 0.0d;
+
+            Intention intention = new Intention("intentionCode", subject, object, sentenceType, sentence.getTimeExpression(), speechAct, clusterGenericTreeNode.getData(), confidence);
+            list.add(intention);
+
             traverseAndCount(clusterGenericTreeNode);
         }
 
-        speechAct = SPEECH_ACT_UNDEFINED;
-        subject = null;
-        object = null;
-        sentenceType = 0;
-        confidence = 0.0d;
+        return list;
     }
 
     public void traverseAndCount(GenericTreeNode<PairCluster> cluster){
