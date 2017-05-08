@@ -26,6 +26,16 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
     private Sentence sentence;
     private PairCluster subject;
     private PairCluster object;
+
+    private boolean generalFact = false;
+    private int subCnt = 0;
+    private int objCnt = 0;
+    private int verbs = 0;
+    private int negatives = 0;
+    private int positives = 0;
+    private int questions = 0;
+    private String speechAct = SPEECH_ACT_UNDEFINED;
+
     private int sentenceType;
     private List<PairCluster> clusters;
     private double confidence = 0.0d;
@@ -41,8 +51,6 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
         // TODO START_POINT
 
         init();
-
-        String speechAct = getSpeechAct();
 
         this.put(SUBJECT, subject); // 행위의 주체
         this.put(OBJECT, object); // 행위의 대상
@@ -62,16 +70,38 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
         clusters = new ArrayList<>();
         for(GenericTreeNode<PairCluster> clusterGenericTreeNode : sentence.getRoot().getChildren()){
             clusters.add(clusterGenericTreeNode.getData());
+            traverseAndCount(clusterGenericTreeNode);
         }
 
+        speechAct = SPEECH_ACT_UNDEFINED;
         subject = null;
         object = null;
         sentenceType = 0;
         confidence = 0.0d;
     }
 
-    private String getSpeechAct(){
-        return SPEECH_ACT_UNDEFINED;
+    public void traverseAndCount(GenericTreeNode<PairCluster> cluster){
+        traverseAndCountRecur(cluster);
+    }
+
+    private void traverseAndCountRecur(GenericTreeNode<PairCluster> cluster){
+        if(cluster == null) return;
+
+        switch (cluster.getData().getType()){
+            case TypedPair.TYPE_SUBJECT: subCnt++; break;
+            case TypedPair.TYPE_OBJECT: objCnt++; break;
+            case TypedPair.TYPE_QUESTION: questions++; break;
+            default: break;
+        }
+
+        if(KoreanUtil.isVerbal(cluster.getData().getTag())) {
+            // TODO START_POINT (인텐션 개수만큼 동적인 인텐션 확장이 필요)
+            verbs++;
+        }
+
+        for(GenericTreeNode<PairCluster> unit : cluster.getChildren()){
+            traverseAndCountRecur(unit);
+        }
     }
 
 //    private int getRoughType() {
@@ -89,6 +119,101 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 //                questions++;
 //            }
 //        }
+//
+//        if(questions > 0) return SENTENCE_QUESTION;
+//
+//        return SENTENCE_ORDER;
+//    }
+
+
+//    public void analyze(List<TypedPair> know, int what){
+//
+//        TypedPair objFirst = know.get(0);
+//        TypedPair objLast = know.get(1);
+//        if(know.get(0).isLinked()){ // TEMPORARY
+//            PairCluster pairCluster = new PairCluster("NNG", expandLinkage(know.get(0), arc));
+//            objFirst = pairCluster.toCSVTypedPair();
+//        }
+//        if(know.get(1).isLinked()){ // TEMPORARY
+//            PairCluster pairCluster = new PairCluster("NNG", expandLinkage(know.get(1), arc));
+//            objLast = pairCluster.toCSVTypedPair();
+//        }
+//
+//        String classified = "";
+//
+//        switch(what){
+//            case SENTENCE_PLAIN: classified = "[평서문] >> "; break;
+//            case SENTENCE_ORDER: classified = "[명령문] >> "; break;
+//            case SENTENCE_QUESTION: classified = "[의문문] >> "; break;
+//            case SENTENCE_META: classified = "[은유형 대입문] >> "; break;
+//            case SENTENCE_METAPHORICAL_QUESTION: classified = "[은유형 의문문] >> "; break;
+//            default: break;
+//        }
+//        System.out.print(classified);
+//
+//        switch(what){
+//            case LinkageFactory.SENTENCE_PLAIN: case LinkageFactory.SENTENCE_ORDER: case LinkageFactory.SENTENCE_QUESTION:
+//                System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+//                instantRes.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                if (objLast.getType() == TypedPair.TYPE_ADV) {
+////                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                } else if (objLast.getType() == TypedPair.TYPE_SUBJECT) {
+////                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                } else if (objLast.getType() == TypedPair.TYPE_QUESTION) {
+////                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                } else if (objLast.getType() == TypedPair.TYPE_ADJ) {
+////                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                } else if (objLast.getType() == TypedPair.TYPE_VADJ) {
+////                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                } else {
+////                    System.out.println(LinkageFactory.MY_NAME + " : [" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                    responses.add("[" + objFirst.getFirst() + "]-[" + objLast.getFirst() + "] [FREQ : " + base.doYouKnow(know) + "]");
+////                }
+//                break;
+//            case LinkageFactory.SENTENCE_META:
+//                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
+//                    System.out.println(LinkageFactory.MY_NAME + " : [종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
+//                    instantRes.add("[종속 : " + objLast.getFirst() + "] [주체 :" + objFirst.getFirst() + "] [빈도 : " + metaBase.doYouKnow(know) + "]");
+//                }
+//                break;
+//            case LinkageFactory.SENTENCE_METAPHORICAL_QUESTION:
+//                if (objFirst.getType() == TypedPair.TYPE_METAPHORE) {
+//                    List<String> backTrack = metaBase.getBackTrackingList(objLast.getFirst(), new ArrayList<>());
+//                    System.out.print("\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [");
+//                    String streamStr = "\'" + objLast.getFirst() + "\'에 대한 지식 백트랙킹 : [";
+//                    for(int e = 0; e < backTrack.size(); e++){
+//                        System.out.print(backTrack.get(e));
+//                        streamStr += backTrack.get(e);
+//                        if(e < backTrack.size() - 1) {
+//                            System.out.print(", ");
+//                            streamStr += ", ";
+//                        }
+//                        else {
+//                            System.out.print("]\n");
+//                            streamStr += "]\n";
+//                        }
+//                    }
+//                    instantRes.add(streamStr);
+//                }
+//                break;
+//            default: break;
+//        }
+//
+//        if(what != LinkageFactory.SENTENCE_META && what != LinkageFactory.SENTENCE_METAPHORICAL_QUESTION) {
+//            base.learn(know);
+//        }
+//        else if(what == LinkageFactory.SENTENCE_METAPHORICAL_QUESTION){
+//            // DO NOTHING
+//        }
+//        else{
+//            metaBase.learn(know);
+//        }
+//
 //    }
 
 }
