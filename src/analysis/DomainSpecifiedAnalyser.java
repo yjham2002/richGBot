@@ -3,6 +3,14 @@ package analysis;
 import relations.KnowledgeBase;
 import relations.PairCluster;
 import relations.Sentence;
+import relations.TypedPair;
+import tree.GenericTreeNode;
+import util.KoreanUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static relations.LinkageFactory.SUBJECTS;
 
 /**
  * @author 함의진
@@ -15,28 +23,72 @@ import relations.Sentence;
  */
 public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
+    private Sentence sentence;
+    private PairCluster subject;
+    private PairCluster object;
+    private int sentenceType;
+    private List<PairCluster> clusters;
+    private double confidence = 0.0d;
+
     private DomainSpecifiedAnalyser(KnowledgeBase base, KnowledgeBase metaBase){
         super(base, metaBase);
     }
 
     public DomainSpecifiedAnalyser(KnowledgeBase base, KnowledgeBase metaBase, Sentence sentence){
         this(base, metaBase);
-
-        this.clear();
+        this.sentence = sentence;
 
         // TODO START_POINT
 
-        this.put(SUBJECT, ""); // 행위의 주체
-        this.put(OBJECT, ""); // 행위의 대상
-        this.put(SENTENCETYPE, ""); // 문장의 대략적 종류
-        this.put(TIME, sentence.getTimeExpression()); // 시간 정보 삽입
-        this.put(SPEECH, SPEECH_ACT_UNDEFINED); // 화행 분석 결과를 삽입
-        this.put(VERBAL, ""); // 동사 삽입
+        init();
 
-        this.put(INTENTION, ""); // 종합적 정리 문장 (아래 모든 정보 요약)
+        String speechAct = getSpeechAct();
+
+        this.put(SUBJECT, subject); // 행위의 주체
+        this.put(OBJECT, object); // 행위의 대상
+        this.put(SENTENCETYPE, sentenceType); // 문장의 대략적 종류
+        this.put(TIME, sentence.getTimeExpression()); // 시간 정보 삽입
+        this.put(SPEECH, speechAct); // 화행 분석 결과를 삽입
+        this.put(VERBAL, clusters); // 동사 삽입
+
+        this.put(INTENTION, ""); // 종합적 정리 문장 (위 모든 정보 요약)
         // TODO 화행에 따라 Intention 또한 변화해야 함
 
-        this.put(CONFIDENT, 0.5d);
+        this.put(CONFIDENT, confidence);
     }
+
+    private void init(){
+        this.clear();
+        clusters = new ArrayList<>();
+        for(GenericTreeNode<PairCluster> clusterGenericTreeNode : sentence.getRoot().getChildren()){
+            clusters.add(clusterGenericTreeNode.getData());
+        }
+
+        subject = null;
+        object = null;
+        sentenceType = 0;
+        confidence = 0.0d;
+    }
+
+    private String getSpeechAct(){
+        return SPEECH_ACT_UNDEFINED;
+    }
+
+//    private int getRoughType() {
+//        int questions = 0;
+//        for (int i = 0; i < words.size(); i++) {
+//            TypedPair pair = words.get(i); // TODO 문장 구분
+//            if (pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
+//        }
+//
+//        for (int i = 0; i < words.size(); i++) {
+//            TypedPair pair = words.get(i); // TODO 문장 구분
+//            if (pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
+//                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
+//            } else if (pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
+//                questions++;
+//            }
+//        }
+//    }
 
 }

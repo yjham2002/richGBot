@@ -6,6 +6,10 @@ import tree.GenericTree;
 import tree.GenericTreeNode;
 import util.TimeExpression;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 import static analysis.SpeechActAnalyser.SPEECH_ACT_UNDEFINED;
 
 /**
@@ -45,8 +49,18 @@ public class Sentence extends GenericTree<PairCluster>{
         if(printProcess){
             int intentionNo = 1;
 
+            List<TypedPair> mergedList = PairCluster.nodeToMergedPairList(root.getChildren());
+
+            // Verb-Verb 링키지의 경우, 목적성을 띈 동사구로서 동사의 목적격 구가 됨
+
             System.out.println("------------------------------------------------------------------------------------");
-            System.out.println(" VERBS(N)  :: " + root.getChildren().size());
+            System.out.print(" VERBS(N)  :: " + root.getChildren().size() + " :: ");
+
+            for(TypedPair pair : mergedList) {
+                System.out.print(pair.getFirst() + "[" +  pair.tenseToString() + "] ");
+            }
+
+            System.out.println();
             System.out.println("------------------------------------------------------------------------------------");
             System.out.println(" [ ATOMICS ]");
 
@@ -60,15 +74,27 @@ public class Sentence extends GenericTree<PairCluster>{
             System.out.println("------------------------------------------------------------------------------------");
             System.out.println(" INT/CONF  :: [" + this.speechAct.get(SpeechActAnalyser.INTENTION)
                     + "] : " + ((double)this.speechAct.get(SpeechActAnalyser.CONFIDENT) * 100.0f) + "%");
-            if(this.speechAct.get(SpeechActAnalyser.TIME) != null)
-                System.out.println(" TIME      :: " + ((TimeExpression)this.speechAct.get(SpeechActAnalyser.TIME)).getDateTime());
-            System.out.println(" SUBJECT   :: " + this.speechAct.get(SpeechActAnalyser.SUBJECT));
-            System.out.println(" OBJECT    :: " + this.speechAct.get(SpeechActAnalyser.OBJECT));
-            System.out.println(" SENTENCE  :: " + this.speechAct.get(SpeechActAnalyser.SENTENCETYPE));
+            if(this.speechAct.get(SpeechActAnalyser.TIME) != null) {
+                System.out.println(" TIME      :: " + ((TimeExpression) this.speechAct.get(SpeechActAnalyser.TIME)).getDateTime());
+            }
+            System.out.println(" SUBJECT   :: " + "");//((PairCluster)this.speechAct.get(SpeechActAnalyser.SUBJECT)).toUniqueCSV());
+            System.out.println(" OBJECT    :: " + "");//((PairCluster)this.speechAct.get(SpeechActAnalyser.OBJECT)).toUniqueCSV());
+            System.out.println(" SNT CLASS :: " + this.speechAct.get(SpeechActAnalyser.SENTENCETYPE));
             System.out.println(" SPEECH    :: " + this.speechAct.get(SpeechActAnalyser.SPEECH));
-            System.out.println(" VERBAL    :: " + this.speechAct.get(SpeechActAnalyser.VERBAL));
+            List<PairCluster> pairClusters = (List<PairCluster>)this.speechAct.get(SpeechActAnalyser.VERBAL);
+            System.out.print(" VERBAL    :: ");
+            for(PairCluster cluster : pairClusters) System.out.print(cluster.toUniqueCSV() + " ");
+            System.out.println();
             System.out.println("------------------------------------------------------------------------------------");
             System.out.println();
+
+            summarized += "\n" + " INT/CONF  :: [" + this.speechAct.get(SpeechActAnalyser.INTENTION)
+                    + "] : " + ((double)this.speechAct.get(SpeechActAnalyser.CONFIDENT) * 100.0f) + "%";
+            summarized += "\n" + " SPEECH    :: " + this.speechAct.get(SpeechActAnalyser.SPEECH);
+            if(this.speechAct.get(SpeechActAnalyser.TIME) != null) {
+                summarized += "\n" + " TIME      :: " + ((TimeExpression) this.speechAct.get(SpeechActAnalyser.TIME)).getDateTime();
+            }
+
         }
 
     }
@@ -100,25 +126,6 @@ public class Sentence extends GenericTree<PairCluster>{
         this.summarized = summarized;
     }
 
-    /**
-     *
-     * 본 메소드는 Sentence에 특화시켜 재작성이 필요함
-     */
-//    private int getRoughType(){
-//        int questions = 0;
-//        for(int i = 0; i < words.size() ; i++) {
-//            TypedPair pair = words.get(i); // TODO 문장 구분
-//            if(pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
-//        }
-//
-//        for(int i = 0; i < words.size() ; i++) {
-//            TypedPair pair = words.get(i); // TODO 문장 구분
-//            if(pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
-//                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
-//            }else if(pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))){
-//                questions++;
-//            }
-//        }
 //
 //        if(questions > 0) return SENTENCE_QUESTION;
 //
@@ -142,11 +149,11 @@ public class Sentence extends GenericTree<PairCluster>{
 //        String classified = "";
 //
 //        switch(what){
-//            case LinkageFactory.SENTENCE_PLAIN: classified = "[평서문] >> "; break;
-//            case LinkageFactory.SENTENCE_ORDER: classified = "[명령문] >> "; break;
-//            case LinkageFactory.SENTENCE_QUESTION: classified = "[의문문] >> "; break;
-//            case LinkageFactory.SENTENCE_META: classified = "[은유형 대입문] >> "; break;
-//            case LinkageFactory.SENTENCE_METAPHORICAL_QUESTION: classified = "[은유형 의문문] >> "; break;
+//            case SENTENCE_PLAIN: classified = "[평서문] >> "; break;
+//            case SENTENCE_ORDER: classified = "[명령문] >> "; break;
+//            case SENTENCE_QUESTION: classified = "[의문문] >> "; break;
+//            case SENTENCE_META: classified = "[은유형 대입문] >> "; break;
+//            case SENTENCE_METAPHORICAL_QUESTION: classified = "[은유형 의문문] >> "; break;
 //            default: break;
 //        }
 //        System.out.print(classified);
@@ -225,8 +232,8 @@ public class Sentence extends GenericTree<PairCluster>{
 
     private void printIntention(GenericTreeNode<PairCluster> cluster){
         if(cluster == null) return;
-        System.out.print(cluster.getData().toUniqueCSV() + "->");
-        summarized += cluster.getData().toUniqueCSV() + "->";
+        System.out.print(cluster.getData().toUniqueCSV() + ":" + cluster.getData().getTag() + ":[" + cluster.getData().getType() + "]->");
+        summarized += cluster.getData().toUniqueCSV() + ":" + cluster.getData().getTag() + ":[" + cluster.getData().getType() + "]->";
         for(GenericTreeNode<PairCluster> unit : cluster.getChildren()){
             printIntention(unit);
         }

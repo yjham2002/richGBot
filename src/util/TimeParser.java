@@ -152,7 +152,7 @@ public class TimeParser extends ArrayList<Pair<Pair<Integer, Integer>, Date>> {
                         }
                     }
                 }
-                else if(isStandalone(pair)) {
+                else if(isStandalone(pair)) { // TODO 절대 시간과 연결
                     int unit = TimeUnit.toCalendarType(TIME_DICTIONARY.get(pair.getFirst()).getMeaning());
                     int value = TIME_DICTIONARY.get(pair.getFirst()).getDiff();
 

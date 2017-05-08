@@ -1,6 +1,7 @@
 package relations;
 
 import kr.co.shineware.util.common.model.Pair;
+import tree.GenericTreeNode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class PairCluster extends HashSet<TypedPair> {
     private String csv = "";
     private String csvUnique = "";
     private String tag = "";
+    private int type = TypedPair.TYPE_DEFAULT;
     private double divisionMean = 0.0;
 
     public boolean equals(PairCluster pairCluster){
@@ -41,9 +43,10 @@ public class PairCluster extends HashSet<TypedPair> {
         return hash;
     }
 
-    public PairCluster(String tag, List<TypedPair> pairs){
+    public PairCluster(String tag, int type, List<TypedPair> pairs){
         super();
 
+        this.type = type;
         this.tag = tag;
         this.list = new ArrayList<>();
         for(int i = 0; i < pairs.size(); i++) {
@@ -62,8 +65,8 @@ public class PairCluster extends HashSet<TypedPair> {
         this.divisionMean /= (double)pairs.size();
     }
 
-    public PairCluster(String tag, List<TypedPair> pairs, int uniqueKey){
-        this(tag, pairs);
+    public PairCluster(String tag, int type, List<TypedPair> pairs, int uniqueKey){
+        this(tag, type, pairs);
         this.uniqueKey = uniqueKey;
     }
 
@@ -80,9 +83,18 @@ public class PairCluster extends HashSet<TypedPair> {
         return cluster.tag.equals(PairCluster.TAG_ROOT);
     }
 
-    public PairCluster(String tag, TypedPair... pairs){
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public PairCluster(String tag, int type, TypedPair... pairs){
         super();
 
+        this.type = type;
         this.tag = tag;
         this.list = new ArrayList<>();
         for(int i = 0; i < pairs.length; i++) {
@@ -99,6 +111,27 @@ public class PairCluster extends HashSet<TypedPair> {
         }
 
         this.divisionMean /= (double)pairs.length;
+    }
+
+    public static List<TypedPair> nodeToMergedPairList(List<GenericTreeNode<PairCluster>> clusters){
+        List<TypedPair> list = new ArrayList<>();
+        for(GenericTreeNode<PairCluster> pair : clusters) list.addAll(pair.getData().toList());
+
+        return list;
+    }
+
+    public static List<TypedPair> toMergedPairList(PairCluster... clusters){
+        List<TypedPair> list = new ArrayList<>();
+        for(PairCluster pair : clusters) list.addAll(pair.toList());
+
+        return list;
+    }
+
+    public static List<TypedPair> toMergedPairList(List<PairCluster> clusters){
+        List<TypedPair> list = new ArrayList<>();
+        for(PairCluster pair : clusters) list.addAll(pair.toList());
+
+        return list;
     }
 
     public int getUniqueKey() {

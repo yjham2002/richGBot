@@ -138,7 +138,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
 
             if(roots.size() > 0) {
                 for (TimeExpression time : timeExpressions) {
-                    double weight = Math.abs(((((double) time.getStart() + (double) time.getEnd())/2.0) - temporaryRoot.getReserveData()));
+                    double weight = Math.abs(((((double) time.getStart() + (double) time.getEnd()) / 2.0) - temporaryRoot.getReserveData()));
                     if (weightOfTime > weight) {
                         weightOfTime = weight;
                         candidate = time;
@@ -221,7 +221,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
     public PairCluster getTypedPairToExpandedPairCluster(TypedPair pair, int uniqueKey){
         PairCluster pc = pair.toPairCluster();
         if(pair.isLinked()){ // TEMPORARY
-            pc = new PairCluster("NNG", expandLinkage(pair, arc), uniqueKey);
+            pc = new PairCluster("NNG", pair.getType(), expandLinkage(pair, arc), uniqueKey);
         }
         return pc;
     }

@@ -18,6 +18,11 @@ public class KoreanUtil {
         return name+seletedValue;
     }
 
+    public static boolean isVerbal(String tag){
+        if(tag.equals("VV") || tag.equals("VA")) return true;
+        return false;
+    }
+
     public static boolean isConcatHead(Pair<String, String> pair){
         if(pair.getFirst().equals("게") && pair.getSecond().equals("EC")) return true;
         return false;
@@ -64,6 +69,11 @@ public class KoreanUtil {
         return false;
     }
 
+    public static boolean isPastTense(Pair<String, String> pair){
+        if(pair.getSecond().equals("EP") && (pair.getFirst().equals("었") || pair.getFirst().equals("았"))) return true;
+        return false;
+    }
+
     public static boolean isVerbalDeriver(Pair<String, String> pair){
         if(pair.getSecond().equals("XSV")) return true;
         return false;
@@ -71,6 +81,11 @@ public class KoreanUtil {
 
     public static boolean isDeriver(Pair<String, String> pair){
         if(pair.getSecond().equals("XSA") || pair.getSecond().equals("XSV") || pair.getSecond().equals("XSN") || pair.getSecond().equals("XSB")) return true;
+        return false;
+    }
+
+    public static boolean isPurposalVerb(Pair<String, String> pair){
+        if((pair.getFirst().equals("러") || pair.getFirst().equals("으러")) && pair.getSecond().equals("EC")) return true;
         return false;
     }
 

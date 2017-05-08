@@ -20,7 +20,13 @@ public class TypedPair extends Pair<String, String> {
     public static final int TYPE_VADJ    = 6; // 형용사 - 관형형전성어미에 의한 동사의 형용사화
     public static final int TYPE_METAPHORE    = 7; // 형용사 - 관형형전성어미에 의한 동사의 형용사화
 
+    public static final int TENSE_UNDEFINED = -1;
+    public static final int TENSE_PAST = 1;
+    public static final int TENSE_PRESENT = 0;
+
     private int type = TYPE_DEFAULT;
+    private int tense = TENSE_UNDEFINED;
+    private boolean purposal = false;
     private boolean linked = false;
 
     private int divisionKey = DIVISION_NONE;
@@ -40,12 +46,35 @@ public class TypedPair extends Pair<String, String> {
         this.type = type;
     }
 
+    public boolean isPurposal() {
+        return purposal;
+    }
+
+    public void setPurposal(boolean purposal) {
+        this.purposal = purposal;
+    }
+
+    public String tenseToString(){
+        if(tense == TENSE_UNDEFINED) return "TENSE_UNDEFINED";
+        else if(tense == TENSE_PRESENT) return "TENSE_PRESENT";
+        else if(tense == TENSE_PAST) return "TENSE_PAST";
+        else return "";
+    }
+
     public ParallelLinkage getParallelLinkage() {
         return parallelLinkage;
     }
 
     public PairCluster toPairCluster(){
-        return new PairCluster(this.getSecond(), this);
+        return new PairCluster(this.getSecond(), type, this);
+    }
+
+    public int getTense() {
+        return tense;
+    }
+
+    public void setTense(int tense) {
+        this.tense = tense;
     }
 
     public void setParallelLinkage(ParallelLinkage parallelLinkage) {

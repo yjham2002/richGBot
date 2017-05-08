@@ -40,6 +40,7 @@ public class LinkageFactory {
     public static final Set<String> OBJECTS= new HashSet<>();
     public static final Set<String> ADJECTIVES= new HashSet<>();
     public static final Set<String> ADVERBS = new HashSet<>();
+    public static final Set<String> ADVERBS_LINK = new HashSet<>();
     public static final Set<String> DETERMINERS = new HashSet<>();
     public static final Set<String> BASES = new HashSet<>();
 
@@ -88,6 +89,8 @@ public class LinkageFactory {
         staticResponser = new StaticResponser(dbManager);
 
         for(String s : new String[]{"NP", "NN", "NNG", "NNP"}) SUBJECTS.add(s);
+        for(String s : new String[]{"MAG"}) ADVERBS.add(s);
+        for(String s : new String[]{"MAJ"}) ADVERBS_LINK.add(s);
         for(String s : new String[]{"NP", "NN", "NNG", "NA", "SL", "SH", "SW", "NF", "SN", "NA"}) OBJECTS.add(s);
         for(String s : new String[]{"NNB"}) DEPNOUN.add(s);
         for(String s : new String[]{"VV"}) VERBS.add(s);
@@ -233,11 +236,16 @@ public class LinkageFactory {
 
             Pair<String, String> pair = cores.get(i);
 
+            if(ADVERBS.contains(pair.getSecond())) {
+                cores.get(i).setType(TypedPair.TYPE_ADJ);
+                aIdx.add(i);
+            }
+
             if(VERBS.contains(pair.getSecond()) || ADJECTIVES.contains(pair.getSecond())) { // 동사 혹은 형용사로 현재 페어가 입력될 수 있는 경우
                 if(cores.size() > i + 1 && KoreanUtil.isDeterminingHead(cores.get(i + 1)) && ADJECTIVES.contains(pair.getSecond())) {
                     cores.get(i).setType(TypedPair.TYPE_ADJ);
                     adjIdx.add(i);
-                }else if(cores.size() > i + 1 && KoreanUtil.isDeterminingHead(cores.get(i + 1)) && VERBS.contains(pair.getSecond())){
+                }else if(cores.size() > i + 1 && KoreanUtil.isDeterminingHead(cores.get(i + 1)) && VERBS.contains(pair.getSecond())) {
                     cores.get(i).setType(TypedPair.TYPE_VADJ);
                     adjIdx.add(i);
                 }else {
@@ -246,6 +254,8 @@ public class LinkageFactory {
                         aIdx.add(i);
                     } else {
                         cores.get(i).setType(TypedPair.TYPE_VERB);
+                        if(cores.size() > i + 1 && KoreanUtil.isPastTense(cores.get(i + 1))) cores.get(i).setTense(TypedPair.TENSE_PAST);
+                        if(cores.size() > i + 1 && KoreanUtil.isPurposalVerb(cores.get(i + 1))) cores.get(i).setPurposal(true);
                         vIdx.add(i);
                     }
                 }
@@ -275,12 +285,14 @@ public class LinkageFactory {
                         typedPair.setFirst(cores.get(i).getFirst() + cores.get(i + 1).getFirst());
                         if (KoreanUtil.isVerbalDeriver(cores.get(i + 1))) {
                             typedPair.setSecond("VV");
+                            typedPair.setTense(TypedPair.TENSE_PRESENT);
                             cores.remove(i);
                             cores.remove(i);
                             cores.add(i, typedPair);
                             i--;
                         } else if (KoreanUtil.isAdjectiveDeriver(cores.get(i + 1))) {
                             typedPair.setSecond("VA");
+                            typedPair.setTense(TypedPair.TENSE_PRESENT);
                             cores.remove(i);
                             cores.remove(i);
                             cores.add(i, typedPair);
@@ -324,7 +336,7 @@ public class LinkageFactory {
             int candidate = -1;
             int dependantNoun = -1;
 
-            Pair<String, String> adj = cores.get(adjIdx.get(k));
+            TypedPair adj = cores.get(adjIdx.get(k));
 
             for (int j = 0; j < soIdx.size(); j++) { // 본 루프에서는 형용사의 접미사로서 관형형전성어미가 접속되어 'ㄴ' 까지를 인덱스로 간주, 해당 형용사에 대해 우측을 검사할 때는 관형형전성어미의 인덱스를 기준으로 가중치를 계산
                 double currentWofOJ = 0;
@@ -366,7 +378,7 @@ public class LinkageFactory {
             double weight = 0;
             int candidate = -1;
 
-            Pair<String, String> meta = cores.get(mIdx.get(i));
+            TypedPair meta = cores.get(mIdx.get(i));
 
             // 주체적 명사와 종속적 명사 연결
             for (int j = 0; j < sIdx.size(); j++) {
@@ -396,7 +408,7 @@ public class LinkageFactory {
                 double weight = 0;
                 int candidate = -1;
 
-                Pair<String, String> verb = cores.get(vIdx.get(i));
+                TypedPair verb = cores.get(vIdx.get(i));
 
                 // 부사와 동사 연결
                 for (int j = 0; j < aIdx.size(); j++) {
@@ -417,11 +429,30 @@ public class LinkageFactory {
 
         }else {
 
+            HashMap<Integer, Integer> purposalMatched = new HashMap<>();
+
             for (int i = 0; i < vIdx.size(); i++) {
                 double weight = 0;
                 int candidate = -1;
 
-                Pair<String, String> verb = cores.get(vIdx.get(i));
+                TypedPair verb = cores.get(vIdx.get(i));
+
+                if(verb.isPurposal()){
+                    int pCandidate = -1;
+                    int dist_left = Integer.MAX_VALUE;
+                    int dist_right = Integer.MAX_VALUE;
+
+                    if(i - 1 >= 0) dist_left = Math.abs(vIdx.get(i) - vIdx.get(i - 1));
+                    if(i + 1 < vIdx.size()) dist_right = Math.abs(vIdx.get(i) - vIdx.get(i + 1));
+
+                    if(dist_left == Integer.MAX_VALUE && dist_right == Integer.MAX_VALUE) continue;
+                    else if(dist_left >= dist_right) pCandidate = vIdx.get(i + 1);
+                    else pCandidate = vIdx.get(i - 1);
+
+                    purposalMatched.put(pCandidate, vIdx.get(i));
+
+                    retVal.connect(pCandidate, vIdx.get(i));
+                }
 
                 // 목적어와 동사 연결
                 for (int j = 0; j < oIdx.size(); j++) { // TODO Parallel
@@ -431,6 +462,9 @@ public class LinkageFactory {
                         candidate = oIdx.get(j);
                     }
                 }
+
+                if(candidate > vIdx.get(i) && verb.isPurposal()) candidate = -1;
+                if(purposalMatched.containsKey(vIdx.get(i)) && candidate < purposalMatched.get(vIdx.get(i))) candidate = -1;
 
                 // 아크 생성
                 if (candidate != -1) {
@@ -460,7 +494,8 @@ public class LinkageFactory {
                 candidate = -1;
 
                 // 주어와 동사 연결
-                for (int j = 0; j < sIdx.size(); j++) { // TODO Parallel
+                for (int j = 0; j < sIdx.size() && !purposalMatched.containsKey(vIdx.get(i)); j++) { // TODO Parallel
+
                     double prob = 1.0;
                     if (sIdx.get(j) - vIdx.get(i) > 0)
                         prob = (((double) sD - (double) Math.abs(sIdx.get(j) - vIdx.get(i))) / (double) sD);

@@ -29,7 +29,8 @@ import java.util.List;
  * Created by a on 2017-04-20.
  */
 public class AppSlackDetectorMain {
-    private static String slackAuth = "xoxb-168613915715-aS76Vm0aULjwEaoM5mtuIyfD";
+    private static String slackAuth = "xoxb-168613915715-rgF7hXxLwG74nRfCr8M6ZRMi";
+    private static final String helloString = "Richware NLP Engine has been started - Cached Successfully via [Slack]";
 
     public static void main(String[] args) {
 
@@ -40,6 +41,9 @@ public class AppSlackDetectorMain {
             session.connect();
 
             SlackChannel channel_general = session.findChannelByName("general"); //make sure bot is a member of the channel.
+
+            session.sendMessage(channel_general, helloString);
+
             SlackMessagePostedListener listener = new SlackMessagePostedListener() {
                 @Override
                 public void onEvent(SlackMessagePosted slackMessagePosted, SlackSession slackSession) {
