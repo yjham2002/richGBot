@@ -21,8 +21,6 @@ import java.util.List;
  */
 public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
-    private Sentence sentence;
-
     private boolean generalFact = false;
     private int subCnt = 0;
     private int objCnt = 0;
@@ -54,36 +52,91 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
             int sentenceType = 0;
             double confidence = 0.0d;
 
-            Intention intention = new Intention("intentionCode", subject, object, sentenceType, sentence.getTimeExpression(), speechAct, clusterGenericTreeNode.getData(), confidence);
-            list.add(intention);
+            Intention intention = new Intention();
 
-            traverseAndCount(clusterGenericTreeNode);
+            intention.setTimeExpression(sentence.getTimeExpression());
+
+            traverseAndCount(clusterGenericTreeNode, intention);
+
+            if(intention.isAllSet() || intention.isRoughlySet()){
+                intention.setSentenceType(SENTENCE_PLAIN);
+                intention.setSpeechAct(SPEECH_ACT_FACT);
+            }else if(intention.isMetaSet() && intention.isQuestionSet()) {
+                intention.setSentenceType(SENTENCE_QUESTION);
+                intention.setSpeechAct(SPEECH_ACT_ASK_REF);
+            }else if(intention.isNoneSubjectSet()) {
+                if(verbs > 0 && intention.getVerb().getTense() == TypedPair.TENSE_PAST){
+                    intention.setSentenceType(SENTENCE_PLAIN);
+                    intention.setSpeechAct(SPEECH_ACT_FACT);
+                }else {
+                    intention.setSentenceType(SENTENCE_ORDER);
+                    intention.setSpeechAct(SPEECH_ACT_REQUEST_ACT);
+                }
+            }else if(intention.isIncludesMeta()){
+                intention.setSentenceType(SENTENCE_META);
+                intention.setSpeechAct(SPEECH_ACT_INFORM);
+            }else{
+                intention.setSentenceType(SENTENCE_NONE);
+                intention.setSpeechAct(SPEECH_ACT_UNDEFINED);
+            }
+
+            // Intention 인스턴스의 속성이 완성되지는 않았으나, 도메인 매칭을 위해 대기중인 상태
+            list.add(intention);
+            // 이후, 인텐션 코드를 지정하고 유사성을 검사하며 이를 통해 Confidence를 확정함. 선택적으로, extra를 부여하여 필요데이터를 전송할 수 있음
+
         }
 
         return list;
     }
 
-    public void traverseAndCount(GenericTreeNode<PairCluster> cluster){
-        traverseAndCountRecur(cluster);
+    public void traverseAndCount(GenericTreeNode<PairCluster> cluster, Intention intention){
+        traverseAndCountRecur(cluster, intention);
     }
 
-    private void traverseAndCountRecur(GenericTreeNode<PairCluster> cluster){
+    private void traverseAndCountRecur(GenericTreeNode<PairCluster> cluster, Intention intention){
         if(cluster == null) return;
 
+        // TODO 부사를 분석에서 사용해야 하는지 재검토 필요
+        // TODO START POINT : ClosedPurpose에서 목적성을 가진 닫힌 정보 획득 로직 작성 후 리액터는 이를 요구하는 역할을 해야 함 리액터는 화행에 따라 그 반응을 다르게 해야 함
+        // TODO 또한 센텐스 클래스는 섬머라이즈를 제거하고 리액터와 연결하여 이를 처리해야 함
+        // TODO 인텐션을 받아 처리하는 리액터는 정해진 인텐션 코드(동사나 문장의 흐름에 따라 정해지는 N:1 맵핑 구조)에 따라 정보를 획득하거나 대화를 마친 다음 해당 반응을 사용자에게 재전송함
+        // TODO 미들웨어는 리액터를 상속받아 클로즈드 퍼포즈를 구현하고 맵핑 구조를 기술하여 특정화된 서비스에 이용할 수 있음
+
         switch (cluster.getData().getType()){
-            case TypedPair.TYPE_SUBJECT: subCnt++; break;
-            case TypedPair.TYPE_OBJECT: objCnt++; break;
-            case TypedPair.TYPE_QUESTION: questions++; break;
+            case TypedPair.TYPE_SUBJECT: {
+                intention.setSubject(cluster.getData());
+                subCnt++;
+                break;
+            }
+            case TypedPair.TYPE_OBJECT: {
+                intention.setObject(cluster.getData());
+                objCnt++;
+                break;
+            }
+            case TypedPair.TYPE_METAPHORE: {
+                intention.setObject(cluster.getData());
+                for(GenericTreeNode<PairCluster> pair : cluster.getChildren()){
+                    metaBase.learn(cluster.getData(), pair.getData());
+                }
+
+                intention.setIncludesMeta(true);
+                break;
+            }
+            case TypedPair.TYPE_QUESTION: {
+                intention.setQuestion(cluster.getData());
+                questions++;
+                break;
+            }
             default: break;
         }
 
         if(KoreanUtil.isVerbal(cluster.getData().getTag())) {
-            // TODO START_POINT (인텐션 개수만큼 동적인 인텐션 확장이 필요)
+            intention.setVerb(cluster.getData());
             verbs++;
         }
 
         for(GenericTreeNode<PairCluster> unit : cluster.getChildren()){
-            traverseAndCountRecur(unit);
+            traverseAndCountRecur(unit, intention);
         }
     }
 

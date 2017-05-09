@@ -22,6 +22,7 @@ public class PairCluster extends HashSet<TypedPair> {
     private String csv = "";
     private String csvUnique = "";
     private String tag = "";
+    private int tense = TypedPair.TENSE_UNDEFINED;
     private int type = TypedPair.TYPE_DEFAULT;
     private double divisionMean = 0.0;
 
@@ -33,6 +34,14 @@ public class PairCluster extends HashSet<TypedPair> {
             if(!this.list.get(i).getSecond().equals(pairCluster.list.get(i).getSecond())) return false;
         }
         return true;
+    }
+
+    public int getTense() {
+        return tense;
+    }
+
+    public void setTense(int tense) {
+        this.tense = tense;
     }
 
     public String hash(){
@@ -51,6 +60,7 @@ public class PairCluster extends HashSet<TypedPair> {
         this.list = new ArrayList<>();
         for(int i = 0; i < pairs.size(); i++) {
             TypedPair pair = pairs.get(i);
+            if(pair.getTense() != TypedPair.TENSE_UNDEFINED) this.tense = pair.getTense();
             list.add(pair);
             this.csv += pair.getFirst();
             this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";
@@ -99,6 +109,7 @@ public class PairCluster extends HashSet<TypedPair> {
         this.list = new ArrayList<>();
         for(int i = 0; i < pairs.length; i++) {
             TypedPair pair = pairs[i];
+            if(pair.getTense() != TypedPair.TENSE_UNDEFINED) this.tense = pair.getTense();
             list.add(pair);
             this.csv += pair.getFirst();
             this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";

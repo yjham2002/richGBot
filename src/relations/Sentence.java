@@ -78,7 +78,7 @@ public class Sentence extends GenericTree<PairCluster>{
 
             int cnt = 1;
             for(Intention intention : intentions) {
-                summarized += "\n" + " Intention No." + cnt++ + " :: " + intention.toString();
+                summarized += "\n" + intention.toString();
             }
 
         }

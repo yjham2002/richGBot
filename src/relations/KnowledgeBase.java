@@ -198,6 +198,21 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
         return list;
     }
 
+    public void learn(PairCluster pair1, PairCluster pair2){
+        for(TypedPair p1 : pair1.toList()){
+            for(TypedPair p2 : pair2.toList()){
+                learn(p1, p2);
+            }
+        }
+    }
+
+    public int learn(TypedPair pair1, TypedPair pair2){
+        List<TypedPair> list = new ArrayList<>();
+        list.add(pair1);
+        list.add(pair2);
+        return learn(list);
+    }
+
     public int learn(List<TypedPair> linkPair){
         if(CURRENT_MODE == REAL_MODE) {
             boolean reverse = linkPair.get(1).getType() == TypedPair.TYPE_ADV;

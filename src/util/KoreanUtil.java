@@ -112,12 +112,8 @@ public class KoreanUtil {
         return false;
     }
 
-    public static boolean isQuestion(Pair<String, String> pair){
-        if(pair.getSecond().equals("NP")){
-            switch (pair.getFirst()){
-                case "누구": case "어디": case "무엇": case "뭐": return true;
-            }
-        }
+    public static boolean isQuestion(TypedPair pair){
+        if((pair.getSecond().equals("NP") || pair.getSecond().equals("NNG")) && (pair.getFirst().equals("누구") || pair.getFirst().equals("어디") || pair.getFirst().equals("무엇") || pair.getFirst().equals("뭐"))) return true;
         return false;
     }
 

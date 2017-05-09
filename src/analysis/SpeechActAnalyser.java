@@ -12,9 +12,9 @@ import java.util.HashMap;
  */
 public abstract class SpeechActAnalyser{
 
-    private KnowledgeBase base;
-    private KnowledgeBase metaBase;
-    private Sentence sentence;
+    protected KnowledgeBase base;
+    protected KnowledgeBase metaBase;
+    protected Sentence sentence;
 
     /**
      * 참고 논문 : 서강대학교 "한국어 대화체 문장의 화행 분석", 이현정 외, 1996
@@ -28,6 +28,12 @@ public abstract class SpeechActAnalyser{
 
     public static final String SPEECH_ACT_ASK_IF = "ask_if"; // 정보 요구 (YES or NO)
     // 정보 제공과 같은 문장 구조로서, 국문학적으로 은유적 표현의 구조를 가진 경우 검출하며, 요구하는 정보가 도메인에 포함된 경우에 한해 정보 요구로 해석
+
+    /**
+     * 논문 참조 내용과 달리 변형한 부분
+     */
+    public static final String SPEECH_ACT_FACT = "fact"; // 무의미한 문장 나열
+    // 정보 제공과 달리 학습이 필요하지 않은 문장 데이터
 
     public static final String SPEECH_ACT_INFORM = "inform"; // 정보 제공
     // 정보 요구와 같은 문장 구조로서, 국문학적으로 은유적 표현의 구조를 가진 경우 검출하며, 요구하는 정보가 도메인에 포함되지 않은 경우에 한해 정보 제공으로 해석
@@ -47,15 +53,11 @@ public abstract class SpeechActAnalyser{
     public static final String SPEECH_ACT_CONFIRM = "confirm"; // 확인 (확인을 요구하는 발화에 대한 응답)
     // 홑단어 혹은 짧은 구구조이며 긍/부정이 확실하게 구분되고, 이전 대화에서 엔진으로부터 화자가 질문을 받은 경우에 한해 검출(긍정)
 
-    public static final String SPEECH_ACT_GREETING = "greeting"; // 인사말
-    // 지식베이스로부터 유사성 기반의 인삿말로 추정되는 경우
-
-    public static final String SPEECH_ACT_PROMISE = "promise"; // 특정 행위를 약속
-    // 시간을 구체적으로 언급하며 현재 시제의 동사만이 포함된 화행으로 명령형 어조를 띄는 경우 행위 약속으로 분류
-
     public static final String SPEECH_ACT_REJECT = "reject"; // 거절
     // 홑단어 혹은 짧은 구구조이며 긍/부정이 확실하게 구분되고, 이전 대화에서 엔진으로부터 화자가 질문을 받은 경우에 한해 검출(부정)
 
+    //    public static final String SPEECH_ACT_PROMISE = "promise"; // 특정 행위를 약속 (행위 요구와 통합 처리하도록 하기 위해 화행 분류에서 삭제)
+    //    public static final String SPEECH_ACT_GREETING = "greeting"; // 인사말 (지식베이스 유사성 응답이 선행처리하므로 화행 분류에서 삭제)
     //    public static final String SPEECH_ACT_REQUEST_CONF = "request_conf"; // 확인 요구 (정보 제공 화행과 구분이 모호하여 삭제)
 
     public static final String OBJECT = "OBJECT";
@@ -67,11 +69,11 @@ public abstract class SpeechActAnalyser{
     public static final String SPEECH = "SPEECH";
     public static final String VERBAL = "VERBAL";
 
-    public static final int SENTENCE_ORDER = 10;
-    public static final int SENTENCE_PLAIN = 20;
-    public static final int SENTENCE_QUESTION = 30;
-    public static final int SENTENCE_META = 40;
-    public static final int SENTENCE_METAPHORICAL_QUESTION = 50;
+    public static final int SENTENCE_NONE = 10;
+    public static final int SENTENCE_ORDER = 20;
+    public static final int SENTENCE_PLAIN = 30;
+    public static final int SENTENCE_QUESTION = 40;
+    public static final int SENTENCE_META = 50;
 
     protected SpeechActAnalyser(){}
 

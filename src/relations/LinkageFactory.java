@@ -218,7 +218,6 @@ public class LinkageFactory {
     }
 
     private MorphemeArc getLinkedArc(List<TypedPair> cores){
-
         List<Integer> vIdx = new ArrayList<>(); // VERB INDEX
         List<Integer> adjIdx = new ArrayList<>(); // ADJECTIVE INDEX
         List<Integer> oIdx = new ArrayList<>(); // OBJECT INDEX
@@ -260,21 +259,20 @@ public class LinkageFactory {
                     }
                 }
             }else if(SUBJECTS.contains(pair.getSecond()) && !(cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1)))) { // 주어 혹은 목적어로 현재 페어가 입력될 수 있는 경우
-                if (KoreanUtil.isQuestion(cores.get(i))) {
-                    cores.get(i).setType(TypedPair.TYPE_QUESTION);
+                if (cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))) { // 다음 페어가 주격조사인 경우
+                    cores.get(i).setType(TypedPair.TYPE_SUBJECT);
                     sIdx.add(i);
                 } else {
-                    if (cores.size() > i + 1 && KoreanUtil.isSubjectivePost(cores.get(i + 1))) { // 다음 페어가 주격조사인 경우
-                        cores.get(i).setType(TypedPair.TYPE_SUBJECT);
-                        sIdx.add(i);
-                    } else {
-                        if(OBJECTS.contains(pair.getSecond()) && (KoreanUtil.isEOS(cores.get(i + 1)) || KoreanUtil.isPositiveDesignator(cores.get(i + 1)))) {
+                    if(OBJECTS.contains(pair.getSecond()) && (KoreanUtil.isEOS(cores.get(i + 1)) || KoreanUtil.isPositiveDesignator(cores.get(i + 1)))) {
+                        if (KoreanUtil.isQuestion(cores.get(i))) {
+                            cores.get(i).setType(TypedPair.TYPE_QUESTION);
+                        } else {
                             cores.get(i).setType(TypedPair.TYPE_METAPHORE);
-                            mIdx.add(i);
-                        }else {
-                            cores.get(i).setType(TypedPair.TYPE_OBJECT); // 다음 페어에 주격조사가 아닌 경우 목적어로 간주
-                            oIdx.add(i);
                         }
+                        mIdx.add(i);
+                    }else {
+                        cores.get(i).setType(TypedPair.TYPE_OBJECT); // 다음 페어에 주격조사가 아닌 경우 목적어로 간주
+                        oIdx.add(i);
                     }
                 }
             }else{ // 예외 상황 처리
