@@ -4,11 +4,17 @@ import relations.KnowledgeBase;
 import relations.PairCluster;
 import relations.Sentence;
 import relations.TypedPair;
+import statics.ResponseConstant;
+import statics.StaticResponser;
 import tree.GenericTreeNode;
 import util.KoreanUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static statics.StaticResponser.INTENT_NA;
+import static statics.StaticResponser.INTENT_PA;
 
 /**
  * @author 함의진
@@ -20,6 +26,8 @@ import java.util.List;
  * 참고논문 및 기저개념 : Recipes for plan inference and domain specific knowledge (Litman and Allen, 1987; Carberry, 1989).
  */
 public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
+
+    public static final double THRESHOLD = 0.80d;
 
     private boolean generalFact = false;
     private int subCnt = 0;
@@ -36,10 +44,10 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
     public DomainSpecifiedAnalyser(KnowledgeBase base, KnowledgeBase metaBase, Sentence sentence){
         this(base, metaBase);
         this.sentence = sentence;
-
     }
 
     public List<Intention> execute(){
+
         List<Intention> list = new ArrayList<>();
 
         for(GenericTreeNode<PairCluster> clusterGenericTreeNode : sentence.getRoot().getChildren()){
@@ -55,29 +63,48 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
             Intention intention = new Intention();
 
             intention.setTimeExpression(sentence.getTimeExpression());
+            intention.setPrediction(sentence.getPrediction());
+            intention.setPredictionP(sentence.getScore());
 
             traverseAndCount(clusterGenericTreeNode, intention);
 
-            if(intention.isAllSet() || intention.isRoughlySet()){
-                intention.setSentenceType(SENTENCE_PLAIN);
-                intention.setSpeechAct(SPEECH_ACT_FACT);
-            }else if(intention.isMetaSet() && intention.isQuestionSet()) {
-                intention.setSentenceType(SENTENCE_QUESTION);
-                intention.setSpeechAct(SPEECH_ACT_ASK_REF);
-            }else if(intention.isNoneSubjectSet()) {
-                if(verbs > 0 && intention.getVerb().getTense() == TypedPair.TENSE_PAST){
+            if(sentence.getScore() > THRESHOLD){
+                switch (sentence.getPrediction()){
+                    case INTENT_PA: {
+                        intention.setSentenceType(SENTENCE_PLAIN);
+                        intention.setSpeechAct(SPEECH_ACT_ACCEPT);
+                        break;
+                    }
+                    case INTENT_NA: {
+                        intention.setSentenceType(SENTENCE_PLAIN);
+                        intention.setSpeechAct(SPEECH_ACT_REJECT);
+                        break;
+                    }
+                    default : break;
+
+                }
+            }else {
+                if (intention.isAllSet() || intention.isRoughlySet()) {
                     intention.setSentenceType(SENTENCE_PLAIN);
                     intention.setSpeechAct(SPEECH_ACT_FACT);
-                }else {
-                    intention.setSentenceType(SENTENCE_ORDER);
-                    intention.setSpeechAct(SPEECH_ACT_REQUEST_ACT);
+                } else if (intention.isMetaSet() && intention.isQuestionSet()) {
+                    intention.setSentenceType(SENTENCE_QUESTION);
+                    intention.setSpeechAct(SPEECH_ACT_ASK_REF);
+                } else if (intention.isNoneSubjectSet()) {
+                    if (verbs > 0 && intention.getVerb().getTense() == TypedPair.TENSE_PAST) {
+                        intention.setSentenceType(SENTENCE_PLAIN);
+                        intention.setSpeechAct(SPEECH_ACT_FACT);
+                    } else {
+                        intention.setSentenceType(SENTENCE_ORDER);
+                        intention.setSpeechAct(SPEECH_ACT_REQUEST_ACT);
+                    }
+                } else if (intention.isIncludesMeta()) {
+                    intention.setSentenceType(SENTENCE_META);
+                    intention.setSpeechAct(SPEECH_ACT_INFORM);
+                } else {
+                    intention.setSentenceType(SENTENCE_NONE);
+                    intention.setSpeechAct(SPEECH_ACT_UNDEFINED);
                 }
-            }else if(intention.isIncludesMeta()){
-                intention.setSentenceType(SENTENCE_META);
-                intention.setSpeechAct(SPEECH_ACT_INFORM);
-            }else{
-                intention.setSentenceType(SENTENCE_NONE);
-                intention.setSpeechAct(SPEECH_ACT_UNDEFINED);
             }
 
             // Intention 인스턴스의 속성이 완성되지는 않았으나, 도메인 매칭을 위해 대기중인 상태
@@ -96,11 +123,12 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
     private void traverseAndCountRecur(GenericTreeNode<PairCluster> cluster, Intention intention){
         if(cluster == null) return;
 
-        // TODO 부사를 분석에서 사용해야 하는지 재검토 필요
+        // TODO 부사를 분석에서 사용해야 하는지 재검토 필요 ***************************************************************************************************************************
+
         // TODO START POINT : ClosedPurpose에서 목적성을 가진 닫힌 정보 획득 로직 작성 후 리액터는 이를 요구하는 역할을 해야 함 리액터는 화행에 따라 그 반응을 다르게 해야 함
         // TODO 또한 센텐스 클래스는 섬머라이즈를 제거하고 리액터와 연결하여 이를 처리해야 함
         // TODO 인텐션을 받아 처리하는 리액터는 정해진 인텐션 코드(동사나 문장의 흐름에 따라 정해지는 N:1 맵핑 구조)에 따라 정보를 획득하거나 대화를 마친 다음 해당 반응을 사용자에게 재전송함
-        // TODO 미들웨어는 리액터를 상속받아 클로즈드 퍼포즈를 구현하고 맵핑 구조를 기술하여 특정화된 서비스에 이용할 수 있음
+        // TODO 미들웨어는 리액터를 상속받아 클로즈드 퍼포즈를 구현하며 정적 응답기(StaticResponser)를 수정하고 맵핑 구조를 기술하여 특정화된 서비스에 이용할 수 있음
 
         switch (cluster.getData().getType()){
             case TypedPair.TYPE_SUBJECT: {

@@ -18,7 +18,7 @@ public class AppMain {
         while(true) {
             System.out.print("USER : ");
             String command = scanner.nextLine();
-            List<String> list = nlpEngine.analyzeInstantly(command, true);
+            List<String> list = nlpEngine.analyzeInstantly(command, false);
             for(String res : list){
                 System.out.println(LinkageFactory.MY_NAME + " : " + res);
             }

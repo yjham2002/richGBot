@@ -29,7 +29,7 @@ import java.util.List;
  * Created by a on 2017-04-20.
  */
 public class AppSlackDetectorMain {
-    private static String slackAuth = "xoxb-168613915715-ClOiYLxIzb1mtZwoNxjexiRa";
+    private static String slackAuth = "xoxb-168613915715-ZXyx9d0CNvzLmw0tv8lMYezk";
     private static final String helloString = "Richware NLP Engine has been started - Cached Successfully via [Slack]";
 
     public static void main(String[] args) {
@@ -42,7 +42,7 @@ public class AppSlackDetectorMain {
 
             SlackChannel channel_general = session.findChannelByName("general"); //make sure bot is a member of the channel.
 
-            session.sendMessage(channel_general, helloString);
+            //session.sendMessage(channel_general, helloString);
 
             SlackMessagePostedListener listener = new SlackMessagePostedListener() {
                 @Override
@@ -105,8 +105,8 @@ public class AppSlackDetectorMain {
                     }
 
                     for(String rMsg : rMsgs) {
+                        // session.sendMessageToUser(slackUser, rMsg, null);
                         session.sendMessage(slackMessagePosted.getChannel(), rMsg);
-                        //session.sendMessageToUser(slackUser, rMsg, null);
                         //session.sendMessage(channel, "GBot has been invited to Richware");
                     }
                 }

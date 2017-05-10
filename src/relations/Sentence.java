@@ -24,6 +24,7 @@ public class Sentence extends GenericTree<PairCluster>{
     /**
      * 멤버 애트리뷰트
      */
+    private String prediction;
     private DomainSpecifiedAnalyser speechAct; // 화행 분석 결과
     private double score = 0.0; // 화행 분석 예상 정확도
     private KnowledgeBase base;
@@ -32,16 +33,34 @@ public class Sentence extends GenericTree<PairCluster>{
 
     private String summarized = "";
 
+    public String getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(String prediction) {
+        this.prediction = prediction;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     /**
      * 문장 추상화 클래스 생성자 - 생성과 동시에 화행 분석을 수행하여 speechAct 변수를 설정하고 확신의 정도를 score에 기록함
      *
      * @param base 문장 구조 지식 베이스
      * @param metaBase 단어 기반 지식 베이스
      */
-    public Sentence(KnowledgeBase base, KnowledgeBase metaBase, GenericTreeNode<PairCluster> root, TimeExpression timeExpression, boolean printProcess){
+    public Sentence(KnowledgeBase base, KnowledgeBase metaBase, GenericTreeNode<PairCluster> root, TimeExpression timeExpression, String prediction, double predictionP, boolean printProcess){
         super();
         this.base = base;
         this.metaBase = metaBase;
+        this.prediction = prediction;
+        this.score = predictionP;
         this.timeExpression = timeExpression;
         this.setRoot(root);
 
@@ -64,6 +83,7 @@ public class Sentence extends GenericTree<PairCluster>{
             }
 
             System.out.println();
+
             System.out.println("------------------------------------------------------------------------------------");
             System.out.println(" [ ATOMICS ]");
 

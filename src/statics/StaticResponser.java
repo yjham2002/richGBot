@@ -30,6 +30,8 @@ public class StaticResponser {
     public static final String INTENT_FORTUNE = "FORTUNE";
     public static final String INTENT_HELP = "HELP";
     public static final String INTENT_DIRECT = "DIRECT";
+    public static final String INTENT_PA = "PA";
+    public static final String INTENT_NA = "NA";
 
     public static final String INTENT_REDUNDANT = "REDUNDANT";
 

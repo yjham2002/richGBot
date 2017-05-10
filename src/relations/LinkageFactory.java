@@ -28,6 +28,8 @@ public class LinkageFactory {
 
     public static final String MY_NAME = "RES";
 
+    public static final int NEGATIVE_DISTANCE = 3;
+
     private static boolean SIMILARITY_MODE = true;
     private static final double SIMILARITY_THRESHOLD = 0.5;
     private static final double SIMILARITY_HIJACKING_THRESHOLD = 0.80;
@@ -135,7 +137,7 @@ public class LinkageFactory {
                 continue;
             }
             TypedPair pair = cores.get(i);
-            if(GENERAL_NOUN.contains(pair.getSecond())){
+            if(GENERAL_NOUN.contains(pair.getSecond()) && cores.size() > 1){
                 if(flag){
                     if(KoreanUtil.isDerivable(cores.get(i))) {
                         if (cores.size() > i + 1 && KoreanUtil.isDeriver(cores.get(i + 1))) { // 파생접미사 처리
@@ -253,6 +255,14 @@ public class LinkageFactory {
                         aIdx.add(i);
                     } else {
                         cores.get(i).setType(TypedPair.TYPE_VERB);
+
+                        for(int ng = i; ng < i + NEGATIVE_DISTANCE; ng++){
+                            if(ng + 1 < cores.size() && KoreanUtil.isNegative(cores.get(ng))) {
+                                cores.get(i).setNegative(true);
+                                break;
+                            }
+                        }
+
                         if(cores.size() > i + 1 && KoreanUtil.isPastTense(cores.get(i + 1))) cores.get(i).setTense(TypedPair.TENSE_PAST);
                         if(cores.size() > i + 1 && KoreanUtil.isPurposalVerb(cores.get(i + 1))) cores.get(i).setPurposal(true);
                         vIdx.add(i);
@@ -263,7 +273,7 @@ public class LinkageFactory {
                     cores.get(i).setType(TypedPair.TYPE_SUBJECT);
                     sIdx.add(i);
                 } else {
-                    if(OBJECTS.contains(pair.getSecond()) && (KoreanUtil.isEOS(cores.get(i + 1)) || KoreanUtil.isPositiveDesignator(cores.get(i + 1)))) {
+                    if(cores.size() > i + 1 && OBJECTS.contains(pair.getSecond()) && (KoreanUtil.isEOS(cores.get(i + 1)) || KoreanUtil.isPositiveDesignator(cores.get(i + 1)))) {
                         if (KoreanUtil.isQuestion(cores.get(i))) {
                             cores.get(i).setType(TypedPair.TYPE_QUESTION);
                         } else {
@@ -394,10 +404,18 @@ public class LinkageFactory {
         }
 
         if(vIdx.size() == 0 && soIdx.size() == 0){
-            System.out.println("INFO - Nothing to link [Forwarding Simply-Linked Set]");
-            for(int m = 0; m < cores.size(); m++){
-                if(m > 0) retVal.connect(m - 1, m);
+            System.out.println("INFO - Nothing to link [Forwarding Simply-Linked Set]" + " :: CORE[" + cores.size() + "]");
+
+            if(cores.size() == 1){
+                retVal.connect(0, 0);
+            }else {
+                for (int m = 0; m < cores.size(); m++) {
+                    if (m > 0) retVal.connect(m - 1, m);
+                }
             }
+
+            retVal.setFlag(true);
+
         }else if(vIdx.size() > 0 && soIdx.size() == 0){
             System.out.println("INFO - Nothing to link [Forwarding Verb-Multi-Root Set]");
 
@@ -537,7 +555,6 @@ public class LinkageFactory {
         if(this.morphemes == null){
             System.out.println("There is no morpheme data.");
         }
-
         List<TypedPair> cores = new ArrayList<>();
 
         for (List<Pair<String, String>> eojeolResult : this.morphemes) {
@@ -597,17 +614,18 @@ public class LinkageFactory {
         }
         // PATTERN DETECTING END
 
+        boolean match = false;
+
         String cleanedSerial = KoreanUtil.eliminateMeaningLess(serialWords);
         if(staticBase.containsKey(cleanedSerial) && SIMILARITY_MODE){
             String intent = staticBase.get(cleanedSerial).keySet().iterator().next();
+
+            match = true;
 
             if(SIMILARITY_MODE) {
                 responses.add(staticResponser.talk(intent, temporaryMemory));
             }
 
-            linkage.setArc(null);
-            linkage.setInstantResponses(responses);
-            return linkage;
         }
 
         MorphemeArc procArc = getLinkedArc(shortenNounNounPhrase(cores)); // 아크를 연결하고 분석을 수행
@@ -615,25 +633,25 @@ public class LinkageFactory {
         double prob = 0.0; // 유사도 척도
         String prediction = ""; // 예측된 사용자 의도
 
-        if(SIMILARITY_MODE) {
-
-            prediction = "";
-            prob = 0.0;
-            String matched = "";
-            for (String str : staticBase.keySet()) {
-                double newProb = KoreanUtil.getEditDistanceRate(str, serialWords, true);
-                if (prob < newProb) {
-                    prediction = staticBase.get(str).keySet().iterator().next();
-                    prob = newProb;
-                    matched = str;
-                }
+        prediction = "";
+        prob = 0.0;
+        String matched = "";
+        for (String str : staticBase.keySet()) {
+            double newProb = KoreanUtil.getEditDistanceRate(str, serialWords, true);
+            if (prob < newProb) {
+                prediction = staticBase.get(str).keySet().iterator().next();
+                prob = newProb;
+                matched = str;
             }
+        }
 
-            if(prediction.equals(StaticResponser.INTENT_DIRECT)) temporaryMemory = matched;
+        if(prediction.equals(StaticResponser.INTENT_DIRECT)) temporaryMemory = matched;
 
-            System.out.println("[Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%]");
-            //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
+        System.out.println("[Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%]");
+        //if(stream) responses.add("[INFO :: 유사도 기반 정적 응답 (Similarity : " + prediction + " / " + String.format("%.2f", prob * 100) + "%) ]");
 
+
+        if(SIMILARITY_MODE && !match) {
             if (procArc.keySet().size() == 0) {
                 if (prob >= SIMILARITY_THRESHOLD) {
                     responses.add(staticResponser.talk(prediction, temporaryMemory));
@@ -647,6 +665,8 @@ public class LinkageFactory {
             }
         }
 
+        linkage.setPrediction(prediction);
+        linkage.setPredictionP(prob);
         linkage.setArc(procArc);
         linkage.setInstantResponses(responses);
 

@@ -76,8 +76,10 @@ public class NaturalLanguageEngine {
         Pair<List<String>, List<String>> resPair = linkage.interaction();
 
         List<String> merged = new ArrayList<>();
-        merged.addAll(resPair.getFirst());
-        merged.addAll(resPair.getSecond());
+        if(resPair != null && resPair.getFirst() != null && resPair.getSecond() != null) {
+            merged.addAll(resPair.getFirst());
+            merged.addAll(resPair.getSecond());
+        }
 
         return merged;
     }

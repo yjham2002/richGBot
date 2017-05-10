@@ -112,6 +112,10 @@ public class KoreanUtil {
         return false;
     }
 
+    public static boolean isNegative(TypedPair pair){
+        return ((pair.getFirst().equals("말") && pair.getSecond().equals("VX")) || (pair.getFirst().equals("않") && pair.getSecond().equals("VX")));
+    }
+
     public static boolean isQuestion(TypedPair pair){
         if((pair.getSecond().equals("NP") || pair.getSecond().equals("NNG")) && (pair.getFirst().equals("누구") || pair.getFirst().equals("어디") || pair.getFirst().equals("무엇") || pair.getFirst().equals("뭐"))) return true;
         return false;

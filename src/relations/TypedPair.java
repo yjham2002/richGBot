@@ -24,6 +24,16 @@ public class TypedPair extends Pair<String, String> {
     public static final int TENSE_PAST = 1;
     public static final int TENSE_PRESENT = 0;
 
+    private boolean negative = false;
+
+    public boolean isNegative() {
+        return negative;
+    }
+
+    public void setNegative(boolean negative) {
+        this.negative = negative;
+    }
+
     private int type = TYPE_DEFAULT;
     private int tense = TENSE_UNDEFINED;
     private boolean purposal = false;

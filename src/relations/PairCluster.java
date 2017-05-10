@@ -17,6 +17,7 @@ public class PairCluster extends HashSet<TypedPair> {
     public static final String TAG_ROOT = "TAG_ROOT_CONST_STRING";
     public static final int KEY_ROOT = -100;
 
+    private boolean negative = false;
     private int uniqueKey;
     private List<TypedPair> list;
     private String csv = "";
@@ -61,6 +62,7 @@ public class PairCluster extends HashSet<TypedPair> {
         for(int i = 0; i < pairs.size(); i++) {
             TypedPair pair = pairs.get(i);
             if(pair.getTense() != TypedPair.TENSE_UNDEFINED) this.tense = pair.getTense();
+            if(pair.isNegative()) this.setNegative(true);
             list.add(pair);
             this.csv += pair.getFirst();
             this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";
@@ -73,6 +75,14 @@ public class PairCluster extends HashSet<TypedPair> {
         }
 
         this.divisionMean /= (double)pairs.size();
+    }
+
+    public boolean isNegative() {
+        return negative;
+    }
+
+    public void setNegative(boolean negative) {
+        this.negative = negative;
     }
 
     public PairCluster(String tag, int type, List<TypedPair> pairs, int uniqueKey){
@@ -110,6 +120,7 @@ public class PairCluster extends HashSet<TypedPair> {
         for(int i = 0; i < pairs.length; i++) {
             TypedPair pair = pairs[i];
             if(pair.getTense() != TypedPair.TENSE_UNDEFINED) this.tense = pair.getTense();
+            if(pair.isNegative()) this.setNegative(true);
             list.add(pair);
             this.csv += pair.getFirst();
             this.csvUnique += pair.getFirst() + "[" + pair.getDivisionKey() + "]";
@@ -166,6 +177,7 @@ public class PairCluster extends HashSet<TypedPair> {
     }
 
     public String toCSV() {
+        if(negative) return csv + "(N)";
         return csv;
     }
 

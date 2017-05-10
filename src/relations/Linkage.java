@@ -15,6 +15,25 @@ import static relations.LinkageFactory.*;
  */
 public class Linkage {
 
+    private String prediction;
+    private double predictionP;
+
+    public String getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(String prediction) {
+        this.prediction = prediction;
+    }
+
+    public double getPredictionP() {
+        return predictionP;
+    }
+
+    public void setPredictionP(double predictionP) {
+        this.predictionP = predictionP;
+    }
+
     private String originalMessage;
     private List<TimeExpression> timeExpressions;
     private HashMap<Integer, Integer> timeRange;
@@ -95,6 +114,7 @@ public class Linkage {
      * @return
      */
     public Pair<List<String>, List<String>> interaction(){
+
         List<Sentence> sentences;
         if(arc != null) {
             sentences = toSentences();
@@ -119,7 +139,7 @@ public class Linkage {
 
         SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(arc, base, metaBase, timeExpressions);
 
-        List<Sentence> sentences = sentenceMultiplexer.extractSentences();
+        List<Sentence> sentences = sentenceMultiplexer.extractSentences(prediction, predictionP);
 
         return sentences;
     }

@@ -1,5 +1,6 @@
 package relations;
 
+import jdk.internal.util.xml.impl.Pair;
 import tree.GenericTreeNode;
 import util.TimeExpression;
 
@@ -21,7 +22,8 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
      * 문장 컬렉션 추출을 위한 메소드로 해시를 통해 병합 및 그래프 폐구간 추출을 통한 문장 분리를 수행
      * @return
      */
-    public List<Sentence> extractSentences(){
+    public List<Sentence> extractSentences(String prediction, double predictionP){
+
         List<Sentence> sentences = new ArrayList<>();
 
         HashMap<Integer, List<Integer>> topologies = new HashMap<>();
@@ -146,11 +148,31 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
                 }
             }
 
-            Sentence sentence = new Sentence(base, metaBase, temporaryRoot, candidate, true); // 지식베이스 인스턴스 전달
+            Sentence sentence = new Sentence(base, metaBase, temporaryRoot, candidate, prediction, predictionP, true); // 지식베이스 인스턴스 전달
+            sentence.setPrediction(prediction);
+            sentence.setScore(predictionP);
 
             sentences.add(sentence); // 의도 추출 전 문장 객체를 수집
 
         }
+
+//        if(arc.isFlag() && sentences.size() == 0) {
+//
+//            System.out.println("#########################################\n\n" + clusters.size() + "/" + prediction + "/" + arc.keySet().size()); // TODO 지우기
+//            GenericTreeNode<PairCluster> temporaryRoot = new GenericTreeNode<>(PairCluster.createDummy());
+//            List<GenericTreeNode<PairCluster>> roots = new ArrayList<>();
+//
+//            for(Integer ii : clusters.keySet()) {
+//                roots.add(new GenericTreeNode<PairCluster>(clusters.get(ii)));
+//            }
+//
+//            temporaryRoot.setChildren(roots);
+//            temporaryRoot.setReserveData(0.0d);
+//
+//            Sentence sentence = new Sentence(base, metaBase, temporaryRoot, null, prediction, predictionP, true); // 지식베이스 인스턴스 전달
+//
+//            sentences.add(sentence);
+//        }
 
         return sentences;
     }

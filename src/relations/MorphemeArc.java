@@ -23,6 +23,16 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
     protected static final int INVALID = -1;
     protected static final int VALID = 1;
 
+    private boolean flag = false;
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
     protected List<TypedPair> words;
 
     public MorphemeArc(List<TypedPair> linearWords){

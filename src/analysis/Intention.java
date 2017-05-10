@@ -12,6 +12,26 @@ import static analysis.SpeechActAnalyser.*;
  * Created by a on 2017-05-08.
  */
 public class Intention {
+
+    private String prediction;
+    private double predictionP;
+
+    public String getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(String prediction) {
+        this.prediction = prediction;
+    }
+
+    public double getPredictionP() {
+        return predictionP;
+    }
+
+    public void setPredictionP(double predictionP) {
+        this.predictionP = predictionP;
+    }
+
     private String intentionCode = "";
     private PairCluster subject;
     private PairCluster question;
@@ -178,7 +198,7 @@ public class Intention {
 
     @Override
     public String toString() {
-        String retVal = "INTENTION :: Confidence[" + confidence * 100.0d + "] => CODE[" + intentionCode + "]";
+        String retVal = "INTENTION :: Confidence[" + confidence * 100.0d + "] => CODE[" + intentionCode + "] :: SIMILARITY["+ prediction + "/" + predictionP +"]";
         if(timeExpression != null) retVal += " Time Expression :: " + timeExpression.getDateTime();
         boolean errorFlag = false;
 
@@ -192,16 +212,16 @@ public class Intention {
                 retVal += "정보에 대한 질의 [" + subject.toUniqueCSV() + " => " + question.toUniqueCSV() + "]";
                 break;
             case SPEECH_ACT_FACT:
-                retVal += "일반 진술 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + " => " + verb.toUniqueCSV() + "]";
+                retVal += "일반 진술 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + " => " + verb.toUniqueCSV() + (verb.isNegative()?"(부정형)":"") + "]";
                 break;
             case SPEECH_ACT_INFORM:
-                retVal += "정보 제공 화행 [" + subject.toUniqueCSV() + (object != null ? " => " + object.toUniqueCSV() : "") + (verb != null ? " => " + verb.toUniqueCSV() : "") + "]";
+                retVal += "정보 제공 화행 [" + subject.toUniqueCSV() + (object != null ? " => " + object.toUniqueCSV() : "") + (verb != null ? " => " + verb.toUniqueCSV() + (verb.isNegative()?"(부정형)":"") : "") + "]";
                 break;
             case SPEECH_ACT_RESPONSE:
                 retVal += "발화에 대한 응답";
                 break;
             case SPEECH_ACT_REQUEST_ACT:
-                retVal += "행위 요구 의도 [" + object.toUniqueCSV() + " => " + verb.toUniqueCSV() + "]";
+                retVal += "행위 " + (verb != null ? (verb.isNegative()?"금지 의도":"요구 의도") : "") + " [" + (object != null ? object.toUniqueCSV() : "") + " => " + (verb != null ? verb.toUniqueCSV() + (verb.isNegative()?"(부정형)":"") : "") + "]";
                 break;
             case SPEECH_ACT_ACCEPT:
                 retVal += "질의에 대한 승인";
