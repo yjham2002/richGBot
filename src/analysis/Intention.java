@@ -204,41 +204,44 @@ public class Intention {
 
         retVal += "\n";
 
-        switch (speechAct){
-            case SPEECH_ACT_UNDEFINED:
-                retVal += "화행을 찾을 수 없음";
-                break;
-            case SPEECH_ACT_ASK_REF: case SPEECH_ACT_ASK_IF:
-                retVal += "정보에 대한 질의 [" + subject.toUniqueCSV() + " => " + question.toUniqueCSV() + "]";
-                break;
-            case SPEECH_ACT_FACT:
-                retVal += "일반 진술 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + " => " + verb.toUniqueCSV() + (verb.isNegative()?"(부정형)":"") + "]";
-                break;
-            case SPEECH_ACT_INFORM:
-                retVal += "정보 제공 화행 [" + subject.toUniqueCSV() + (object != null ? " => " + object.toUniqueCSV() : "") + (verb != null ? " => " + verb.toUniqueCSV() + (verb.isNegative()?"(부정형)":"") : "") + "]";
-                break;
-            case SPEECH_ACT_RESPONSE:
-                retVal += "발화에 대한 응답";
-                break;
-            case SPEECH_ACT_REQUEST_ACT:
-                retVal += "행위 " + (verb != null ? (verb.isNegative()?"금지 의도":"요구 의도") : "") + " [" + (object != null ? object.toUniqueCSV() : "") + " => " + (verb != null ? verb.toUniqueCSV() + (verb.isNegative()?"(부정형)":"") : "") + "]";
-                break;
-            case SPEECH_ACT_ACCEPT:
-                retVal += "질의에 대한 승인";
-                break;
-            case SPEECH_ACT_CORRECT:
-                retVal += "정정 의도";
-                break;
-            case SPEECH_ACT_CONFIRM:
-                retVal += "질의에 대한 확인";
-                break;
-            case SPEECH_ACT_REJECT:
-                retVal += "질의에 대한 거절";
-                break;
-            default: {
-                retVal += "[ERROR] :: An error occured while processing sentences";
-                errorFlag = true;
-                break;
+        if(speechAct != null) {
+            switch (speechAct) {
+                case SPEECH_ACT_UNDEFINED:
+                    retVal += "화행을 찾을 수 없음";
+                    break;
+                case SPEECH_ACT_ASK_REF:
+                case SPEECH_ACT_ASK_IF:
+                    retVal += "정보에 대한 질의 [" + subject.toUniqueCSV() + " => " + question.toUniqueCSV() + "]";
+                    break;
+                case SPEECH_ACT_FACT:
+                    retVal += "일반 진술 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + " => " + verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") + "]";
+                    break;
+                case SPEECH_ACT_INFORM:
+                    retVal += "정보 제공 화행 [" + subject.toUniqueCSV() + (object != null ? " => " + object.toUniqueCSV() : "") + (verb != null ? " => " + verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";
+                    break;
+                case SPEECH_ACT_RESPONSE:
+                    retVal += "발화에 대한 응답";
+                    break;
+                case SPEECH_ACT_REQUEST_ACT:
+                    retVal += "행위 " + (verb != null ? (verb.isNegative() ? "금지 의도" : "요구 의도") : "") + " [" + (object != null ? object.toUniqueCSV() : "") + " => " + (verb != null ? verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";
+                    break;
+                case SPEECH_ACT_ACCEPT:
+                    retVal += "질의에 대한 승인";
+                    break;
+                case SPEECH_ACT_CORRECT:
+                    retVal += "정정 의도";
+                    break;
+                case SPEECH_ACT_CONFIRM:
+                    retVal += "질의에 대한 확인";
+                    break;
+                case SPEECH_ACT_REJECT:
+                    retVal += "질의에 대한 거절";
+                    break;
+                default: {
+                    retVal += "[ERROR] :: An error occured while processing sentences";
+                    errorFlag = true;
+                    break;
+                }
             }
         }
 

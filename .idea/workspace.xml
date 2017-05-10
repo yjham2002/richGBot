@@ -2,31 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Sentence.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/AppMain.class" afterPath="$PROJECT_DIR$/out/production/GBot/AppMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/AppSlackDetectorMain.class" afterPath="$PROJECT_DIR$/out/production/GBot/AppSlackDetectorMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/analysis/DomainSpecifiedAnalyser.class" afterPath="$PROJECT_DIR$/out/production/GBot/analysis/DomainSpecifiedAnalyser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/analysis/Intention.class" afterPath="$PROJECT_DIR$/out/production/GBot/analysis/Intention.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/nlp/NaturalLanguageEngine.class" afterPath="$PROJECT_DIR$/out/production/GBot/nlp/NaturalLanguageEngine.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/LinkageFactory.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/LinkageFactory.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/PairCluster.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/PairCluster.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/TypedPair.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/TypedPair.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" afterPath="$PROJECT_DIR$/out/production/GBot/util/KoreanUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppMain.java" afterPath="$PROJECT_DIR$/src/AppMain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppSlackDetectorMain.java" afterPath="$PROJECT_DIR$/src/AppSlackDetectorMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" afterPath="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/analysis/Intention.java" afterPath="$PROJECT_DIR$/src/analysis/Intention.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" afterPath="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linkage.java" afterPath="$PROJECT_DIR$/src/relations/Linkage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/LinkageFactory.java" afterPath="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/MorphemeArc.java" afterPath="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/PairCluster.java" afterPath="$PROJECT_DIR$/src/relations/PairCluster.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Sentence.java" afterPath="$PROJECT_DIR$/src/relations/Sentence.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" afterPath="$PROJECT_DIR$/src/relations/SentenceMultiplexer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/TypedPair.java" afterPath="$PROJECT_DIR$/src/relations/TypedPair.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/statics/StaticResponser.java" afterPath="$PROJECT_DIR$/src/statics/StaticResponser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/KoreanUtil.java" afterPath="$PROJECT_DIR$/src/util/KoreanUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -92,8 +69,8 @@
       <file leaf-file-name="Sentence.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/Sentence.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="68" column="57" lean-forward="false" selection-start-line="68" selection-start-column="57" selection-end-line="68" selection-end-column="57" />
+            <state relative-caret-position="181">
+              <caret line="100" column="0" lean-forward="false" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
               <folding>
                 <element signature="e#856#857#0" expanded="true" />
                 <element signature="e#889#890#0" expanded="true" />
@@ -108,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AppSlackDetectorMain.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AppSlackDetectorMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppSlackDetectorMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1558">
-              <caret line="107" column="24" lean-forward="false" selection-start-line="107" selection-start-column="24" selection-end-line="107" selection-end-column="24" />
+            <state relative-caret-position="114">
+              <caret line="31" column="81" lean-forward="false" selection-start-line="31" selection-start-column="81" selection-end-line="31" selection-end-column="81" />
               <folding />
             </state>
           </provider>
@@ -128,11 +105,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Intention.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Intention.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/analysis/Intention.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="580">
-              <caret line="223" column="95" lean-forward="false" selection-start-line="223" selection-start-column="95" selection-end-line="223" selection-end-column="95" />
+            <state relative-caret-position="390">
+              <caret line="245" column="9" lean-forward="false" selection-start-line="245" selection-start-column="9" selection-end-line="245" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#360#361#0" expanded="true" />
@@ -284,7 +261,6 @@
         <option value="$PROJECT_DIR$/src/relations/PairCluster.java" />
         <option value="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" />
         <option value="$PROJECT_DIR$/src/AppMain.java" />
-        <option value="$PROJECT_DIR$/src/analysis/Intention.java" />
         <option value="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
         <option value="$PROJECT_DIR$/src/statics/StaticResponser.java" />
         <option value="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
@@ -293,6 +269,7 @@
         <option value="$PROJECT_DIR$/src/relations/Linkage.java" />
         <option value="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
         <option value="$PROJECT_DIR$/src/AppSlackDetectorMain.java" />
+        <option value="$PROJECT_DIR$/src/analysis/Intention.java" />
       </list>
     </option>
   </component>
@@ -760,8 +737,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.AppMain" />
-        <item index="1" class="java.lang.String" itemvalue="Application.AppSlackDetectorMain" />
+        <item index="0" class="java.lang.String" itemvalue="Application.AppSlackDetectorMain" />
+        <item index="1" class="java.lang.String" itemvalue="Application.AppMain" />
         <item index="2" class="java.lang.String" itemvalue="Application.WeatherParser" />
         <item index="3" class="java.lang.String" itemvalue="Application.AppSlackMain" />
         <item index="4" class="java.lang.String" itemvalue="Application.FaceDetector" />
@@ -821,13 +798,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37068063" sideWeight="0.2125" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37068063" sideWeight="0.7875" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37068063" sideWeight="0.7875" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19479166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19479166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32879582" sideWeight="0.49583334" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1110,47 +1087,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/analysis/Intention.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="223" column="95" lean-forward="false" selection-start-line="223" selection-start-column="95" selection-end-line="223" selection-end-column="95" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#360#361#0" expanded="true" />
-            <element signature="e#393#394#0" expanded="true" />
-            <element signature="e#445#446#0" expanded="true" />
-            <element signature="e#489#490#0" expanded="true" />
-            <element signature="e#527#528#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-            <element signature="e#615#616#0" expanded="true" />
-            <element signature="e#661#662#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2327">
           <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/relations/Sentence.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="68" column="57" lean-forward="false" selection-start-line="68" selection-start-column="57" selection-end-line="68" selection-end-column="57" />
-          <folding>
-            <element signature="e#856#857#0" expanded="true" />
-            <element signature="e#889#890#0" expanded="true" />
-            <element signature="e#941#942#0" expanded="true" />
-            <element signature="e#985#986#0" expanded="true" />
-            <element signature="e#1017#1018#0" expanded="true" />
-            <element signature="e#1045#1046#0" expanded="true" />
-            <element signature="e#1087#1088#0" expanded="true" />
-            <element signature="e#1121#1122#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1208,9 +1150,44 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppSlackDetectorMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1558">
-          <caret line="107" column="24" lean-forward="false" selection-start-line="107" selection-start-column="24" selection-end-line="107" selection-end-column="24" />
+        <state relative-caret-position="114">
+          <caret line="31" column="81" lean-forward="false" selection-start-line="31" selection-start-column="81" selection-end-line="31" selection-end-column="81" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/relations/Sentence.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="100" column="0" lean-forward="false" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+          <folding>
+            <element signature="e#856#857#0" expanded="true" />
+            <element signature="e#889#890#0" expanded="true" />
+            <element signature="e#941#942#0" expanded="true" />
+            <element signature="e#985#986#0" expanded="true" />
+            <element signature="e#1017#1018#0" expanded="true" />
+            <element signature="e#1045#1046#0" expanded="true" />
+            <element signature="e#1087#1088#0" expanded="true" />
+            <element signature="e#1121#1122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/analysis/Intention.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="245" column="9" lean-forward="false" selection-start-line="245" selection-start-column="9" selection-end-line="245" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#360#361#0" expanded="true" />
+            <element signature="e#393#394#0" expanded="true" />
+            <element signature="e#445#446#0" expanded="true" />
+            <element signature="e#489#490#0" expanded="true" />
+            <element signature="e#527#528#0" expanded="true" />
+            <element signature="e#561#562#0" expanded="true" />
+            <element signature="e#615#616#0" expanded="true" />
+            <element signature="e#661#662#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
