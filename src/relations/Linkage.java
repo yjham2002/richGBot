@@ -2,6 +2,7 @@ package relations;
 
 import analysis.ITrigger;
 import analysis.Intention;
+import analysis.SpeechActAnalyser;
 import kr.co.shineware.util.common.model.Pair;
 import nlp.NaturalLanguageEngine;
 import react.PurposeEncloser;
@@ -137,7 +138,7 @@ public class Linkage {
             for(Intention intention : sentence.getIntentions()){
 
                 boolean triggered = false;
-                if(PurposeEncloser.containsCode(intention.getIntentionCode())) {
+                if(PurposeEncloser.containsCode(intention.getIntentionCode()) && intention.getSpeechAct().equals(SpeechActAnalyser.SPEECH_ACT_REQUEST_ACT)) {
                     System.out.println("ONGOING TRIGGERED");
                     this.ongoing = true;
                     triggered = true;

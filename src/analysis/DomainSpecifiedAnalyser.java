@@ -51,8 +51,6 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
         for(GenericTreeNode<PairCluster> clusterGenericTreeNode : sentence.getRoot().getChildren()){
 
-            // TODO START_POINT
-
             String speechAct = SPEECH_ACT_UNDEFINED;
             PairCluster subject = null;
             PairCluster object = null;
@@ -124,8 +122,16 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
             // Intention 인스턴스의 속성이 완성되지는 않았으나, 도메인 매칭을 위해 대기중인 상태
             intention.setOriginalMessage(sentence.getOriginal());
+
+            // TODO START_POINT
+            // TODO :: DB를 통해 요청 맵퍼를 연결하고 유사성 검증 로직을 작성한다.
+            // TODO :: 인텐션 클래스의 깊은 복사 clone()을 작성해야 한다.
+
+            // 동사(1)에 목적어(N)개가 매칭된다는 가정 하에 작성된 코드임 (개선 필요)
+            intention.getObject();
+            intention.getSubject();
+
             list.add(intention);
-            // 이후, 인텐션 코드를 지정하고 유사성을 검사하며 이를 통해 Confidence를 확정함. 선택적으로, extra를 부여하여 필요데이터를 전송할 수 있음
 
         }
 
@@ -138,13 +144,6 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
     private void traverseAndCountRecur(GenericTreeNode<PairCluster> cluster, Intention intention){
         if(cluster == null) return;
-
-        // TODO 부사를 분석에서 사용해야 하는지 재검토 필요 ***************************************************************************************************************************
-
-        // TODO START POINT : ClosedPurpose에서 목적성을 가진 닫힌 정보 획득 로직 작성 후 리액터는 이를 요구하는 역할을 해야 함 리액터는 화행에 따라 그 반응을 다르게 해야 함
-        // TODO 또한 센텐스 클래스는 섬머라이즈를 제거하고 리액터와 연결하여 이를 처리해야 함
-        // TODO 인텐션을 받아 처리하는 리액터는 정해진 인텐션 코드(동사나 문장의 흐름에 따라 정해지는 N:1 맵핑 구조)에 따라 정보를 획득하거나 대화를 마친 다음 해당 반응을 사용자에게 재전송함
-        // TODO 미들웨어는 리액터를 상속받아 클로즈드 퍼포즈를 구현하며 정적 응답기(StaticResponser)를 수정하고 맵핑 구조를 기술하여 특정화된 서비스에 이용할 수 있음
 
         switch (cluster.getData().getType()){
             case TypedPair.TYPE_SUBJECT: {
@@ -183,28 +182,6 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
             traverseAndCountRecur(unit, intention);
         }
     }
-
-//    private int getRoughType() {
-//        int questions = 0;
-//        for (int i = 0; i < words.size(); i++) {
-//            TypedPair pair = words.get(i); // TODO 문장 구분
-//            if (pair.getType() == TypedPair.TYPE_METAPHORE) return SENTENCE_META;
-//        }
-//
-//        for (int i = 0; i < words.size(); i++) {
-//            TypedPair pair = words.get(i); // TODO 문장 구분
-//            if (pair.getType() == TypedPair.TYPE_SUBJECT && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
-//                if (words.size() > i + 1 && KoreanUtil.isSubjectivePost(words.get(i + 1))) return SENTENCE_PLAIN;
-//            } else if (pair.getType() == TypedPair.TYPE_QUESTION && SUBJECTS.contains(pair.getSecond()) && !(words.size() > i + 1 && KoreanUtil.isDeriver(words.get(i + 1)))) {
-//                questions++;
-//            }
-//        }
-//
-//        if(questions > 0) return SENTENCE_QUESTION;
-//
-//        return SENTENCE_ORDER;
-//    }
-
 
 //    public void analyze(List<TypedPair> know, int what){
 //

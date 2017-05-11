@@ -16,6 +16,8 @@ public abstract class SpeechActAnalyser{
     protected KnowledgeBase metaBase;
     protected Sentence sentence;
 
+    public static final double SIMILARITY_ACTION_THRESHOLD = 0.5d;
+
     /**
      * 참고 논문 : 서강대학교 "한국어 대화체 문장의 화행 분석", 이현정 외, 1996
      */
