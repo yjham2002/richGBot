@@ -177,7 +177,7 @@ public class PairCluster extends HashSet<TypedPair> {
     }
 
     public String toCSV() {
-        if(negative) return csv + "(N)";
+        if(negative) return csv + "";
         return csv;
     }
 

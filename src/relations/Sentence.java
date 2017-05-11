@@ -3,6 +3,7 @@ package relations;
 import analysis.DomainSpecifiedAnalyser;
 import analysis.Intention;
 import analysis.SpeechActAnalyser;
+import react.Reactor;
 import tree.GenericTree;
 import tree.GenericTreeNode;
 import util.TimeExpression;
@@ -25,11 +26,14 @@ public class Sentence extends GenericTree<PairCluster>{
      * 멤버 애트리뷰트
      */
     private String prediction;
+    private String original;
     private DomainSpecifiedAnalyser speechAct; // 화행 분석 결과
     private double score = 0.0; // 화행 분석 예상 정확도
     private KnowledgeBase base;
+    private Reactor reactor;
     private KnowledgeBase metaBase;
     private TimeExpression timeExpression;
+    private List<Intention> intentions;
 
     private String summarized = "";
 
@@ -49,24 +53,43 @@ public class Sentence extends GenericTree<PairCluster>{
         this.score = score;
     }
 
+    public String getOriginal() {
+        return original;
+    }
+
+    public void setOriginal(String original) {
+        this.original = original;
+    }
+
+    public List<Intention> getIntentions() {
+        return intentions;
+    }
+
+    public void setIntentions(List<Intention> intentions) {
+        this.intentions = intentions;
+    }
+
     /**
      * 문장 추상화 클래스 생성자 - 생성과 동시에 화행 분석을 수행하여 speechAct 변수를 설정하고 확신의 정도를 score에 기록함
      *
      * @param base 문장 구조 지식 베이스
      * @param metaBase 단어 기반 지식 베이스
      */
-    public Sentence(KnowledgeBase base, KnowledgeBase metaBase, GenericTreeNode<PairCluster> root, TimeExpression timeExpression, String prediction, double predictionP, boolean printProcess){
+    public Sentence(KnowledgeBase base, KnowledgeBase metaBase, GenericTreeNode<PairCluster> root, TimeExpression timeExpression, String prediction, double predictionP, String original, boolean printProcess){
         super();
         this.base = base;
         this.metaBase = metaBase;
         this.prediction = prediction;
         this.score = predictionP;
+        this.original = original;
         this.timeExpression = timeExpression;
         this.setRoot(root);
 
         init(true);
 
-        List<Intention> intentions = speechAct.execute();
+        intentions = speechAct.execute();
+
+        this.reactor = Reactor.getInstance(intentions);
 
         if(printProcess){
             int intentionNo = 1;

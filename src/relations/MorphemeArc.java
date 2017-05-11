@@ -107,7 +107,7 @@ public class MorphemeArc extends HashMap<Integer, ArrayList<Integer>> {
         String debugPos = "DO[" + dominant + "] DE[" + dependant + "]";
         boolean doNothing = false;
         if(dominant < 0 || dependant < 0 || dominant >= words.size() || dependant >= words.size()){
-            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [Unable to Refer] : " + debugPos + " [" + words.get(dominant).getFirst() + "/" + words.get(dependant).getFirst() + "]");
+            if(CURRENT == MODE_DEBUG) System.out.println("DEBUG :: [Unable to Refer - Ignoring] : " + debugPos);
             doNothing = true;
         }
 //        if(dominant <= dependant){

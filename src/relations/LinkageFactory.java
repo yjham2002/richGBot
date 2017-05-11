@@ -31,7 +31,7 @@ public class LinkageFactory {
     public static final int NEGATIVE_DISTANCE = 3;
 
     private static boolean SIMILARITY_MODE = true;
-    private static final double SIMILARITY_THRESHOLD = 0.5;
+    private static final double SIMILARITY_THRESHOLD = 0.7;
     private static final double SIMILARITY_HIJACKING_THRESHOLD = 0.80;
 
     public static final Set<String> SUBJECTS = new HashSet<>();
@@ -661,6 +661,17 @@ public class LinkageFactory {
             } else {
                 if (prob >= SIMILARITY_HIJACKING_THRESHOLD) {
                     responses.add(staticResponser.talk(prediction, temporaryMemory));
+                }
+            }
+        }
+
+        if(cores.size() > 0 && procArc.size() == 0){
+
+            if(cores.size() == 1){
+                procArc.connect(0, 0);
+            }else {
+                for (int m = 0; m < cores.size(); m++) {
+                    if (m > 0) procArc.connect(m - 1, m);
                 }
             }
         }

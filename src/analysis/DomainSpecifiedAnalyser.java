@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static statics.StaticResponser.INTENT_NA;
-import static statics.StaticResponser.INTENT_PA;
+import static statics.StaticResponser.*;
 
 /**
  * @author 함의진
@@ -70,6 +69,16 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
 
             if(sentence.getScore() > THRESHOLD){
                 switch (sentence.getPrediction()){
+                    case INTENT_CHEER: case INTENT_BAD: case INTENT_GOOD: case INTENT_HELLO: case INTENT_CALL: case INTENT_BORED:{
+                        intention.setSentenceType(SENTENCE_PLAIN);
+                        intention.setSpeechAct(SPEECH_ACT_FACT);
+                        break;
+                    }
+                    case INTENT_INTRODUCE: case INTENT_CAPACITY: case INTENT_WEATHER: case INTENT_TIME: case INTENT_DOING: {
+                        intention.setSentenceType(SENTENCE_QUESTION);
+                        intention.setSpeechAct(SPEECH_ACT_ASK_REF);
+                        break;
+                    }
                     case INTENT_PA: {
                         intention.setSentenceType(SENTENCE_PLAIN);
                         intention.setSpeechAct(SPEECH_ACT_ACCEPT);
@@ -80,7 +89,7 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
                         intention.setSpeechAct(SPEECH_ACT_REJECT);
                         break;
                     }
-                    default : break;
+                    case INTENT_OBSCURE: case INTENT_NOTHING: default : break;
 
                 }
             }else {
@@ -95,8 +104,14 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
                         intention.setSentenceType(SENTENCE_PLAIN);
                         intention.setSpeechAct(SPEECH_ACT_FACT);
                     } else {
-                        intention.setSentenceType(SENTENCE_ORDER);
-                        intention.setSpeechAct(SPEECH_ACT_REQUEST_ACT);
+                        if(verbs == 0) {
+                            intention.setSentenceType(SENTENCE_NONE);
+                            intention.setSpeechAct(SPEECH_ACT_UNDEFINED);
+                        }else {
+                            intention.setIntentionCode("REPORT");
+                            intention.setSentenceType(SENTENCE_ORDER);
+                            intention.setSpeechAct(SPEECH_ACT_REQUEST_ACT);
+                        }
                     }
                 } else if (intention.isIncludesMeta()) {
                     intention.setSentenceType(SENTENCE_META);
@@ -108,6 +123,7 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
             }
 
             // Intention 인스턴스의 속성이 완성되지는 않았으나, 도메인 매칭을 위해 대기중인 상태
+            intention.setOriginalMessage(sentence.getOriginal());
             list.add(intention);
             // 이후, 인텐션 코드를 지정하고 유사성을 검사하며 이를 통해 Confidence를 확정함. 선택적으로, extra를 부여하여 필요데이터를 전송할 수 있음
 

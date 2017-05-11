@@ -1,12 +1,15 @@
 package relations;
 
+import analysis.ITrigger;
+import analysis.Intention;
 import kr.co.shineware.util.common.model.Pair;
+import nlp.NaturalLanguageEngine;
+import react.PurposeEncloser;
+import react.Reactor;
 import util.KoreanUtil;
 import util.TimeExpression;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static relations.LinkageFactory.*;
 
@@ -34,10 +37,12 @@ public class Linkage {
         this.predictionP = predictionP;
     }
 
+    private boolean ongoing = false;
     private String originalMessage;
     private List<TimeExpression> timeExpressions;
     private HashMap<Integer, Integer> timeRange;
     private MorphemeArc arc;
+
     private List<String> instantResponses;
     private KnowledgeBase base; // 가중치 부여 및 단순 문장 링킹를 위한 지식베이스
     private KnowledgeBase metaBase; // 은유적 1:N 관계를 기술하기 위한 지식베이스 (단, 1은 큰 범위의 의미이고 N은 작은 범위의 의미)
@@ -109,11 +114,15 @@ public class Linkage {
         this.instantResponses = instantResponses;
     }
 
+    public boolean isOngoing(){
+        return ongoing;
+    }
+
     /**
      * 모든 상호작용에 대한 응답을 이곳에서 담당한다. 추후 응답 및 시나리오 관련 클래스 생성 시 이 부분을 설계변경해야 한다.
      * @return
      */
-    public Pair<List<String>, List<String>> interaction(){
+    public Pair<List<String>, List<String>> interaction(ITrigger trigger, NaturalLanguageEngine nlp){
 
         List<Sentence> sentences;
         if(arc != null) {
@@ -125,6 +134,47 @@ public class Linkage {
         List<String> analysisResposes = new ArrayList<>();
 
         for(Sentence sentence : sentences){
+            for(Intention intention : sentence.getIntentions()){
+
+                boolean triggered = false;
+                if(PurposeEncloser.containsCode(intention.getIntentionCode())) {
+                    System.out.println("ONGOING TRIGGERED");
+                    this.ongoing = true;
+                    triggered = true;
+                }
+
+                assert intention != null;
+
+                HashSet<String> expects = Reactor.extractExpectation(intention, triggered);
+
+                System.out.print("[INFO :: INTENT :: " + intention.getSpeechAct() + "]");
+
+                if(((expects == null && triggered) || expects.contains(intention.getSpeechAct()))){
+                    if(Reactor.isEOC()){
+                        System.out.println(" / MODE :: END OF PURPOSE");
+                        // TODO Finalize
+                        nlp.setFinalPurpose(true);
+                        this.ongoing = false;
+                    }else {
+                        System.out.println(" / MODE :: ON PURPOSE");
+                        if (!this.ongoing) {
+                            trigger.run();
+                        }
+                        this.ongoing = true;
+                    }
+                }else{
+                    if(triggered){
+
+                    }else{
+                        System.out.println("MODE :: NOT ON PURPOSE");
+                        PurposeEncloser.flush();
+                        Reactor.clear();
+                        this.ongoing = false;
+                    }
+                    triggered = false;
+
+                }
+            }
             analysisResposes.add(sentence.getSummarized());
         }
 
@@ -139,7 +189,7 @@ public class Linkage {
 
         SentenceMultiplexer sentenceMultiplexer = new SentenceMultiplexer(arc, base, metaBase, timeExpressions);
 
-        List<Sentence> sentences = sentenceMultiplexer.extractSentences(prediction, predictionP);
+        List<Sentence> sentences = sentenceMultiplexer.extractSentences(prediction, predictionP, originalMessage);
 
         return sentences;
     }

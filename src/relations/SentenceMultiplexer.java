@@ -22,7 +22,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
      * 문장 컬렉션 추출을 위한 메소드로 해시를 통해 병합 및 그래프 폐구간 추출을 통한 문장 분리를 수행
      * @return
      */
-    public List<Sentence> extractSentences(String prediction, double predictionP){
+    public List<Sentence> extractSentences(String prediction, double predictionP, String originalMessage){
 
         List<Sentence> sentences = new ArrayList<>();
 
@@ -148,7 +148,7 @@ public class SentenceMultiplexer { // TODO 임시 분리임 - 설계필요
                 }
             }
 
-            Sentence sentence = new Sentence(base, metaBase, temporaryRoot, candidate, prediction, predictionP, true); // 지식베이스 인스턴스 전달
+            Sentence sentence = new Sentence(base, metaBase, temporaryRoot, candidate, prediction, predictionP, originalMessage, true); // 지식베이스 인스턴스 전달
             sentence.setPrediction(prediction);
             sentence.setScore(predictionP);
 

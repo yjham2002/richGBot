@@ -33,6 +33,16 @@ public class Intention {
     }
 
     private String intentionCode = "";
+    private String originalMessage = "";
+
+    public String getOriginalMessage() {
+        return originalMessage;
+    }
+
+    public void setOriginalMessage(String originalMessage) {
+        this.originalMessage = originalMessage;
+    }
+
     private PairCluster subject;
     private PairCluster question;
     private PairCluster object;
@@ -198,7 +208,7 @@ public class Intention {
 
     @Override
     public String toString() {
-        String retVal = "INTENTION :: Confidence[" + confidence * 100.0d + "] => CODE[" + intentionCode + "] :: SIMILARITY["+ prediction + "/" + predictionP +"]";
+        String retVal = "INTENTION :: Confidence[" + confidence * 100.0d + "] => CODE[" + intentionCode + "] :: SIMILARITY["+ prediction + "/" + String.format("%.2f", predictionP) +"]";
         if(timeExpression != null) retVal += " Time Expression :: " + timeExpression.getDateTime();
         boolean errorFlag = false;
 
@@ -211,24 +221,24 @@ public class Intention {
                     break;
                 case SPEECH_ACT_ASK_REF:
                 case SPEECH_ACT_ASK_IF:
-                    retVal += "정보에 대한 질의 [" + subject.toUniqueCSV() + " => " + question.toUniqueCSV() + "]";
+                    retVal += "정보에 대한 질의 [" + (subject != null ? subject.toUniqueCSV() + " => " : "") + (question != null ? question.toUniqueCSV() : "") + "]";
                     break;
                 case SPEECH_ACT_FACT:
-                    retVal += "일반 진술 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + " => " + verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") + "]";
+                    retVal += "일반 진술 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + " => " + (verb != null ? " => " + verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";
                     break;
                 case SPEECH_ACT_INFORM:
-                    retVal += "정보 제공 화행 [" + subject.toUniqueCSV() + (object != null ? " => " + object.toUniqueCSV() : "") + (verb != null ? " => " + verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";
+                    retVal += "정보 제공 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + (verb != null ? " => " + verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";
                     break;
-                case SPEECH_ACT_RESPONSE:
+                case SPEECH_ACT_RESPONSE: // 처리필요
                     retVal += "발화에 대한 응답";
                     break;
-                case SPEECH_ACT_REQUEST_ACT:
-                    retVal += "행위 " + (verb != null ? (verb.isNegative() ? "금지 의도" : "요구 의도") : "") + " [" + (object != null ? object.toUniqueCSV() : "") + " => " + (verb != null ? verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";
+                case SPEECH_ACT_REQUEST_ACT: // 빈값
+                    retVal += (verb != null ? (verb.isNegative() ? "행위 금지 의도" : "행위 요구 의도") : "") + " [" + (object != null ? object.toUniqueCSV() : "") + " => " + (verb != null ? verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";
                     break;
                 case SPEECH_ACT_ACCEPT:
                     retVal += "질의에 대한 승인";
                     break;
-                case SPEECH_ACT_CORRECT:
+                case SPEECH_ACT_CORRECT: // 처리 필요
                     retVal += "정정 의도";
                     break;
                 case SPEECH_ACT_CONFIRM:
