@@ -150,7 +150,7 @@ public class Linkage {
 
                 System.out.print("[INFO :: INTENT :: " + intention.getSpeechAct() + "]");
 
-                if(((expects == null && triggered) || expects.contains(intention.getSpeechAct()))){
+                if(((expects == null && triggered) || (expects != null && expects.contains(intention.getSpeechAct())))){
                     if(Reactor.isEOC()){
                         System.out.println(" / MODE :: END OF PURPOSE");
                         // TODO Finalize
@@ -167,7 +167,7 @@ public class Linkage {
                     if(triggered){
 
                     }else{
-                        System.out.println("MODE :: NOT ON PURPOSE");
+                        System.out.println(" / MODE :: NOT ON PURPOSE");
                         PurposeEncloser.flush();
                         Reactor.clear();
                         this.ongoing = false;

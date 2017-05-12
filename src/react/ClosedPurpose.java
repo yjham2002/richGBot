@@ -18,6 +18,7 @@ public class ClosedPurpose {
     public static final int MODE_REQUEST_ONLY = 20;
     public static final int MODE_ASK_IF = 30;
     public static final int MODE_ASK_TIME = 40;
+    public static final int MODE_NO_MATTER = 50;
 
     public static HashMap<Integer, HashSet<String>> filterMap;
 
@@ -48,24 +49,40 @@ public class ClosedPurpose {
         HashSet<String> MODE_REQUEST_ONLY_SET = new HashSet<>();
         HashSet<String> MODE_ASK_IF_SET = new HashSet<>();
         HashSet<String> MODE_ASK_TIME_SET = new HashSet<>();
+        HashSet<String> MODE_NO_MATTER_SET = new HashSet<>();
 
         String[] MODE_NONE_INIT = new String[]{};
         String[] MODE_REQUEST_BULK_INIT = new String[]{SpeechActAnalyser.SPEECH_ACT_UNDEFINED, SpeechActAnalyser.SPEECH_ACT_FACT, SpeechActAnalyser.SPEECH_ACT_INFORM, SpeechActAnalyser.SPEECH_ACT_RESPONSE};
         String[] MODE_REQUEST_ONLY_INIT = new String[]{SpeechActAnalyser.SPEECH_ACT_UNDEFINED, SpeechActAnalyser.SPEECH_ACT_FACT, SpeechActAnalyser.SPEECH_ACT_INFORM, SpeechActAnalyser.SPEECH_ACT_RESPONSE};
         String[] MODE_ASK_IF_INIT = new String[]{SpeechActAnalyser.SPEECH_ACT_ACCEPT, SpeechActAnalyser.SPEECH_ACT_REJECT};
         String[] MODE_ASK_INIT = new String[]{SpeechActAnalyser.SPEECH_ACT_UNDEFINED, SpeechActAnalyser.SPEECH_ACT_FACT, SpeechActAnalyser.SPEECH_ACT_INFORM, SpeechActAnalyser.SPEECH_ACT_RESPONSE};
+        String[] MODE_NO_MATTER_INIT = new String[]{
+                SpeechActAnalyser.SPEECH_ACT_UNDEFINED,
+                SpeechActAnalyser.SPEECH_ACT_FACT,
+                SpeechActAnalyser.SPEECH_ACT_INFORM,
+                SpeechActAnalyser.SPEECH_ACT_RESPONSE,
+//                SpeechActAnalyser.SPEECH_ACT_ACCEPT,
+//                SpeechActAnalyser.SPEECH_ACT_REJECT,
+                SpeechActAnalyser.SPEECH_ACT_ASK_IF,
+                SpeechActAnalyser.SPEECH_ACT_ASK_REF,
+                SpeechActAnalyser.SPEECH_ACT_REQUEST_ACT,
+                SpeechActAnalyser.SPEECH_ACT_CORRECT,
+                SpeechActAnalyser.SPEECH_ACT_CONFIRM
+        };
 
         for(String s : MODE_NONE_INIT) MODE_NONE_SET.add(s);
         for(String s : MODE_REQUEST_BULK_INIT) MODE_REQUEST_BULK_SET.add(s);
         for(String s : MODE_REQUEST_ONLY_INIT) MODE_REQUEST_ONLY_SET.add(s);
         for(String s : MODE_ASK_IF_INIT) MODE_ASK_IF_SET.add(s);
         for(String s : MODE_ASK_INIT) MODE_ASK_TIME_SET.add(s);
+        for(String s : MODE_NO_MATTER_INIT) MODE_NO_MATTER_SET.add(s);
 
         filterMap.put(MODE_NONE, MODE_NONE_SET);
         filterMap.put(MODE_REQUEST_BULK, MODE_REQUEST_BULK_SET);
         filterMap.put(MODE_REQUEST_ONLY, MODE_REQUEST_ONLY_SET);
         filterMap.put(MODE_ASK_IF, MODE_ASK_IF_SET);
         filterMap.put(MODE_ASK_TIME, MODE_ASK_TIME_SET);
+        filterMap.put(MODE_NO_MATTER, MODE_NO_MATTER_SET);
 
     }
 
