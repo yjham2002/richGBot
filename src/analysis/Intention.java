@@ -111,6 +111,57 @@ public class Intention {
         this.question = question;
     }
 
+    /**
+     * clone 메소드를 위한 내부 생성자
+     * @param prediction
+     * @param predictionP
+     * @param intentionCode
+     * @param originalMessage
+     * @param subject
+     * @param question
+     * @param object
+     * @param sentenceType
+     * @param timeExpression
+     * @param speechAct
+     * @param verb
+     * @param extra
+     * @param confidence
+     * @param isSubjectSet
+     * @param isObjectSet
+     * @param isSentenceTypeSet
+     * @param isSpeechActSet
+     * @param isVerbSet
+     * @param isQuestionSet
+     * @param includesMeta
+     */
+    private Intention(String prediction, double predictionP, String intentionCode, String originalMessage, PairCluster subject, PairCluster question, PairCluster object, int sentenceType, TimeExpression timeExpression, String speechAct, PairCluster verb, HashMap<String, Object> extra, double confidence, boolean isSubjectSet, boolean isObjectSet, boolean isSentenceTypeSet, boolean isSpeechActSet, boolean isVerbSet, boolean isQuestionSet, boolean includesMeta) {
+        this.prediction = prediction;
+        this.predictionP = predictionP;
+        this.intentionCode = intentionCode;
+        this.originalMessage = originalMessage;
+        this.subject = subject;
+        this.question = question;
+        this.object = object;
+        this.sentenceType = sentenceType;
+        this.timeExpression = timeExpression;
+        this.speechAct = speechAct;
+        this.verb = verb;
+        this.extra = extra;
+        this.confidence = confidence;
+        this.isSubjectSet = isSubjectSet;
+        this.isObjectSet = isObjectSet;
+        this.isSentenceTypeSet = isSentenceTypeSet;
+        this.isSpeechActSet = isSpeechActSet;
+        this.isVerbSet = isVerbSet;
+        this.isQuestionSet = isQuestionSet;
+        this.includesMeta = includesMeta;
+    }
+
+    public Intention clone(){
+        Intention intention = new Intention(prediction, predictionP, intentionCode, originalMessage, subject, question, object, sentenceType, timeExpression, speechAct, verb, extra, confidence, isSubjectSet, isObjectSet, isSentenceTypeSet, isSpeechActSet, isVerbSet, isQuestionSet, includesMeta);
+        return intention;
+    }
+
     public Intention(String intentionCode, PairCluster subject, PairCluster object, int sentenceType, TimeExpression timeExpression, String speechAct, PairCluster verb, double confidence, HashMap<String, Object> extra) {
         this.intentionCode = intentionCode;
         this.subject = subject;

@@ -99,7 +99,7 @@ public class Sentence extends GenericTree<PairCluster>{
             // Verb-Verb 링키지의 경우, 목적성을 띈 동사구로서 동사의 목적격 구가 됨
 
             System.out.println("------------------------------------------------------------------------------------");
-            System.out.print(" VERBS(N)  :: " + root.getChildren().size() + " :: ");
+            System.out.print(" ROOT(N)  :: " + root.getChildren().size() + " :: ");
 
             for(TypedPair pair : mergedList) {
                 System.out.print(pair.getFirst() + "[" +  pair.tenseToString() + "] ");

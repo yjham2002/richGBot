@@ -11,6 +11,8 @@ import java.util.*;
  */
 public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
 
+    public static ActionBase actionBase;
+
     /*
     지식베이스 용도에 대한 컨스턴트
      */
@@ -42,9 +44,14 @@ public class KnowledgeBase extends HashMap<String, HashMap<String, Integer>> {
     public DBManager dbManager;
 
     public KnowledgeBase(DBManager dbManager, int set){
+        if(actionBase == null) actionBase = new ActionBase(dbManager);
         this.dbManager = dbManager;
         this.current_set = set;
         wakeUp();
+    }
+
+    public static ActionBase getActionBase(){
+        return actionBase;
     }
 
     public int doYouKnow(String key, String subKey){

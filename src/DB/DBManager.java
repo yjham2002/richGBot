@@ -1,8 +1,6 @@
 package DB;
 
-import relations.KnowledgeBase;
-import relations.KnowledgeFraction;
-import relations.TypedPair;
+import relations.*;
 import util.NumberUnit;
 import util.TimeUnit;
 
@@ -165,6 +163,36 @@ public class DBManager extends DBConstManager {
 //                    know.setWord(rs.getString("refWord"));
 //                }
                 know.setFrequency(rs.getInt("frequency"));
+                retVal.add(know);
+            }
+
+            rs.close();
+            st.close();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    public List<ActionFraction> getActions(){
+        List<ActionFraction> retVal = new ArrayList<>();
+        try{
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            String sql = "SELECT *, CONCAT(objectSerial, '#', verbSerial) AS keyValue FROM tblRequestMapper GROUP BY CONCAT(objectSerial, '#', verbSerial) ORDER BY no;";
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()){
+                String original = rs.getString("original");
+                String objectSerial = rs.getString("objectSerial");
+                String verbSerial = rs.getString("verbSerial");
+                String intentionCode = rs.getString("intentionCode");
+                String desc = rs.getString("desc");
+                int frequency = rs.getInt("frequency");
+                String keyValue = rs.getString("keyValue");
+
+                ActionFraction know = new ActionFraction(original, objectSerial, verbSerial, intentionCode, desc, frequency, keyValue);
                 retVal.add(know);
             }
 

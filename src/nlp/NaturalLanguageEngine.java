@@ -38,7 +38,13 @@ public class NaturalLanguageEngine extends ContextNLP{
     private static NaturalLanguageEngine instance; // Singleton instance
 
     private NaturalLanguageEngine(){
-        PurposeEncloser.start();
+        try {
+            PurposeEncloser.start();
+            System.out.println(" ::: NLP Engine has been started successfully ::: \n");
+        }catch(Exception e){
+            System.out.println(" ::: An error occured while Starting NLP Engine ::: \n");
+        }
+
     }
 
     public static NaturalLanguageEngine getInstance(){

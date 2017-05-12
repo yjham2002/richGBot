@@ -1,5 +1,6 @@
 package analysis;
 
+import kr.co.shineware.util.common.model.Pair;
 import relations.KnowledgeBase;
 import relations.PairCluster;
 import relations.Sentence;
@@ -106,7 +107,6 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
                             intention.setSentenceType(SENTENCE_NONE);
                             intention.setSpeechAct(SPEECH_ACT_UNDEFINED);
                         }else {
-                            intention.setIntentionCode("REPORT");
                             intention.setSentenceType(SENTENCE_ORDER);
                             intention.setSpeechAct(SPEECH_ACT_REQUEST_ACT);
                         }
@@ -128,10 +128,38 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
             // TODO :: 인텐션 클래스의 깊은 복사 clone()을 작성해야 한다.
 
             // 동사(1)에 목적어(N)개가 매칭된다는 가정 하에 작성된 코드임 (개선 필요)
-            intention.getObject();
-            intention.getSubject();
 
-            list.add(intention);
+            List<Intention> multiplexedIntention = new ArrayList<>();
+
+            if(intention.getVerb() != null && intention.getObject() != null) {
+                for (TypedPair pair : intention.getObject().toList()) {
+                    String keyValue = pair.getFirst() + "#" + intention.getVerb().toCSV().trim();
+                    Pair<String, Double> predict = base.getActionBase().getIntentionProbPair(keyValue);
+                    Intention intent = intention.clone();
+
+                    if (predict.getSecond() >= THRESHOLD) {
+                        System.out.println("Action Matched :: CONFIDENCE[" + String.format("%.2f", predict.getSecond()) + "] INTENTION[" + predict.getFirst() + "]");
+                        intent.setIntentionCode(predict.getFirst());
+                    }
+                    else intent.setIntentionCode("");
+                    multiplexedIntention.add(intent);
+                }
+                list.addAll(multiplexedIntention);
+            }else if(intention.getVerb() != null){
+                String keyValue = "#" + intention.getVerb().toCSV().trim();
+                Pair<String, Double> predict = base.getActionBase().getIntentionProbPair(keyValue);
+                Intention intent = intention.clone();
+
+                if (predict.getSecond() >= THRESHOLD) {
+                    System.out.println("Action Matched :: CONFIDENCE[" + String.format("%.2f", (predict.getSecond() * 100.0d)) + "%] INTENTION[" + predict.getFirst() + "]");
+                    intent.setIntentionCode(predict.getFirst());
+                }
+                else intent.setIntentionCode("");
+                multiplexedIntention.add(intent);
+                list.addAll(multiplexedIntention);
+            }else{
+                list.add(intention);
+            }
 
         }
 
