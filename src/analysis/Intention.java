@@ -272,7 +272,8 @@ public class Intention {
                     break;
                 case SPEECH_ACT_ASK_REF:
                 case SPEECH_ACT_ASK_IF:
-                    retVal += "정보에 대한 질의 [" + (subject != null ? subject.toUniqueCSV() + " => " : "") + (question != null ? question.toUniqueCSV() : "") + "]";
+                    if(object == null || verb == null) retVal += "정보에 대한 질의 [" + (subject != null ? subject.toUniqueCSV() + " => " : "") + (question != null ? question.toUniqueCSV() : "") + "]";
+                    else retVal += "정보에 대한 질의 [" + (object != null ? object.toUniqueCSV() + " => " : "") + (verb != null ? verb.toUniqueCSV() : "") + "]";
                     break;
                 case SPEECH_ACT_FACT:
                     retVal += "일반 진술 화행 [" + (subject != null ? subject.toUniqueCSV() : "") + (object != null ? " => " + object.toUniqueCSV() : "") + " => " + (verb != null ? " => " + verb.toUniqueCSV() + (verb.isNegative() ? "(부정형)" : "") : "") + "]";

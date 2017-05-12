@@ -92,7 +92,7 @@ public class NaturalLanguageEngine extends ContextNLP{
         // TODO 임시 설계 - 응답 클래스가 별도로 생성될 경우, 변경이 필수적임
         Pair<List<String>, List<String>> resPair = linkage.interaction(new ITrigger() {
             @Override
-            public boolean run(HashMap<String, Object> extra) {
+            public boolean run(HashMap<String, Object> extra,  List<String> ref) {
 
                 return false;
             }
@@ -103,7 +103,7 @@ public class NaturalLanguageEngine extends ContextNLP{
             response.addAll(Reactor.getInstanceForAnswer().getResponse());
             response.add(Reactor.debugExtra()); // TODO DELETE
             try {
-                if (finalPurpose) Reactor.finalizePurpose();
+                if (finalPurpose) response.addAll(Reactor.finalizePurpose());
             }catch(PurposeSizeException pe){
                 pe.printStackTrace();
             }

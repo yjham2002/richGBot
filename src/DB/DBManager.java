@@ -13,10 +13,12 @@ import java.util.List;
  */
 public class DBManager extends DBConstManager {
 
+    private static boolean isAllowed = true;
     private Connection connection = null;
     private Statement st = null;
 
     public DBManager(){
+        isAllowed = true;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
@@ -35,6 +37,14 @@ public class DBManager extends DBConstManager {
                 se.printStackTrace();
             }
         }
+    }
+
+    public static boolean isIsAllowed() {
+        return isAllowed;
+    }
+
+    public static void setIsAllowed(boolean isAllowed) {
+        DBManager.isAllowed = isAllowed;
     }
 
     public List<KnowledgeFraction> getMetaphors(){
@@ -298,6 +308,8 @@ public class DBManager extends DBConstManager {
     }
 
     public boolean saveStaticSentence(String sWord, String sTag, String intention, String resp){
+        if(!isAllowed) return false;
+
         boolean retVal = false;
 
         try {
@@ -326,6 +338,8 @@ public class DBManager extends DBConstManager {
     }
 
     public boolean saveMetaLink(TypedPair word, TypedPair ref){
+        if(!isAllowed) return false;
+
         boolean retVal = false;
 
         TypedPair param1, param2;
@@ -363,6 +377,8 @@ public class DBManager extends DBConstManager {
     }
 
     public boolean saveKnowledgeLink(TypedPair word, TypedPair ref, boolean reverse){
+        if(!isAllowed) return false;
+
         boolean retVal = false;
 
         TypedPair param1, param2;

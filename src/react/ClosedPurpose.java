@@ -34,6 +34,10 @@ public class ClosedPurpose {
     private List<String> mapper;
     private ITrigger callback;
 
+    public ClosedPurpose(int maximum, String intentionCode){
+        this(maximum, 0, intentionCode);
+    }
+
     public ClosedPurpose(int maximum, int current, String intentionCode){
         this.extra = new HashMap<>();
         this.maximum = maximum;
@@ -125,9 +129,13 @@ public class ClosedPurpose {
         for(Integer i : integers) this.modeList.add(i);
     }
 
-    public void run() throws  PurposeSizeException{
+    public List<String> run() throws  PurposeSizeException{
+        List<String> extraMessage = new ArrayList<>();
+
         if(modeList.size() + 1 != mapper.size() || levelMessages.size() != mapper.size()) throw new PurposeSizeException();
-        if(callback != null) callback.run(extra);
+        if(callback != null) callback.run(extra, extraMessage);
+
+        return extraMessage;
     }
 
     public String getMessage(int level, boolean classify) throws NullPointerException, IndexOutOfBoundsException {

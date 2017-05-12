@@ -31,8 +31,8 @@ public class LinkageFactory {
     public static final int NEGATIVE_DISTANCE = 3;
 
     private static boolean SIMILARITY_MODE = true;
-    private static final double SIMILARITY_THRESHOLD = 0.7;
-    private static final double SIMILARITY_HIJACKING_THRESHOLD = 0.80;
+    private static final double SIMILARITY_THRESHOLD = 0.50d;
+    private static final double SIMILARITY_HIJACKING_THRESHOLD = 0.80d;
 
     public static final Set<String> SUBJECTS = new HashSet<>();
     public static final Set<String> GENERAL_NOUN = new HashSet<>();

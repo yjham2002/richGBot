@@ -55,15 +55,19 @@ public class Reactor{
         return msg;
     }
 
-    public static void finalizePurpose() throws PurposeSizeException{
+    public static List<String> finalizePurpose() throws PurposeSizeException{
+        List<String> extraMessage = new ArrayList<>();
+
         HashMap<String, Object> map = PurposeEncloser.getPurpose(currentIntention).getExtra();
         for(String s : map.keySet()){
             System.out.println(s + " :: " + map.get(s));
         }
         System.out.println();
-        PurposeEncloser.getPurpose(currentIntention).run();
+        extraMessage.addAll(PurposeEncloser.getPurpose(currentIntention).run());
         PurposeEncloser.flush();
         Reactor.clear();
+
+        return extraMessage;
     }
 
     public List<String> getResponse(){

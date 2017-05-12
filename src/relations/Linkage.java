@@ -139,9 +139,11 @@ public class Linkage {
 
                 boolean triggered = false;
                 if(PurposeEncloser.containsCode(intention.getIntentionCode()) && intention.getSpeechAct().equals(SpeechActAnalyser.SPEECH_ACT_REQUEST_ACT)) {
-                    System.out.println("ONGOING TRIGGERED");
-                    this.ongoing = true;
-                    triggered = true;
+                    if(intention.getVerb() != null && !intention.getVerb().isNegative()) {
+                        System.out.println("ONGOING TRIGGERED");
+                        this.ongoing = true;
+                        triggered = true;
+                    }
                 }
 
                 assert intention != null;

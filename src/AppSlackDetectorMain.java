@@ -29,7 +29,7 @@ import java.util.List;
  * Created by a on 2017-04-20.
  */
 public class AppSlackDetectorMain {
-    private static String slackAuth = "xoxb-168613915715-ve8WBWqwez3c2J5jA3Su3iFL";
+    private static String slackAuth = "xoxb-168613915715-RKzTMXIg0ByJuIHi75olsq27";
     private static final String helloString = "Richware NLP Engine has been started - Cached Successfully via [Slack]";
 
     public static void main(String[] args) {
