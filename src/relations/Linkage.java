@@ -159,7 +159,7 @@ public class Linkage {
                     }else {
                         System.out.println(" / MODE :: ON PURPOSE");
                         if (!this.ongoing) {
-                            trigger.run();
+                            //
                         }
                         this.ongoing = true;
                     }

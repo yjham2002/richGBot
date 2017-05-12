@@ -2,6 +2,7 @@ package react;
 
 import analysis.Intention;
 import analysis.SpeechActAnalyser;
+import exceptions.PurposeSizeException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ public class Reactor{
         return msg;
     }
 
-    public static void finalizePurpose(){
+    public static void finalizePurpose() throws PurposeSizeException{
         HashMap<String, Object> map = PurposeEncloser.getPurpose(currentIntention).getExtra();
         for(String s : map.keySet()){
             System.out.println(s + " :: " + map.get(s));

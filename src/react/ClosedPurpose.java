@@ -2,6 +2,7 @@ package react;
 
 import analysis.ITrigger;
 import analysis.SpeechActAnalyser;
+import exceptions.PurposeSizeException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,11 +125,13 @@ public class ClosedPurpose {
         for(Integer i : integers) this.modeList.add(i);
     }
 
-    public void run(){
-        if(callback != null) callback.run();
+    public void run() throws  PurposeSizeException{
+        if(modeList.size() + 1 != mapper.size() || levelMessages.size() != mapper.size()) throw new PurposeSizeException();
+        if(callback != null) callback.run(extra);
     }
 
-    public String getMessage(int level, boolean classify) throws NullPointerException, IndexOutOfBoundsException{
+    public String getMessage(int level, boolean classify) throws NullPointerException, IndexOutOfBoundsException {
+
         if(classify) {
             if (modeList.get(level) == MODE_REQUEST_BULK) {
                 String msg = this.header.trim() + " ";

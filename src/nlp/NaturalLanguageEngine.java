@@ -2,6 +2,7 @@ package nlp;
 
 import analysis.ITrigger;
 import analysis.SpeechActAnalyser;
+import exceptions.PurposeSizeException;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 import kr.co.shineware.util.common.model.Pair;
 import react.PurposeEncloser;
@@ -11,6 +12,7 @@ import relations.LinkageFactory;
 import statics.StaticResponser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -90,7 +92,7 @@ public class NaturalLanguageEngine extends ContextNLP{
         // TODO 임시 설계 - 응답 클래스가 별도로 생성될 경우, 변경이 필수적임
         Pair<List<String>, List<String>> resPair = linkage.interaction(new ITrigger() {
             @Override
-            public boolean run() {
+            public boolean run(HashMap<String, Object> extra) {
 
                 return false;
             }
@@ -100,7 +102,11 @@ public class NaturalLanguageEngine extends ContextNLP{
             List<String> response = new ArrayList<>();
             response.addAll(Reactor.getInstanceForAnswer().getResponse());
             response.add(Reactor.debugExtra()); // TODO DELETE
-            if(finalPurpose) Reactor.finalizePurpose();
+            try {
+                if (finalPurpose) Reactor.finalizePurpose();
+            }catch(PurposeSizeException pe){
+                pe.printStackTrace();
+            }
             finalPurpose = false;
             return response;
         }else{

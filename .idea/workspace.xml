@@ -2,11 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b89674e-1ec1-44ff-9841-ea065a6ccfff" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Linkage.class" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/exceptions/PurposeSizeException.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/GBot/react/ClosedPurpose.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/AppSlackDetectorMain.class" afterPath="$PROJECT_DIR$/out/production/GBot/AppSlackDetectorMain.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/analysis/DomainSpecifiedAnalyser.class" afterPath="$PROJECT_DIR$/out/production/GBot/analysis/DomainSpecifiedAnalyser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/analysis/ITrigger.class" afterPath="$PROJECT_DIR$/out/production/GBot/analysis/ITrigger.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/nlp/NaturalLanguageEngine$1.class" afterPath="$PROJECT_DIR$/out/production/GBot/nlp/NaturalLanguageEngine$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/nlp/NaturalLanguageEngine.class" afterPath="$PROJECT_DIR$/out/production/GBot/nlp/NaturalLanguageEngine.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/react/PurposeEncloser$1.class" afterPath="$PROJECT_DIR$/out/production/GBot/react/PurposeEncloser$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/react/PurposeEncloser$2.class" afterPath="$PROJECT_DIR$/out/production/GBot/react/PurposeEncloser$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/react/PurposeEncloser.class" afterPath="$PROJECT_DIR$/out/production/GBot/react/PurposeEncloser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/GBot/relations/Linkage.class" afterPath="$PROJECT_DIR$/out/production/GBot/relations/Linkage.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppSlackDetectorMain.java" afterPath="$PROJECT_DIR$/src/AppSlackDetectorMain.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" afterPath="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/analysis/ITrigger.java" afterPath="$PROJECT_DIR$/src/analysis/ITrigger.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" afterPath="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/react/ClosedPurpose.java" afterPath="$PROJECT_DIR$/src/react/ClosedPurpose.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/react/PurposeEncloser.java" afterPath="$PROJECT_DIR$/src/react/PurposeEncloser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/react/Reactor.java" afterPath="$PROJECT_DIR$/src/react/Reactor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relations/Linkage.java" afterPath="$PROJECT_DIR$/src/relations/Linkage.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -26,11 +40,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="NaturalLanguageEngine.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="107" column="37" lean-forward="false" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
+              <folding>
+                <marker date="1494562293120" expanded="true" signature="3973:3979" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="PurposeEncloser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/react/PurposeEncloser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="65" column="52" lean-forward="false" selection-start-line="65" selection-start-column="52" selection-end-line="65" selection-end-column="52" />
+            <state relative-caret-position="145">
+              <caret line="67" column="21" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -38,11 +64,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClosedPurpose.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ITrigger.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/analysis/ITrigger.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="13" column="52" lean-forward="false" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ClosedPurpose.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/react/ClosedPurpose.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="63" column="54" lean-forward="true" selection-start-line="63" selection-start-column="54" selection-end-line="63" selection-end-column="54" />
+            <state relative-caret-position="181">
+              <caret line="128" column="121" lean-forward="true" selection-start-line="128" selection-start-column="121" selection-end-line="128" selection-end-column="121" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -50,34 +88,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LinkageFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/relations/LinkageFactory.java">
+      <file leaf-file-name="Reactor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/react/Reactor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="634" column="0" lean-forward="true" selection-start-line="634" selection-start-column="0" selection-end-line="634" selection-end-column="0" />
+            <state relative-caret-position="394">
+              <caret line="76" column="93" lean-forward="true" selection-start-line="76" selection-start-column="93" selection-end-line="76" selection-end-column="93" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KnowledgeBase.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/relations/KnowledgeBase.java">
+      <file leaf-file-name="StaticResponser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="31" column="44" lean-forward="false" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
-              <folding>
-                <element signature="e#1274#1275#0" expanded="true" />
-                <element signature="e#1307#1308#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="779">
+              <caret line="63" column="9" lean-forward="true" selection-start-line="63" selection-start-column="9" selection-end-line="63" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DomainSpecifiedAnalyser.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DomainSpecifiedAnalyser.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="153" column="131" lean-forward="false" selection-start-line="153" selection-start-column="131" selection-end-line="153" selection-end-column="131" />
+            <state relative-caret-position="399">
+              <caret line="132" column="0" lean-forward="true" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -95,49 +130,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DBManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DB/DBManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="185" column="29" lean-forward="true" selection-start-line="185" selection-start-column="29" selection-end-line="185" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Linkage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/relations/Linkage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-218">
-              <caret line="152" column="74" lean-forward="false" selection-start-line="152" selection-start-column="74" selection-end-line="152" selection-end-column="74" />
+            <state relative-caret-position="366">
+              <caret line="161" column="30" lean-forward="false" selection-start-line="161" selection-start-column="30" selection-end-line="161" selection-end-column="30" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ActionFraction.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/relations/ActionFraction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="409">
-              <caret line="26" column="5" lean-forward="true" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
-              <folding>
-                <element signature="e#743#744#0" expanded="true" />
-                <element signature="e#774#775#0" expanded="true" />
-                <element signature="e#822#823#0" expanded="true" />
-                <element signature="e#862#863#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ActionBase.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/relations/ActionBase.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="30" column="42" lean-forward="false" selection-start-line="30" selection-start-column="42" selection-end-line="30" selection-end-column="42" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -207,8 +205,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/ullink/slack/simpleslackapi/impl/SlackBotImpl.java" />
-        <option value="$PROJECT_DIR$/src/statics/PrivateServiceResponser.java" />
         <option value="$PROJECT_DIR$/src/statics/ResponseConstant.java" />
         <option value="$PROJECT_DIR$/src/relations/LinkableArc.java" />
         <option value="$PROJECT_DIR$/src/relations/InterconnectionArc.java" />
@@ -242,22 +238,24 @@
         <option value="$PROJECT_DIR$/src/AppMain.java" />
         <option value="$PROJECT_DIR$/src/relations/LinkageFactory.java" />
         <option value="$PROJECT_DIR$/src/relations/MorphemeArc.java" />
-        <option value="$PROJECT_DIR$/src/analysis/ITrigger.java" />
-        <option value="$PROJECT_DIR$/src/react/Reactor.java" />
         <option value="$PROJECT_DIR$/src/relations/PairCluster.java" />
         <option value="$PROJECT_DIR$/src/analysis/SpeechActAnalyser.java" />
         <option value="$PROJECT_DIR$/src/relations/Sentence.java" />
         <option value="$PROJECT_DIR$/src/analysis/Intention.java" />
         <option value="$PROJECT_DIR$/src/relations/ActionFraction.java" />
         <option value="$PROJECT_DIR$/src/DB/DBManager.java" />
-        <option value="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" />
         <option value="$PROJECT_DIR$/src/relations/KnowledgeBase.java" />
         <option value="$PROJECT_DIR$/src/relations/ActionBase.java" />
-        <option value="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
+        <option value="$PROJECT_DIR$/src/analysis/ITrigger.java" />
         <option value="$PROJECT_DIR$/src/relations/Linkage.java" />
-        <option value="$PROJECT_DIR$/src/AppSlackDetectorMain.java" />
         <option value="$PROJECT_DIR$/src/react/PurposeEncloser.java" />
+        <option value="$PROJECT_DIR$/src/AppSlackDetectorMain.java" />
+        <option value="$PROJECT_DIR$/src/react/PurposeSizeException.java" />
+        <option value="$PROJECT_DIR$/src/react/Reactor.java" />
+        <option value="$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java" />
         <option value="$PROJECT_DIR$/src/react/ClosedPurpose.java" />
+        <option value="$PROJECT_DIR$/src/exceptions/PurposeSizeException.java" />
+        <option value="$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java" />
       </list>
     </option>
   </component>
@@ -398,6 +396,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="nlp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="richGBot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="richGBot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="exceptions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -816,13 +832,13 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277487" sideWeight="0.475" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277487" sideWeight="0.46666667" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37068063" sideWeight="0.240625" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37068063" sideWeight="0.246875" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37068063" sideWeight="0.759375" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37068063" sideWeight="0.753125" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -865,7 +881,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/closed/Intention.java" />
     <entry file="file://$PROJECT_DIR$/src/statics/PrivateServiceResponser.java" />
     <entry file="file://$PROJECT_DIR$/src/vision.java" />
     <entry file="file://$PROJECT_DIR$/src/vision/ImageRecognizer.java">
@@ -1002,14 +1017,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="43" column="24" lean-forward="true" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/statics/ResponseConstant.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
@@ -1050,16 +1057,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/analysis/ITrigger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="23" lean-forward="false" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/MorphemeArc.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="295">
@@ -1073,19 +1070,6 @@
         <state relative-caret-position="19">
           <caret line="23" column="34" lean-forward="false" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/react/Reactor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="82" column="163" lean-forward="true" selection-start-line="82" selection-start-column="163" selection-end-line="82" selection-end-column="163" />
-          <folding>
-            <element signature="e#717#718#0" expanded="true" />
-            <element signature="e#748#749#0" expanded="true" />
-            <element signature="e#1001#1002#0" expanded="true" />
-            <element signature="e#1081#1082#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1130,16 +1114,6 @@
         <state relative-caret-position="95">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="44" column="86" lean-forward="false" selection-start-line="44" selection-start-column="86" selection-end-line="44" selection-end-column="86" />
-          <folding>
-            <marker date="1494553646938" expanded="true" signature="3758:3764" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1193,10 +1167,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java">
+    <entry file="file://$PROJECT_DIR$/src/statics/StaticResponser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="153" column="131" lean-forward="false" selection-start-line="153" selection-start-column="131" selection-end-line="153" selection-end-column="131" />
+        <state relative-caret-position="779">
+          <caret line="63" column="9" lean-forward="true" selection-start-line="63" selection-start-column="9" selection-end-line="63" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/analysis/ITrigger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="52" lean-forward="false" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1205,9 +1187,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/relations/Linkage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-218">
-          <caret line="152" column="74" lean-forward="false" selection-start-line="152" selection-start-column="74" selection-end-line="152" selection-end-column="74" />
+        <state relative-caret-position="366">
+          <caret line="161" column="30" lean-forward="false" selection-start-line="161" selection-start-column="30" selection-end-line="161" selection-end-column="30" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/react/PurposeEncloser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="67" column="21" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1219,20 +1211,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/react/PurposeEncloser.java">
+    <entry file="file://$PROJECT_DIR$/src/nlp/NaturalLanguageEngine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="65" column="52" lean-forward="false" selection-start-line="65" selection-start-column="52" selection-end-line="65" selection-end-column="52" />
+        <state relative-caret-position="252">
+          <caret line="107" column="37" lean-forward="false" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <marker date="1494562293120" expanded="true" signature="3973:3979" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/react/ClosedPurpose.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="63" column="54" lean-forward="true" selection-start-line="63" selection-start-column="54" selection-end-line="63" selection-end-column="54" />
+        <state relative-caret-position="181">
+          <caret line="128" column="121" lean-forward="true" selection-start-line="128" selection-start-column="121" selection-end-line="128" selection-end-column="121" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/exceptions/PurposeSizeException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="15" column="5" lean-forward="false" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/react/Reactor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="76" column="93" lean-forward="true" selection-start-line="76" selection-start-column="93" selection-end-line="76" selection-end-column="93" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/analysis/DomainSpecifiedAnalyser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="132" column="0" lean-forward="true" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

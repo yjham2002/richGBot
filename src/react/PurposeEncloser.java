@@ -54,8 +54,20 @@ public class PurposeEncloser extends HashMap<String, ClosedPurpose> {
         cp.initModeSet(ClosedPurpose.MODE_NO_MATTER, ClosedPurpose.MODE_NO_MATTER, ClosedPurpose.MODE_NO_MATTER, ClosedPurpose.MODE_ASK_IF);
         cp.initRun(new ITrigger() {
             @Override
-            public boolean run() {
+            public boolean run(HashMap<String, Object> extra) {
                 System.out.println("보고서 파일 저장");
+                return false;
+            }
+        });
+
+        ClosedPurpose cp1 = new ClosedPurpose(1, 0, "EXIT");
+        cp1.init("", "","ㅇㅅㅇ" ,  "진짜루요...? ㅠㅠㅠㅠㅠㅠㅠ");
+        cp1.initExtra("DONE");
+        cp1.initModeSet(ClosedPurpose.MODE_ASK_IF);
+        cp1.initRun(new ITrigger() {
+            @Override
+            public boolean run(HashMap<String, Object> extra) {
+                System.exit(0);
                 return false;
             }
         });
@@ -66,13 +78,14 @@ public class PurposeEncloser extends HashMap<String, ClosedPurpose> {
         cp2.initModeSet(ClosedPurpose.MODE_NO_MATTER, ClosedPurpose.MODE_NO_MATTER, ClosedPurpose.MODE_NO_MATTER, ClosedPurpose.MODE_ASK_IF);
         cp2.initRun(new ITrigger() {
             @Override
-            public boolean run() {
+            public boolean run(HashMap<String, Object> extra) {
                 System.out.println("시말서 파일 저장");
                 return false;
             }
         });
 
         instance.put(cp);
+        instance.put(cp1);
         instance.put(cp2);
 
     }

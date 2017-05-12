@@ -120,12 +120,12 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
                 }
             }
 
+
+            // TODO START_POINT :: 병렬 구성의 인텐션 액션을 수행하지 못 함
+
+
             // Intention 인스턴스의 속성이 완성되지는 않았으나, 도메인 매칭을 위해 대기중인 상태
             intention.setOriginalMessage(sentence.getOriginal());
-
-            // TODO START_POINT
-            // TODO :: DB를 통해 요청 맵퍼를 연결하고 유사성 검증 로직을 작성한다.
-            // TODO :: 인텐션 클래스의 깊은 복사 clone()을 작성해야 한다.
 
             // 동사(1)에 목적어(N)개가 매칭된다는 가정 하에 작성된 코드임 (개선 필요)
 
@@ -146,7 +146,7 @@ public class DomainSpecifiedAnalyser extends SpeechActAnalyser {
                 }
                 list.addAll(multiplexedIntention);
             }else if(intention.getVerb() != null){
-                String keyValue = "#" + intention.getVerb().toCSV().trim();
+                String keyValue = "##" + intention.getVerb().toCSV().trim();
                 Pair<String, Double> predict = base.getActionBase().getIntentionProbPair(keyValue);
                 Intention intent = intention.clone();
 
